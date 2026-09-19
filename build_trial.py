@@ -71,7 +71,7 @@ if __name__ == "__main__":
   <img class="pay-qr" src="{qr}" alt="作者微信二维码">
   <div class="pay-info">
     <div class="pay-title">添加作者微信</div>
-    <div>完整版（309 页 PDF + 实操代码包）获取方式，微信咨询<br>
+    <div>完整版（309 页 PDF + 实操代码包）· <b>¥39.9</b>，微信咨询<br>
     备注请写 <b>LLM 教材</b>，会尽快回复</div>
     <div class="pay-note">也可通过 <a href="{repo}" target="_blank">GitHub 仓库</a> 了解试读章节、完整目录与勘误。<br>
     姊妹篇《掩模版光学仿真与 die-to-database 缺陷检测》见 <a href="https://jiejin93.github.io/optic-textbook/" target="_blank"> optic 教材站</a>。</div>
