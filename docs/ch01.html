@@ -1,0 +1,509 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>第 1 章 绪论：大语言模型全景 · 大模型：从 Transformer 到部署（试读版）</title>
+<link rel="stylesheet" href="katex/katex.min.css"><style>:root{--ink:#1f2933;--muted:#5b6b76;--brand:#1a56db;--bg:#f7f8fa;--line:#e4e8ee;}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Noto Sans SC","Source Han Sans SC","Microsoft YaHei",-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);line-height:1.75}
+h1,h2,h3,h4{line-height:1.35;font-weight:700}
+h1{font-size:1.9em;border-bottom:3px solid var(--brand);padding-bottom:.3em;margin-top:1em}
+h2{font-size:1.45em;margin-top:2em;border-left:5px solid var(--brand);padding-left:.5em}
+h3{font-size:1.2em;margin-top:1.6em}
+code,pre{font-family:"JetBrains Mono",Consolas,"Courier New",monospace}
+code{background:#eef1f5;padding:.1em .35em;border-radius:4px;font-size:.92em}
+pre{background:#0f172a;color:#e2e8f0;padding:1em 1.2em;border-radius:8px;overflow-x:auto;line-height:1.55}
+pre code{background:none;padding:0;color:inherit}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.95em}
+th,td{border:1px solid var(--line);padding:.45em .7em;text-align:left}
+th{background:#edf1f7}
+blockquote{margin:1em 0;padding:.6em 1em;border-left:4px solid #f59e0b;background:#fffbeb;border-radius:0 6px 6px 0}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+img,svg{max-width:100%;height:auto}
+figure{margin:1.5em 0;text-align:center}
+figcaption{color:var(--muted);font-size:.9em;margin-top:.4em}
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:270px;background:#fff;border-right:1px solid var(--line);overflow-y:auto;padding:1rem;z-index:10}
+#sidebar .brand{font-size:1.25em;font-weight:800;padding:.6rem .4rem 1rem}
+#sidebar .brand a{color:var(--ink)}
+#sidebar .brand span{font-size:.55em;font-weight:500;color:var(--muted)}
+#sidebar nav a{display:block;padding:.32rem .6rem;color:#3a4a55;border-radius:6px;font-size:.92em}
+#sidebar nav a:hover{background:#eef2f8}
+#sidebar nav a.active{background:#e8effd;color:var(--brand);font-weight:600}
+#sidebar .part{font-size:.8em;color:var(--muted);margin:.9em .4em .3em;font-weight:700;letter-spacing:.05em}
+main{margin-left:270px;padding:1.5rem 3rem 4rem;max-width:1100px}
+.topbar{display:none}
+@media (max-width:960px){
+ #sidebar{transform:translateX(-100%);transition:.2s} #sidebar.open{transform:none;box-shadow:0 0 30px rgba(0,0,0,.2)}
+ main{margin-left:0;padding:1rem}
+ .topbar{display:flex;align-items:center;gap:.8em;margin-bottom:1em}
+ .topbar button{font-size:1em;padding:.3em .7em}
+}
+.content{background:#fff;padding:2.5rem 3rem;border-radius:10px;box-shadow:0 1px 4px rgba(20,30,50,.06);max-width:900px}
+.pagenav{display:flex;justify-content:space-between;margin-top:3em;border-top:1px solid var(--line);padding-top:1em;gap:1em}
+.pagenav a{flex:1;border:1px solid var(--line);border-radius:8px;padding:.6em .9em;font-size:.92em}
+.pagenav a.nav-next{text-align:right}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:.3em 0}
+/* landing */
+body.landing main{margin:0 auto;padding:3rem 1.5rem}
+.landing-main{text-align:center}
+.cover-wrap{max-width:520px;margin:0 auto}
+h1{margin-top:1.2em}
+.subtitle{color:var(--muted);font-size:1.1em}
+.btn{display:inline-block;background:var(--brand);color:#fff!important;padding:.65em 1.6em;border-radius:8px;margin:.4em;font-weight:600}
+.btn.ghost{background:#fff;color:var(--brand)!important;border:1px solid var(--brand)}
+.toc-grid{text-align:left;margin-top:2.5em}
+.toc-grid h3{border-bottom:2px solid var(--line);padding-bottom:.3em;color:var(--brand)}
+.toc-grid .col{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.2em 1.5em;margin-bottom:1em}
+.toc-grid a{padding:.25em 0;display:block}
+</style></head><body>
+<aside id="sidebar"><div class="brand"><a href="index.html">大模型<br><span>从 Transformer 到部署 · 免费试读</span></a></div>
+<nav id="toc"><a href="math.html">第 0 章 数学基础</a><a href="ch00.html">前言</a><a href="ch01.html" class=active>第 1 章 绪论：大语言模型全景</a><a href="ch02.html">第 2 章 语言模型基础</a><a href="ch03.html">第 3 章 Transformer 详解</a><a href="ch04.html">第 4 章 分词器</a><div class="part">完整版</div><a href="https://github.com/jiejin93/llm-textbook">GitHub 仓库 / 获取完整版</a></nav></aside>
+<main><div class="topbar"><button onclick="document.getElementById('sidebar').classList.toggle('open')">☰ 目录</button></div>
+<article class="content"><div class="trial-banner">📚 当前为免费试读版 · 完整版（第 5–17 章 + 附录）获取方式见 <a href="https://github.com/jiejin93/llm-textbook" target="_blank">GitHub 仓库</a></div>
+<h1 id="1">第 1 章 绪论：大语言模型全景</h1>
+<p>2022 年 11 月底，ChatGPT 上线，五天收获一百万用户，两个月月活过亿——这个速度超过了此前所有消费级互联网产品。人们突然意识到：一个只被训练来&rdquo;预测下一个词&rdquo;的神经网络，竟能写代码、做翻译、解数学题、进行多轮对话。这场变革并非一夜发生，而是近四十年语言建模技术持续演进、并在&rdquo;规模&rdquo;（scale）的杠杆下发生质变的结果。</p>
+<p>本章是全书的开篇，目标有三个：第一，建立对&rdquo;什么是大语言模型&rdquo;的准确直觉——下一 token 预测（next-token prediction）范式为何威力巨大，什么是能力涌现；第二，梳理从 n-gram 到 DeepSeek 的发展脉络，让你在读到后续章节的每个技术时都知道&rdquo;它从哪里来、解决什么问题&rdquo;；第三，给出全书路线图并搭好学习环境。学完本章，你应当能够在一张白纸上画出 LLM 的&rdquo;预训练—微调—对齐&rdquo;三级流水线，并对参数、数据、算力三者的规模量级有基本感觉。</p>
+<h2 id="11">1.1 什么是大语言模型</h2>
+<h3 id="111">1.1.1 语言建模：从概率到生成</h3>
+<p>语言模型（Language Model, LM）的本质，是对自然语言的概率分布建模：给定一段文本，计算这段文本出现的概率。用形式化语言描述，设一个长度为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi></mrow><annotation encoding="application/x-tex">T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span> 的词序列 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo>=</mo><mo stretchy="false">(</mo><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>w</mi><mi>T</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">w = (w_1, w_2, \dots, w_T)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>，语言模型给出其联合概率 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>w</mi><mi>T</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(w_1, \dots, w_T)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>。直接建模联合概率很困难，概率链式法则（chain rule of probability）告诉我们，可以把它分解为一系列条件概率的连乘：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>w</mi><mi>T</mi></msub><mo stretchy="false">)</mo><mo>=</mo><munderover><mo>∏</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mi>T</mi></munderover><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>w</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(w_1, w_2, \dots, w_T) = \prod_{t=1}^{T} P(w_t \mid w_1, \dots, w_{t-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:3.0954em;vertical-align:-1.2671em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283em;"><span style="top:-1.8829em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∏</span></span></span><span style="top:-4.3em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2671em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>
+<p>也就是说，&rdquo;建模一段话的概率&rdquo;等价于&rdquo;反复预测下一个词&rdquo;。这就是<strong>自回归（autoregressive）语言建模</strong>：每次以已生成的全部前文为条件，预测下一个 token 的概率分布 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>w</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(w_t \mid w_{&lt;t})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mrel mtight">&lt;</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1774em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>。大语言模型就是用极深的神经网络（在本书中几乎总是 Transformer）来实现这个条件分布的模型，&rdquo;大&rdquo;指的是参数量大——现代 LLM 从数十亿（B，billion）到上万亿参数不等。</p>
+<p>&ldquo;预测下一个词&rdquo;这个目标看似简单，实则是通用的：要把下一个词预测得准，模型隐式地必须掌握语法、事实知识、常识推理，甚至代码逻辑。例如，要预测&rdquo;法国的首都是__&rdquo;的下一个词，模型必须&rdquo;知道&rdquo;巴黎；要预测一段 Python 代码的下一个 token，模型必须&rdquo;理解&rdquo;缩进规则与变量作用域。下一 token 预测因此被称为一种<strong>自监督学习</strong>（self-supervised learning）：监督信号（下一个词是什么）直接来自数据本身，无需人工标注，这使得训练数据可以扩展到互联网规模的万亿 token。</p>
+<blockquote>
+<p>📌 注：本节用&rdquo;词&rdquo;（word）称呼序列单元 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">w_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，是为了让链式法则的记号与第 0 章概率部分保持一致。在实际系统中，模型处理的最小单位是 <strong>token</strong>——由分词器（第 4 章）切出的子词片段，可能是整词（&rdquo;学习&rdquo;）、词的一部分（&rdquo;ization&rdquo;）或单个字节。本书第 2 章之后会逐渐统一使用 token 记号，两者的数学角色完全相同：都是离散词表 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 中的一个元素。更多背景可参考维基百科 <a href="https://en.wikipedia.org/wiki/Large_language_model">Word (computing) 与 token 化</a>。</p>
+</blockquote>
+<p>生成（generation）则是在训练好的模型上反复执行：采样一个 token，拼回输入，再预测下一个，循环往复。这个&rdquo;一次预测一个、喂回去再预测&rdquo;的过程称为<strong>自回归解码</strong>（autoregressive decoding），是第 14 章推理优化的核心对象。</p>
+<h3 id="112">1.1.2 能力涌现：规模的魔法</h3>
+<p>一个令人惊讶的经验现象是：许多能力并非随规模线性增长，而是在参数量跨过某个阈值后才<strong>突然出现</strong>，这就是<strong>涌现能力</strong>（emergent abilities）。Wei et al.（2022）系统报告了这一现象：在数十亿参数以下，模型做多位数加法的正确率接近随机；跨过阈值后，正确率陡然跃升。类似地，思维链（Chain-of-Thought, CoT） prompting 带来的推理增益，也主要出现在百亿参数以上的模型中。</p>
+<p>对涌现现象的解释存在争议。一种观点（Schaeffer et al., 2023）认为，部分&rdquo;涌现&rdquo;是评测指标非线性（如&rdquo;完全答对才得分&rdquo;的离散指标）造成的假象，换成连续指标后能力增长其实是平滑的。</p>
+<blockquote>
+<p>📌 注：如果你对&rdquo;规模变大为什么会产生质变&rdquo;缺少直觉，可以把下一 token 预测想象成无数个难度不一的子任务（拼词、搭配、事实、推理）的混合：小模型把算力花在最常见的子任务上，长尾任务的表现停留在随机水平，因此在&rdquo;完全答对才得分&rdquo;的指标上得分接近零；规模扩大后长尾任务陆续越过随机基线，宏观上就表现为&rdquo;突然会了&rdquo;。想看更直观的可视化讲解，推荐 3Blue1Brown 的 <a href="https://www.3blue1brown.com/topics/neural-networks">Deep Learning 系列视频（第 5 章：注意力与 Transformer）</a>。</p>
+</blockquote>
+<p>本书第 7 章将回到这一争论。无论解释如何，工程事实是清楚的：<strong>规模本身是能力的重要来源</strong>，参数量、数据量、算力三者需要协同扩展——这正是 Scaling Laws（规模定律）研究的对象，也是现代 LLM 区别于传统 NLP 模型的根本特征。</p>
+<h3 id="113-llm-nlp">1.1.3 LLM 与传统 NLP 模型的区别</h3>
+<p>下表概括了范式层面的关键差异：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>传统 NLP（BERT 时代）</th>
+<th>大语言模型（GPT 时代）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>训练目标</td>
+<td>掩码词预测等代理任务</td>
+<td>下一 token 预测</td>
+</tr>
+<tr>
+<td>任务适配</td>
+<td>每个任务一个微调头</td>
+<td>一个模型通吃，提示词即可</td>
+</tr>
+<tr>
+<td>交互方式</td>
+<td>分类/打分</td>
+<td>自然语言指令 + 生成</td>
+</tr>
+<tr>
+<td>规模</td>
+<td>1 亿参数量级（如 BERT-base 110M）</td>
+<td>10B 至万亿参数</td>
+</tr>
+<tr>
+<td>数据</td>
+<td>数十 GB 精选语料（如 BookCorpus + Wikipedia）</td>
+<td>数万亿 token 的网络级语料</td>
+</tr>
+</tbody>
+</table>
+<p>值得强调的是&rdquo;一个模型通吃&rdquo;带来的产品形态变化：过去为情感分析、命名实体识别、机器翻译分别训练模型；今天只需向同一个 LLM 描述任务（few-shot prompting），它便可根据示例推断意图。任务边界从&rdquo;模型结构 + 数据集&rdquo;转移到了&rdquo;提示词&rdquo;，这是 ChatGPT 能成为通用助手的技术前提。</p>
+<h2 id="12-n-gram-deepseek">1.2 发展简史：从 n-gram 到 DeepSeek</h2>
+<p>理解 LLM 今天的形态，最好的方式是回看它一步步走来时分别解决了什么问题。下图给出全景时间线，随后按阶段展开。</p>
+<svg width="780" height="470" viewBox="0 0 780 470" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .axis { stroke: #888; stroke-width: 2; }
+    .tick { stroke: #aaa; stroke-width: 1; }
+    .lbl { font-family: sans-serif; font-size: 12px; fill: #555; text-anchor: middle; }
+    .node { fill: #3b6fd4; }
+    .node2 { fill: #e07020; }
+    .up { font-family: sans-serif; font-size: 12.5px; fill: #1a3c7a; text-anchor: middle; font-weight: bold; }
+    .down { font-family: sans-serif; font-size: 12.5px; fill: #a34a10; text-anchor: middle; font-weight: bold; }
+    .desc { font-family: sans-serif; font-size: 10.5px; fill: #666; text-anchor: middle; }
+    .title { font-family: sans-serif; font-size: 15px; fill: #222; text-anchor: middle; font-weight: bold; }
+    .lead { stroke: #bbb; stroke-width: 1; fill: none; }
+  </style>
+  <text x="390" y="25" class="title">语言模型发展时间线（1948 – 2025）</text>
+
+  <line class="axis" x1="40" y1="270" x2="750" y2="270"/>
+
+  <!-- ticks & years -->
+  <line class="tick" x1="60"  y1="265" x2="60"  y2="275"/><text class="lbl" x="60"  y="292">1948</text>
+  <line class="tick" x1="150" y1="265" x2="150" y2="275"/><text class="lbl" x="150" y="292">1980</text>
+  <line class="tick" x1="230" y1="265" x2="230" y2="275"/><text class="lbl" x="230" y="292">2003</text>
+  <line class="tick" x1="300" y1="265" x2="300" y2="275"/><text class="lbl" x="300" y="292">2014</text>
+  <line class="tick" x1="365" y1="265" x2="365" y2="275"/><text class="lbl" x="365" y="292">2017</text>
+  <line class="tick" x1="430" y1="265" x2="430" y2="275"/><text class="lbl" x="430" y="292">2020</text>
+  <line class="tick" x1="495" y1="265" x2="495" y2="275"/><text class="lbl" x="495" y="292">2022</text>
+  <line class="tick" x1="560" y1="265" x2="560" y2="275"/><text class="lbl" x="560" y="292">2023</text>
+  <line class="tick" x1="660" y1="265" x2="660" y2="275"/><text class="lbl" x="660" y="292">2024–25</text>
+
+  <!-- above-axis items -->
+  <circle class="node" cx="60" cy="270" r="5"/>
+  <line class="lead" x1="60" y1="265" x2="60" y2="215"/>
+  <text class="up" x="60" y="200">香农《通信的数学理论》</text>
+  <text class="desc" x="60" y="158">提出用 n-gram 近似</text>
+  <text class="desc" x="60" y="172">估计英语的熵</text>
+
+  <circle class="node" cx="230" cy="270" r="5"/>
+  <line class="lead" x1="230" y1="265" x2="230" y2="215"/>
+  <text class="up" x="230" y="200">NNLM (Bengio et al.)</text>
+  <text class="desc" x="230" y="158">神经网络 + 词嵌入</text>
+  <text class="desc" x="230" y="172">取代统计 n-gram</text>
+
+  <circle class="node" cx="365" cy="270" r="6"/>
+  <line class="lead" x1="365" y1="264" x2="365" y2="215"/>
+  <text class="up" x="365" y="200">Transformer</text>
+  <text class="desc" x="365" y="158">Attention Is All You Need</text>
+  <text class="desc" x="365" y="172">完全基于注意力，可大规模并行</text>
+
+  <circle class="node2" cx="495" cy="270" r="6"/>
+  <line class="lead" x1="495" y1="264" x2="495" y2="215"/>
+  <text class="up" x="495" y="200">ChatGPT 发布</text>
+  <text class="desc" x="495" y="158">RLHF 对齐的对话助手</text>
+  <text class="desc" x="495" y="172">两个月月活过亿</text>
+
+  <circle class="node2" cx="660" cy="270" r="6"/>
+  <line class="lead" x1="660" y1="264" x2="660" y2="215"/>
+  <text class="up" x="660" y="200">开源浪潮巅峰</text>
+  <text class="desc" x="660" y="158">Llama 3、Qwen2.5、</text>
+  <text class="desc" x="660" y="172">DeepSeek-V3 / R1</text>
+
+  <!-- below-axis items -->
+  <circle class="node" cx="150" cy="270" r="5"/>
+  <line class="lead" x1="150" y1="275" x2="150" y2="320"/>
+  <text class="down" x="150" y="338">统计语言模型时代</text>
+  <text class="desc" x="150" y="356">n-gram + 平滑（Katz 回插等）</text>
+  <text class="desc" x="150" y="370">语音识别与机器翻译的标配</text>
+
+  <circle class="node" cx="300" cy="270" r="5"/>
+  <line class="lead" x1="300" y1="275" x2="300" y2="320"/>
+  <text class="down" x="300" y="338">Seq2Seq / Attention</text>
+  <text class="desc" x="300" y="356">RNN 编码器-解码器（Sutskever 2014）</text>
+  <text class="desc" x="300" y="370">注意力最初用于对齐翻译（Bahdanau 2014）</text>
+
+  <circle class="node" cx="430" cy="270" r="6"/>
+  <line class="lead" x1="430" y1="276" x2="430" y2="320"/>
+  <text class="down" x="430" y="338">GPT-3：175B 参数</text>
+  <text class="desc" x="430" y="356">300B token 预训练，上下文学习</text>
+  <text class="desc" x="430" y="370">GPT-1(2018) / BERT(2018) / GPT-2(2019)</text>
+
+  <circle class="node2" cx="560" cy="270" r="6"/>
+  <line class="lead" x1="560" y1="276" x2="560" y2="320"/>
+  <text class="down" x="560" y="338">GPT-4 / 开源追赶</text>
+  <text class="desc" x="560" y="356">GPT-4(2023.3)、Llama 2(2023.7)、</text>
+  <text class="desc" x="560" y="370">Mistral 7B(2023.9)、Mixtral MoE(2023.12)</text>
+
+  <!-- era bands -->
+  <text class="lbl" x="130" y="440">统计时代</text>
+  <text class="lbl" x="290" y="440">神经时代</text>
+  <text class="lbl" x="450" y="440">规模时代</text>
+  <text class="lbl" x="620" y="440">对齐与开源时代</text>
+  <line class="lead" x1="40" y1="425" x2="750" y2="425"/>
+</svg>
+<h3 id="121-n-gram">1.2.1 统计时代：n-gram 与香农的游戏</h3>
+<p>1948 年，香农（Claude Shannon）在《通信的数学理论》中提出用 n-gram 统计来逼近英语的熵，并设计了著名的&rdquo;人类预测下一个字母&rdquo;实验。此后数十年，基于计数和平滑（smoothing）的 n-gram 模型一直是语音识别与机器翻译的标准组件。它的根本缺陷在第 2 章会详细讨论：稀疏性——绝大多数合法的词组合在训练数据中从未出现，参数量随阶数指数增长，长程依赖无从谈起。</p>
+<h3 id="122-nnlm-rnnlstm">1.2.2 神经时代：从 NNLM 到 RNN/LSTM</h3>
+<p>2003 年，Bengio 等人的神经概率语言模型（Neural Probabilistic Language Model, NNLM）迈出关键一步：用神经网络的词嵌入（word embedding）表示词，再把前 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span> 个词的嵌入拼接后经多层网络预测下一个词。这一工作引入了两个影响深远的思想——<strong>分布式词表示</strong>与<strong>参数共享</strong>，使模型能对未见过的词组合给出合理的概率泛化。2013 年 word2vec 把&rdquo;分布式表示&rdquo;推向极致，2014 年 Seq2Seq 与注意力机制（attention，最初作为 RNN 翻译系统的对齐组件）登场。RNN/LSTM 虽能处理任意长度序列，但其顺序计算无法并行、且长距离信息经反复传递容易衰减，制约了规模扩展——这两个痛点正是 Transformer 的直接靶子。</p>
+<h3 id="123-transformer-gpt">1.2.3 规模时代：Transformer 与 GPT 系列</h3>
+<p>2017 年，Google 的《Attention Is All You Need》提出 Transformer：抛弃循环结构，完全依靠自注意力（self-attention）在任意两个位置之间直接传递信息，训练可完全并行。Transformer 是现代所有 LLM 的骨架，第 3 章将逐模块剖析。</p>
+<p>2018–2020 年，GPT 系列验证了&rdquo;Transformer 解码器 + 大规模下一词预测&rdquo;路线的威力：</p>
+<ul>
+<li><strong>GPT-1</strong>（2018，1.17 亿参数）：首次展示&rdquo;无监督预训练 + 有监督微调&rdquo;的两段式范式，在多个 NLP 任务上达到当时最优。</li>
+<li><strong>GPT-2</strong>（2019，15 亿参数）：发现规模扩大后，模型无需微调即可通过零样本提示（zero-shot prompting）完成多任务，于是&rdquo;通用语言模型&rdquo;的构想开始成形。</li>
+<li><strong>GPT-3</strong>（2020，1750 亿参数，约 3000 亿 token 训练）：参数量扩大百倍以上后，<strong>上下文学习</strong>（in-context learning）出现——在提示里给几个示例，模型就能照做新任务，无需更新任何权重。GPT-3 的论文标题直接点题：&rdquo;Language Models are Few-Shot Learners&rdquo;。</li>
+</ul>
+<h3 id="124-instructgpt-chatgpt">1.2.4 对齐时代：InstructGPT 与 ChatGPT</h3>
+<p>GPT-3 虽强，却像一个&rdquo;文献续写器&rdquo;而非&rdquo;助手&rdquo;：用户问它问题，它可能接着写&rdquo;还有人问……&rdquo;而不是回答。2022 年初的 InstructGPT（Ouyang et al., 2022）给出解法，确立了<strong>RLHF</strong>（Reinforcement Learning from Human Feedback，基于人类反馈的强化学习）三阶段流程：先监督微调（SFT）教会模型遵循指令，再训练奖励模型（RM）为回答打分，最后用强化学习（PPO）优化模型去最大化奖励。ChatGPT 正是这套配方的产品化，RLHF 让&rdquo;续写器&rdquo;变成了&rdquo;对话助手&rdquo;。此后 DPO、GRPO 等更简洁的对齐方法相继出现，2025 年初 DeepSeek-R1 展示了用 GRPO + 可验证奖励（RLVR）就能激发出长链推理能力，把后训练推向了新阶段。这些将在第 12–13 章完整展开。</p>
+<h3 id="125-llamaqwen-deepseek">1.2.5 开源浪潮：Llama、Qwen 与 DeepSeek</h3>
+<p>GPT-3 之后，开源社区从追赶到并跑。Meta 的 <strong>Llama</strong>（2023.2，7B–65B）与 <strong>Llama 2</strong>（2023.7，7B/13B/70B）确立了&rdquo;开源权重 + 现代架构（RMSNorm、RoPE、SwiGLU、GQA）&rdquo;的事实标准，Llama 3（2024.4，8B/70B，后续 405B）进一步缩小了与闭源模型的差距。同期 Mistral 7B（2023.9）以小胜大，Mixtral（2023.12）把混合专家（MoE）架构带入开源视野。国内的 <strong>Qwen</strong>（阿里通义千问）系列持续迭代，Qwen2.5 覆盖 0.5B–72B 并成为开源社区微调最频繁的基座之一；<strong>DeepSeek-V3</strong>（2024.12，671B 总参数、约 37B 激活的 MoE）以极低的训练成本引发关注，<strong>DeepSeek-R1</strong>（2025.1）则以开放权重复现了 o1 级别的推理能力。今天，一个开发者用一张消费级显卡就能运行 7B 级模型、用 LoRA 微调出自己的助手——这在 2020 年是不可想象的。</p>
+<h2 id="13-llm">1.3 预训练—微调—对齐：LLM 的三级流水线</h2>
+<p>现代 LLM 的生产流程可以概括为三段式流水线，各段目标、数据与算力消耗截然不同：</p>
+<svg width="780" height="330" viewBox="0 0 780 330" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L9,3 L0,6 Z" fill="#555"/>
+    </marker>
+  </defs>
+  <style>
+    .stage { fill: #eef4ff; stroke: #3b6fd4; stroke-width: 1.5; }
+    .inner { fill: #fff; stroke: #7a9ae0; stroke-width: 1; }
+    .h { font-family: sans-serif; font-size: 15px; font-weight: bold; fill: #1a3c7a; text-anchor: middle; }
+    .t { font-family: sans-serif; font-size: 11.5px; fill: #333; text-anchor: middle; }
+    .s { font-family: sans-serif; font-size: 10.5px; fill: #777; text-anchor: middle; }
+    .arrow { stroke: #555; stroke-width: 2; fill: none; marker-end: url(#arr1); }
+    .note { font-family: sans-serif; font-size: 11px; fill: #a34a10; text-anchor: middle; }
+  </style>
+
+  <rect class="stage" x="30" y="60" width="210" height="180" rx="10"/>
+  <text class="h" x="135" y="88">① 预训练 Pre-training</text>
+  <rect class="inner" x="45" y="105" width="180" height="115" rx="6"/>
+  <text class="t" x="135" y="127">目标：下一 token 预测</text>
+  <text class="t" x="135" y="147">数据：万亿级 token 网络语料</text>
+  <text class="t" x="135" y="167">算法：自监督，海量算力</text>
+  <text class="t" x="135" y="187">产出：基座模型（会续写，</text>
+  <text class="t" x="135" y="205">不一定会听话）</text>
+  <text class="s" x="135" y="226">→ 第 5–9 章</text>
+
+  <rect class="stage" x="285" y="60" width="210" height="180" rx="10"/>
+  <text class="h" x="390" y="88">② 微调 SFT</text>
+  <rect class="inner" x="300" y="105" width="180" height="115" rx="6"/>
+  <text class="t" x="390" y="127">目标：学会遵循指令</text>
+  <text class="t" x="390" y="147">数据：万~百万条指令-回答对</text>
+  <text class="t" x="390" y="167">算法：监督学习（可加 LoRA）</text>
+  <text class="t" x="390" y="187">产出：指令模型</text>
+  <text class="s" x="390" y="226">→ 第 10 章</text>
+
+  <rect class="stage" x="540" y="60" width="210" height="180" rx="10"/>
+  <text class="h" x="645" y="88">③ 对齐 Alignment</text>
+  <rect class="inner" x="555" y="105" width="180" height="115" rx="6"/>
+  <text class="t" x="645" y="127">目标：有用、诚实、无害</text>
+  <text class="t" x="645" y="147">数据：人类偏好比较</text>
+  <text class="t" x="645" y="167">算法：RLHF / DPO / GRPO</text>
+  <text class="t" x="645" y="187">产出：对话助手</text>
+  <text class="s" x="645" y="226">→ 第 12–13 章</text>
+
+  <path class="arrow" d="M 240 150 L 283 150"/>
+  <path class="arrow" d="M 495 150 L 538 150"/>
+
+  <text class="note" x="135" y="285">算力占比：绝大部分（>95%）</text>
+  <text class="note" x="390" y="285">算力占比：少量</text>
+  <text class="note" x="645" y="285">算力占比：少但决定"性格"</text>
+
+  <path class="arrow" d="M 540 250 C 400 320 200 320 135 245" stroke-dasharray="5,4" stroke="#aaa"/>
+  <text class="s" x="330" y="322">部署后的反馈数据可回流，用于下一轮迭代（第 14–15 章部署）</text>
+</svg>
+<ul>
+<li><strong>预训练（pre-training）</strong>：在数万亿 token 上做下一词预测，学会语言、知识与初步推理。消耗了绝大部分算力（GPT-3 级模型训练一次需要数千张 GPU 跑数周），产出的是&rdquo;基座模型&rdquo;（base model）。</li>
+<li><strong>监督微调（Supervised Fine-Tuning, SFT）</strong>：用人工编写的高质量&rdquo;指令→回答&rdquo;对继续训练，把基座从&rdquo;续写机器&rdquo;变成&rdquo;听指令办事的模型&rdquo;。数据量骤降至万级到百万级，算力需求小几个数量级。</li>
+<li><strong>对齐（alignment）</strong>：通过人类偏好数据 + 强化学习，进一步塑造模型的行为边界——更有帮助、更诚实、更无害（Helpful, Honest, Harmless，即 3H）。SFT 教模型&rdquo;做什么&rdquo;，对齐在诸多可行回答中挑选&rdquo;人类更偏好的那种&rdquo;。</li>
+</ul>
+<p>一个常见的误解是把三段流水线当作严格串行的&rdquo;官方流程&rdquo;。实践中它是灵活的：小模型可以直接蒸馏；RLHF 之后常再补一轮 SFT；DeepSeek-R1 甚至展示了&rdquo;纯 RL（可验证奖励）+ 少量冷启动数据&rdquo;也能造就强推理模型。但作为思维框架，&rdquo;预训练给能力、微调给形式、对齐给价值观&rdquo;是理解一切后训练技术的钥匙。</p>
+<h2 id="14">1.4 规模概览：参数、数据、算力</h2>
+<p>三个量级决定了 LLM 的成本与能力。下表列出若干代表性模型（数字来自各官方论文/技术报告，开源模型给出总参数量，MoE 模型注明激活参数）：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>发布时间</th>
+<th>参数量</th>
+<th>训练数据（token）</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT-2</td>
+<td>2019.02</td>
+<td>1.5B</td>
+<td>约 40 亿（WebText）</td>
+<td>零样本多任务初现</td>
+</tr>
+<tr>
+<td>GPT-3</td>
+<td>2020.05</td>
+<td>175B</td>
+<td>约 3000 亿</td>
+<td>few-shot 学习，训练约 3.14e23 FLOPs</td>
+</tr>
+<tr>
+<td>Llama 2</td>
+<td>2023.07</td>
+<td>7B / 13B / 70B</td>
+<td>2 万亿</td>
+<td>开源权重，可商用</td>
+</tr>
+<tr>
+<td>Mistral 7B</td>
+<td>2023.09</td>
+<td>7.3B</td>
+<td>8 万亿</td>
+<td>滑动窗口注意力</td>
+</tr>
+<tr>
+<td>Mixtral 8x7B</td>
+<td>2023.12</td>
+<td>46.7B（每 token 激活约 12.9B）</td>
+<td>—</td>
+<td>开源 MoE 代表</td>
+</tr>
+<tr>
+<td>Llama 3</td>
+<td>2024.04</td>
+<td>8B / 70B（405B 于 2024.07）</td>
+<td>15 万亿+</td>
+<td>开源旗舰</td>
+</tr>
+<tr>
+<td>Qwen2.5</td>
+<td>2024.09</td>
+<td>0.5B – 72B</td>
+<td>18 万亿</td>
+<td>中文最强开源系之一</td>
+</tr>
+<tr>
+<td>DeepSeek-V3</td>
+<td>2024.12</td>
+<td>671B（激活约 37B）</td>
+<td>14.8 万亿</td>
+<td>MoE，报告训练约 2.788M H800 GPU 时</td>
+</tr>
+</tbody>
+</table>
+<p>几点直觉值得建立：</p>
+<ul>
+<li><strong>参数量</strong>：7B 级模型在 INT4 量化后约占 4 GB 存储，可塞进手机；70B 级需要多卡服务；671B 的 MoE 虽总参数巨大，但每个 token 只激活一小部分，推理成本远低于同参数量的稠密模型。</li>
+<li><strong>数据量</strong>：经验上，训练 token 数与参数量的比值（&rdquo;重复度&rdquo;）在 Chinchilla 最优附近约为 20:1（第 7 章），但现代模型普遍远超此比例（Llama 3 为 15T/8B ≈ 1875:1），靠数据重复利用换取小参数高性能。</li>
+<li><strong>算力</strong>：训练总计算量常用 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>≈</mo><mn>6</mn><mi>N</mi><mi>D</mi></mrow><annotation encoding="application/x-tex">C \approx 6ND</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">6</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span></span> 估算（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 为参数量，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi></mrow><annotation encoding="application/x-tex">D</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span></span> 为 token 数，第 3 章推导）。一张 H100 每秒约 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><msup><mn>0</mn><mn>15</mn></msup></mrow><annotation encoding="application/x-tex">10^{15}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">15</span></span></span></span></span></span></span></span></span></span></span></span> FLOPs（BF16 理论峰值近 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><msup><mn>0</mn><mn>15</mn></msup></mrow><annotation encoding="application/x-tex">10^{15}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">15</span></span></span></span></span></span></span></span></span></span></span></span>），训练一个 8B 模型 15T token 约 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7.2</mn><mo>×</mo><mn>1</mn><msup><mn>0</mn><mn>23</mn></msup></mrow><annotation encoding="application/x-tex">7.2\times10^{23}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">7.2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">23</span></span></span></span></span></span></span></span></span></span></span></span> FLOPs——即便千卡集群也要跑数周。这个估算能力在第 7、8、15 章会反复用到。</li>
+</ul>
+<h3 id="141">1.4.1 算力之外的隐藏成本</h3>
+<p>初学者容易把 LLM 的门槛等同于&rdquo;买得起多少张显卡&rdquo;，实际上预训练还有三块常被低估的成本。<strong>数据工程</strong>：从 Common Crawl 到可训练语料需要经过抓取、抽取、清洗、去重、配比等长管线（第 5 章），其工程量与调参难度不亚于训练本身；业界常说&rdquo;垃圾进、垃圾出&rdquo;，数据质量的细微差异会在最终模型能力上被放大。<strong>实验与迭代</strong>：一次大规模预训练动辄数周，期间任何一次 loss spike 都可能浪费数十万元算力，因此必须先用小模型、短训练做充分的消融实验（这依赖第 7 章 Scaling Laws 提供的外推能力），再放大到目标规模。<strong>评测</strong>：训练完成只是开始，要回答&rdquo;这个模型到底好不好、好在哪里、差在哪里&rdquo;，需要系统化的评测体系（第 11 章）。理解这三块隐藏成本，有助于你在阅读本书后续章节时明白：为什么我们要花整整五章讲预训练，而不是只讲一个训练循环。</p>
+<h3 id="142">1.4.2 一个常见的规模误区</h3>
+<p>&ldquo;参数越多越好&rdquo;是新手最常见的误区。事实上，在固定算力预算下，参数量与数据量存在最优配比（Chinchilla 定律，第 7 章）：盲目堆参数而数据不足，模型会&rdquo;欠训练&rdquo;，性能反而不如更小但喂饱数据的模型。而在部署侧，推理成本几乎随参数量线性增长，第 14 章会展示同一模型的不同量化版本在精度与速度之间的权衡。<strong>规模是一个三维（参数、数据、算力）联合优化问题，而不是一个单维军备竞赛</strong>——DeepSeek-V3 用 671B 总参数、约 37B 激活的稀疏设计在成本与能力之间取得平衡，正是这一思想的好例子。</p>
+<h2 id="15">1.5 本教材路线图</h2>
+<p>全书 17 章按&rdquo;基础 → 预训练 → 微调评测 → 后训练 → 部署 → 多模态与前沿&rdquo;推进（前言中的路线图给出了完整依赖关系）。就本章之后的路径而言：第 2 章补齐语言建模的概率基础与解码策略，第 3 章深入 Transformer 并亲手实现最小 GPT，第 4 章解决文本如何变成 token 的问题——这四章是全书的地基。此后无论你走向预训练工程（第 5–9 章）、微调与评测（第 10–11 章）、对齐研究（第 12–13 章）还是推理部署（第 14–15 章），都建立在这块地基之上。</p>
+<h2 id="16">1.6 学习环境准备</h2>
+<p>本书实战代码以 Python + PyTorch 为主。推荐环境如下：</p>
+<p><strong>Python 与 PyTorch。</strong> 使用 Python 3.10+，PyTorch 2.x。安装（CUDA 12.1 版本为例）：</p>
+<pre><code class="language-bash"># 使用 pip 安装 PyTorch（国内可加清华镜像 -i https://pypi.tuna.tsinghua.edu.cn/simple）
+pip install torch --index-url https://download.pytorch.org/whl/cu121
+</code></pre>
+<pre><code class="language-python"># 验证 GPU 是否可用
+import torch
+print(torch.__version__)
+print(torch.cuda.is_available())        # True 表示 GPU 可用
+print(torch.cuda.get_device_name(0))    # 打印显卡型号
+</code></pre>
+<p><strong>常用库。</strong> <code>transformers</code>、<code>datasets</code>、<code>tokenizers</code>、<code>peft</code>、<code>trl</code>（HuggingFace 全家桶）、<code>wandb</code>（实验追踪）、<code>vllm</code>（推理部署）。国内网络环境下，HuggingFace 模型下载可用镜像：</p>
+<pre><code class="language-bash"># 使用 hf-mirror 镜像下载模型与数据集
+export HF_ENDPOINT=https://hf-mirror.com
+pip install -U huggingface_hub
+huggingface-cli download Qwen/Qwen2.5-0.5B --local-dir ./qwen-0.5b
+</code></pre>
+<p><strong>算力选择。</strong> 本书各章实战的最低配置如下，可按需选择本地 GPU、Colab 或国内云平台（AutoDL、阿里云 PAI 等）：</p>
+<table>
+<thead>
+<tr>
+<th>章节</th>
+<th>实战内容</th>
+<th>最低显存</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 3 章</td>
+<td>最小 GPT 训练</td>
+<td>4 GB（CPU 亦可，较慢）</td>
+</tr>
+<tr>
+<td>第 6 章</td>
+<td>TinyStories 预训练</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>第 10 章</td>
+<td>LoRA 微调 7B</td>
+<td>16 GB（QLoRA 约 8 GB）</td>
+</tr>
+<tr>
+<td>第 13 章</td>
+<td>小模型 GRPO</td>
+<td>24 GB</td>
+</tr>
+<tr>
+<td>第 14–15 章</td>
+<td>vLLM 部署 7B</td>
+<td>20 GB</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Colab。</strong> 免费 Tier 提供 T4（16 GB），Pro 版提供 A100，适合临时跑通流程；注意免费会话有时长限制，重要实验务必及时保存 checkpoint。</p>
+<h2 id="_1">本章小结</h2>
+<ul>
+<li>语言建模 = 用链式法则把序列概率分解为条件概率连乘，LLM 用超大神经网络实现 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>w</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(w_t \mid w_{&lt;t})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mrel mtight">&lt;</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1774em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>，即下一 token 预测；该目标自监督、可扩展，是能力涌现的土壤。</li>
+<li>发展史的主旋律是&rdquo;可扩展性&rdquo;：n-gram 受稀疏性所限 → NNLM 引入分布式表示 → RNN 受顺序计算所限 → Transformer 实现全并行 → GPT-3 验证规模 → InstructGPT/ChatGPT 解决对齐 → Llama/Qwen/DeepSeek 开源浪潮。</li>
+<li>现代 LLM 生产是三级流水线：预训练（能力，消耗绝大部分算力）→ SFT（指令形式）→ 对齐（偏好与安全）。</li>
+<li>参数（B 级到千亿级）、数据（万亿 token 级）、算力（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>≈</mo><mn>6</mn><mi>N</mi><mi>D</mi></mrow><annotation encoding="application/x-tex">C \approx 6ND</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">6</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span></span>，e23–e25 FLOPs）三个数字是讨论一切 LLM 的坐标系。</li>
+<li>环境准备：Python + PyTorch 2.x + HuggingFace 全家桶，无 GPU 可用 Colab / 国内云平台，下载用 hf-mirror 镜像。</li>
+</ul>
+<h2 id="_2">练习</h2>
+<ol>
+<li><strong>概念题</strong>：用自己的话解释&rdquo;为什么预测下一个词的目标，会迫使模型学到语法、事实知识和推理能力&rdquo;？举一个具体的句子示例说明。</li>
+<li><strong>概念题</strong>：基座模型与经过 RLHF 的对话模型在&rdquo;用户问：北京有什么好玩的景点？&rdquo;时行为有何不同？为什么流水线中必须引入对齐阶段？</li>
+<li><strong>计算题</strong>：用 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>≈</mo><mn>6</mn><mi>N</mi><mi>D</mi></mrow><annotation encoding="application/x-tex">C \approx 6ND</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">6</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span></span> 估算：一个 7B 模型训练 2 万亿 token 需要多少 FLOPs？若单张 GPU 的有效算力为 400 TFLOPs（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>×</mo><mn>1</mn><msup><mn>0</mn><mn>14</mn></msup></mrow><annotation encoding="application/x-tex">4\times10^{14}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">14</span></span></span></span></span></span></span></span></span></span></span></span>）、利用 1024 张卡，理论训练耗时多久？请与公开报告中同类模型的训练时长对比。</li>
+<li><strong>调研题</strong>：查阅 Llama 3 与 Qwen2.5 的技术报告/模型卡，整理两者在参数规模、训练数据量、架构细节（归一化、位置编码、注意力变体）上的异同，填成一张对比表。</li>
+<li><strong>思考题</strong>：涌现能力是&rdquo;真实存在&rdquo;还是&rdquo;评测指标造成的假象&rdquo;？分别给出支持两种观点的论据，并思考这一争论对&rdquo;小模型是否有商业价值&rdquo;意味着什么。</li>
+</ol>
+<h3 id="_3">实操：编程练习</h3>
+<p><strong>练习 A：用 pipeline 跑一个小模型问答。</strong> HuggingFace 的 <code>pipeline</code> 是调用 LLM 的最短路径，先用它建立&rdquo;模型—分词器—生成&rdquo;的整体印象（各组件分别在第 3、4 章拆解）。</p>
+<pre><code class="language-python"># pip install transformers torch
+from transformers import pipeline
+
+# 文本生成 pipeline：加载一个 0.5B 小模型，CPU 也能跑（几分钟内下载完成）
+# 国内可先执行: export HF_ENDPOINT=https://hf-mirror.com
+gen = pipeline(&quot;text-generation&quot;, model=&quot;Qwen/Qwen2.5-0.5B&quot;)
+
+prompt = &quot;问题：法国的首都是哪里？\n答案：&quot;
+out = gen(prompt, max_new_tokens=20, do_sample=False)  # do_sample=False 即贪心解码
+print(out[0][&quot;generated_text&quot;])
+# 预期输出（截断示意）：'问题：法国的首都是哪里？\n答案：巴黎。'
+# 模型只见过&quot;续写&quot;，却回答了问题——第 1.1.1 节&quot;下一词预测蕴含知识&quot;的直接证据
+
+# 换一个对话格式的 pipeline，体验指令模型与基座模型的区别
+chat = pipeline(&quot;text-generation&quot;, model=&quot;Qwen/Qwen2.5-0.5B-Instruct&quot;)
+msgs = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;用一句话解释什么是注意力机制。&quot;}]
+print(chat(msgs, max_new_tokens=60)[0][&quot;generated_text&quot;][-1][&quot;content&quot;])
+</code></pre>
+<p><strong>练习 B：亲手验证&rdquo;续写器 vs 助手&rdquo;。</strong> 用同一个问题分别问基座模型与指令模型，观察 1.2.4 节描述的行为差异。</p>
+<pre><code class="language-python">from transformers import pipeline
+
+base = pipeline(&quot;text-generation&quot;, model=&quot;Qwen/Qwen2.5-0.5B&quot;)
+q = &quot;北京有什么好玩的景点？&quot;
+print(base(q, max_new_tokens=50, do_sample=False)[0][&quot;generated_text&quot;])
+# 基座模型可能做的是&quot;续写&quot;：接着编造更多问题，如
+#   '北京有什么好玩的景点？\n上海有什么好玩的景点？\n广州有什么好玩的景点？...'
+inst = pipeline(&quot;text-generation&quot;, model=&quot;Qwen/Qwen2.5-0.5B-Instruct&quot;)
+print(inst([{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: q}], max_new_tokens=100)[0]
+      [&quot;generated_text&quot;][-1][&quot;content&quot;])
+# 指令模型则会真正列举景点（故宫、长城、颐和园……）——SFT+对齐带来的行为改变
+</code></pre>
+<p><strong>练习 C：规模直觉计算器。</strong> 把 1.4 节的估算公式写成函数，扫码式地比较几个模型。</p>
+<pre><code class="language-python">def train_flops(n_params_b, tokens_t):
+    &quot;&quot;&quot;C ≈ 6ND。参数单位十亿(B)，token 单位万亿(T)。&quot;&quot;&quot;
+    return 6 * n_params_b * 1e9 * tokens_t * 1e12
+
+def gpu_days(flops, gpus=1024, tflops_per_gpu=400, util=0.45):
+    &quot;&quot;&quot;有效算力 = 峰值 × 利用率；返回 gpu·天 数。&quot;&quot;&quot;
+    eff = gpus * tflops_per_gpu * 1e12 * util
+    return flops / eff / 86400
+
+for name, n, d in [(&quot;Llama-2-7B&quot;, 7, 2), (&quot;Llama-3-8B&quot;, 8, 15), (&quot;Qwen2.5-72B&quot;, 72, 18)]:
+    c = train_flops(n, d)
+    print(f&quot;{name}: C≈{c:.2e} FLOPs, 1024卡约 {gpu_days(c):.0f} 天&quot;)
+# 预期输出：
+# Llama-2-7B: C≈8.40e+22 FLOPs, 1024卡约 5 天
+# Llama-3-8B: C≈7.20e+23 FLOPs, 1024卡约 46 天
+# Qwen2.5-72B: C≈7.78e+24 FLOPs, 1024卡约 496 天
+</code></pre>
+<h2 id="_4">延伸阅读</h2>
+<ul>
+<li>GPT-3 论文《Language Models are Few-Shot Learners》：<a href="https://arxiv.org/abs/2005.14165">https://arxiv.org/abs/2005.14165</a></li>
+<li>涌现能力论文《Emergent Abilities of Large Language Models》：<a href="https://arxiv.org/abs/2206.07682">https://arxiv.org/abs/2206.07682</a></li>
+<li>涌现争议《Are Emergent Abilities of Large Language Models a Mirage?》：<a href="https://arxiv.org/abs/2304.15004">https://arxiv.org/abs/2304.15004</a></li>
+<li>InstructGPT 论文《Training language models to follow instructions with human feedback》：<a href="https://arxiv.org/abs/2203.02155">https://arxiv.org/abs/2203.02155</a></li>
+<li>《Attention Is All You Need》：<a href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></li>
+<li>Llama 3 技术报告（Herd 模型）：<a href="https://arxiv.org/abs/2407.21783">https://arxiv.org/abs/2407.21783</a></li>
+<li>DeepSeek-V3 技术报告：<a href="https://arxiv.org/abs/2412.19437">https://arxiv.org/abs/2412.19437</a></li>
+<li>Jay Alammar《The Illustrated GPT-2》：<a href="https://jalammar.github.io/illustrated-gpt2/">https://jalammar.github.io/illustrated-gpt2/</a></li>
+<li>Stanford CS336 课程（Lecture 1: Overview）：<a href="https://stanford-cs336.github.io/spring2025/">https://stanford-cs336.github.io/spring2025/</a></li>
+<li>HuggingFace 镜像站 hf-mirror：<a href="https://hf-mirror.com/">https://hf-mirror.com/</a></li>
+</ul><div class="pagenav"><a class="nav-prev" href="ch00.html">← 上一页</a><a class="nav-next" href="ch02.html">下一页 →</a></div></article></main></body></html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>大模型：从 Transformer 到部署 | LLM 中文教程免费在线试读 · 预训练/RLHF/量化部署</title>
+<meta name="description" content="《大模型：从 Transformer 到部署》309 页中文 LLM 系统教材免费在线试读：数学基础、Transformer 逐模块实现、预训练、分布式训练、LoRA 微调、RLHF/DPO/GRPO、量化部署、视觉语言模型，92 个可运行代码练习。">
+<meta name="keywords" content="大模型,LLM,Transformer,注意力机制,RoPE,预训练,分布式训练,LoRA,RLHF,DPO,GRPO,量化,vLLM,部署,视觉语言模型,中文教材,免费试读">
+<meta property="og:type" content="book">
+<meta property="og:title" content="大模型：从 Transformer 到部署（免费试读）">
+<meta property="og:description" content="从注意力机制到 RLHF、量化部署与视觉语言模型的 309 页中文系统教材。">
+<meta property="og:url" content="https://jiejin93.github.io/llm-textbook/">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://jiejin93.github.io/llm-textbook/"><link rel="stylesheet" href="katex/katex.min.css"><style>:root{--ink:#1f2933;--muted:#5b6b76;--brand:#1a56db;--bg:#f7f8fa;--line:#e4e8ee;}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Noto Sans SC","Source Han Sans SC","Microsoft YaHei",-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);line-height:1.75}
+h1,h2,h3,h4{line-height:1.35;font-weight:700}
+h1{font-size:1.9em;border-bottom:3px solid var(--brand);padding-bottom:.3em;margin-top:1em}
+h2{font-size:1.45em;margin-top:2em;border-left:5px solid var(--brand);padding-left:.5em}
+h3{font-size:1.2em;margin-top:1.6em}
+code,pre{font-family:"JetBrains Mono",Consolas,"Courier New",monospace}
+code{background:#eef1f5;padding:.1em .35em;border-radius:4px;font-size:.92em}
+pre{background:#0f172a;color:#e2e8f0;padding:1em 1.2em;border-radius:8px;overflow-x:auto;line-height:1.55}
+pre code{background:none;padding:0;color:inherit}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.95em}
+th,td{border:1px solid var(--line);padding:.45em .7em;text-align:left}
+th{background:#edf1f7}
+blockquote{margin:1em 0;padding:.6em 1em;border-left:4px solid #f59e0b;background:#fffbeb;border-radius:0 6px 6px 0}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+img,svg{max-width:100%;height:auto}
+figure{margin:1.5em 0;text-align:center}
+figcaption{color:var(--muted);font-size:.9em;margin-top:.4em}
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:270px;background:#fff;border-right:1px solid var(--line);overflow-y:auto;padding:1rem;z-index:10}
+#sidebar .brand{font-size:1.25em;font-weight:800;padding:.6rem .4rem 1rem}
+#sidebar .brand a{color:var(--ink)}
+#sidebar .brand span{font-size:.55em;font-weight:500;color:var(--muted)}
+#sidebar nav a{display:block;padding:.32rem .6rem;color:#3a4a55;border-radius:6px;font-size:.92em}
+#sidebar nav a:hover{background:#eef2f8}
+#sidebar nav a.active{background:#e8effd;color:var(--brand);font-weight:600}
+#sidebar .part{font-size:.8em;color:var(--muted);margin:.9em .4em .3em;font-weight:700;letter-spacing:.05em}
+main{margin-left:270px;padding:1.5rem 3rem 4rem;max-width:1100px}
+.topbar{display:none}
+@media (max-width:960px){
+ #sidebar{transform:translateX(-100%);transition:.2s} #sidebar.open{transform:none;box-shadow:0 0 30px rgba(0,0,0,.2)}
+ main{margin-left:0;padding:1rem}
+ .topbar{display:flex;align-items:center;gap:.8em;margin-bottom:1em}
+ .topbar button{font-size:1em;padding:.3em .7em}
+}
+.content{background:#fff;padding:2.5rem 3rem;border-radius:10px;box-shadow:0 1px 4px rgba(20,30,50,.06);max-width:900px}
+.pagenav{display:flex;justify-content:space-between;margin-top:3em;border-top:1px solid var(--line);padding-top:1em;gap:1em}
+.pagenav a{flex:1;border:1px solid var(--line);border-radius:8px;padding:.6em .9em;font-size:.92em}
+.pagenav a.nav-next{text-align:right}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:.3em 0}
+/* landing */
+body.landing main{margin:0 auto;padding:3rem 1.5rem}
+.landing-main{text-align:center}
+.cover-wrap{max-width:520px;margin:0 auto}
+h1{margin-top:1.2em}
+.subtitle{color:var(--muted);font-size:1.1em}
+.btn{display:inline-block;background:var(--brand);color:#fff!important;padding:.65em 1.6em;border-radius:8px;margin:.4em;font-weight:600}
+.btn.ghost{background:#fff;color:var(--brand)!important;border:1px solid var(--brand)}
+.toc-grid{text-align:left;margin-top:2.5em}
+.toc-grid h3{border-bottom:2px solid var(--line);padding-bottom:.3em;color:var(--brand)}
+.toc-grid .col{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.2em 1.5em;margin-bottom:1em}
+.toc-grid a{padding:.25em 0;display:block}
+
+.trial-banner{background:#fff7ed;border:1px solid #fdba74;border-radius:8px;padding:.7em 1em;margin-bottom:1.5em;font-size:.95em}
+.pay-card{display:flex;gap:1.5em;align-items:center;background:#fff;border:1px solid #dbe3ee;border-radius:12px;padding:1.5em;max-width:640px;margin:2em auto;text-align:left;box-shadow:0 2px 8px rgba(20,30,50,.06)}
+.pay-qr{width:180px;height:180px;border-radius:8px;border:1px solid #e4e8ee;flex:none}
+.pay-title{font-size:1.25em;font-weight:800;color:#1a56db;margin-bottom:.4em}
+.pay-note{color:#5b6b76;font-size:.88em;margin-top:.6em}
+@media (max-width:600px){.pay-card{flex-direction:column;text-align:center}}
+</style></head><body class="landing"><main class="landing-main"><div class="cover-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 820" font-family="'Noto Sans SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1e3f"/><stop offset="0.55" stop-color="#123a7a"/><stop offset="1" stop-color="#0b1e3f"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f6d365"/><stop offset="1" stop-color="#e8a33d"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.32" r="0.6">
+      <stop offset="0" stop-color="#3b82f6" stop-opacity="0.55"/><stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="820" fill="url(#bg)"/>
+  <rect width="600" height="820" fill="url(#glow)"/>
+  <!-- attention grid motif -->
+  <g opacity="0.5">
+    <g transform="translate(60,560)">
+      <!-- transformer stack schematic -->
+      <rect x="0" y="120" width="360" height="46" rx="8" fill="none" stroke="#7aa2f7" stroke-width="2"/>
+      <text x="180" y="149" fill="#bcd3fa" font-size="20" text-anchor="middle">FFN (SwiGLU)</text>
+      <rect x="0" y="60" width="360" height="46" rx="8" fill="none" stroke="#7aa2f7" stroke-width="2"/>
+      <text x="180" y="89" fill="#bcd3fa" font-size="20" text-anchor="middle">Multi-Head Attention</text>
+      <rect x="0" y="0" width="360" height="46" rx="8" fill="none" stroke="#7aa2f7" stroke-width="2"/>
+      <text x="180" y="29" fill="#bcd3fa" font-size="20" text-anchor="middle">RMSNorm + Residual</text>
+      <text x="180" y="-12" fill="#e8a33d" font-size="17" text-anchor="middle">× N 层</text>
+    </g>
+  </g>
+  <!-- tokens -->
+  <g font-size="19" fill="#8fb4f9" font-family="Consolas,monospace">
+    <rect x="62" y="470" width="54" height="30" rx="6" fill="none" stroke="#5b7fd4"/><text x="89" y="491" text-anchor="middle">大</text>
+    <rect x="126" y="470" width="54" height="30" rx="6" fill="none" stroke="#5b7fd4"/><text x="153" y="491" text-anchor="middle">模</text>
+    <rect x="190" y="470" width="54" height="30" rx="6" fill="none" stroke="#5b7fd4"/><text x="217" y="491" text-anchor="middle">型</text>
+    <rect x="254" y="470" width="54" height="30" rx="6" fill="#e8a33d" fill-opacity="0.18" stroke="#e8a33d"/><text x="281" y="491" text-anchor="middle" fill="#f3c77e">是</text>
+    <rect x="318" y="470" width="54" height="30" rx="6" fill="none" stroke="#5b7fd4"/><text x="345" y="491" text-anchor="middle">?</text>
+  </g>
+  <!-- decorative network nodes -->
+  <g stroke="#4c6fb5" stroke-width="1.1" opacity="0.85">
+    <line x1="130" y1="330" x2="180" y2="395"/><line x1="230" y1="330" x2="180" y2="395"/><line x1="330" y1="330" x2="180" y2="395"/>
+    <line x1="130" y1="330" x2="280" y2="395"/><line x1="230" y1="330" x2="280" y2="395"/><line x1="330" y1="330" x2="280" y2="395"/>
+    <line x1="180" y1="395" x2="230" y2="450"/><line x1="280" y1="395" x2="230" y2="450"/>
+  </g>
+  <g fill="#9dbcf2">
+    <circle cx="130" cy="330" r="8"/><circle cx="230" cy="330" r="8"/><circle cx="330" cy="330" r="8"/>
+    <circle cx="180" cy="395" r="8"/><circle cx="280" cy="395" r="8"/><circle cx="230" cy="450" r="9" fill="#e8a33d"/>
+  </g>
+  <!-- title band -->
+  <rect x="70" y="96" width="460" height="4" fill="url(#gold)"/>
+  <text x="300" y="176" fill="#f4f7ff" font-size="66" font-weight="800" text-anchor="middle" letter-spacing="6">大 模 型</text>
+  <text x="300" y="238" fill="#e8a33d" font-size="26" font-weight="600" text-anchor="middle" letter-spacing="2">从 Transformer 到部署</text>
+  <text x="300" y="284" fill="#9db8e4" font-size="16" text-anchor="middle">预训练 · 微调 · 评测 · RLHF · 量化 · 推理服务 · 视觉语言模型</text>
+  <rect x="70" y="308" width="460" height="2.5" fill="url(#gold)" opacity="0.7"/>
+</svg>
+</div>
+<h1>大模型：从 Transformer 到部署</h1>
+<p class="subtitle">免费试读版 · 第 0 章数学基础 + 前言 + 第 1–4 章</p>
+<p><a class="btn" href="math.html">开始阅读</a> <a class="btn ghost" href="https://github.com/jiejin93/llm-textbook" target="_blank">GitHub 仓库</a></p>
+<div class="pay-card">
+  <img class="pay-qr" src="pay-qr.png" alt="付款二维码">
+  <div class="pay-info">
+    <div class="pay-title">扫码获取完整版</div>
+    <div>¥39 早鸟价（前 200 名，后恢复 ¥59）· 309 页 PDF 全书<br>
+    预训练 · 分布式 · MoE · 微调 · 评测 · RLHF/DPO/GRPO · 量化部署 · 视觉语言模型</div>
+    <div class="pay-note">付款后请截图发送至 GitHub 仓库 Issues 或作者邮箱，24 小时内发送 PDF 与更新说明。<br>
+    含代码包（¥99）与答疑社群（¥199/年）版本见 <a href="https://github.com/jiejin93/llm-textbook" target="_blank">GitHub 仓库</a>。</div>
+  </div>
+</div>
+<div class="toc-grid"><h3>试读目录</h3><div class="col"><a href="math.html">第 0 章 数学基础</a><a href="ch00.html">前言</a><a href="ch01.html">第 1 章 绪论：大语言模型全景</a><a href="ch02.html">第 2 章 语言模型基础</a><a href="ch03.html">第 3 章 Transformer 详解</a><a href="ch04.html">第 4 章 分词器</a></div></div>
+<p style="color:#5b6b76;margin-top:2em">完整版共 17 章 + 数学基础 + 3 附录（309 页 PDF）：预训练、分布式训练、MoE、微调、评测、RLHF/DPO/GRPO、量化与部署、视觉语言模型等。获取方式见上方付款入口或 GitHub 仓库 README。</p>
+</main></body></html>

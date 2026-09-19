@@ -1,0 +1,630 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>第 4 章 分词器 · 大模型：从 Transformer 到部署（试读版）</title>
+<link rel="stylesheet" href="katex/katex.min.css"><style>:root{--ink:#1f2933;--muted:#5b6b76;--brand:#1a56db;--bg:#f7f8fa;--line:#e4e8ee;}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Noto Sans SC","Source Han Sans SC","Microsoft YaHei",-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);line-height:1.75}
+h1,h2,h3,h4{line-height:1.35;font-weight:700}
+h1{font-size:1.9em;border-bottom:3px solid var(--brand);padding-bottom:.3em;margin-top:1em}
+h2{font-size:1.45em;margin-top:2em;border-left:5px solid var(--brand);padding-left:.5em}
+h3{font-size:1.2em;margin-top:1.6em}
+code,pre{font-family:"JetBrains Mono",Consolas,"Courier New",monospace}
+code{background:#eef1f5;padding:.1em .35em;border-radius:4px;font-size:.92em}
+pre{background:#0f172a;color:#e2e8f0;padding:1em 1.2em;border-radius:8px;overflow-x:auto;line-height:1.55}
+pre code{background:none;padding:0;color:inherit}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.95em}
+th,td{border:1px solid var(--line);padding:.45em .7em;text-align:left}
+th{background:#edf1f7}
+blockquote{margin:1em 0;padding:.6em 1em;border-left:4px solid #f59e0b;background:#fffbeb;border-radius:0 6px 6px 0}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+img,svg{max-width:100%;height:auto}
+figure{margin:1.5em 0;text-align:center}
+figcaption{color:var(--muted);font-size:.9em;margin-top:.4em}
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:270px;background:#fff;border-right:1px solid var(--line);overflow-y:auto;padding:1rem;z-index:10}
+#sidebar .brand{font-size:1.25em;font-weight:800;padding:.6rem .4rem 1rem}
+#sidebar .brand a{color:var(--ink)}
+#sidebar .brand span{font-size:.55em;font-weight:500;color:var(--muted)}
+#sidebar nav a{display:block;padding:.32rem .6rem;color:#3a4a55;border-radius:6px;font-size:.92em}
+#sidebar nav a:hover{background:#eef2f8}
+#sidebar nav a.active{background:#e8effd;color:var(--brand);font-weight:600}
+#sidebar .part{font-size:.8em;color:var(--muted);margin:.9em .4em .3em;font-weight:700;letter-spacing:.05em}
+main{margin-left:270px;padding:1.5rem 3rem 4rem;max-width:1100px}
+.topbar{display:none}
+@media (max-width:960px){
+ #sidebar{transform:translateX(-100%);transition:.2s} #sidebar.open{transform:none;box-shadow:0 0 30px rgba(0,0,0,.2)}
+ main{margin-left:0;padding:1rem}
+ .topbar{display:flex;align-items:center;gap:.8em;margin-bottom:1em}
+ .topbar button{font-size:1em;padding:.3em .7em}
+}
+.content{background:#fff;padding:2.5rem 3rem;border-radius:10px;box-shadow:0 1px 4px rgba(20,30,50,.06);max-width:900px}
+.pagenav{display:flex;justify-content:space-between;margin-top:3em;border-top:1px solid var(--line);padding-top:1em;gap:1em}
+.pagenav a{flex:1;border:1px solid var(--line);border-radius:8px;padding:.6em .9em;font-size:.92em}
+.pagenav a.nav-next{text-align:right}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:.3em 0}
+/* landing */
+body.landing main{margin:0 auto;padding:3rem 1.5rem}
+.landing-main{text-align:center}
+.cover-wrap{max-width:520px;margin:0 auto}
+h1{margin-top:1.2em}
+.subtitle{color:var(--muted);font-size:1.1em}
+.btn{display:inline-block;background:var(--brand);color:#fff!important;padding:.65em 1.6em;border-radius:8px;margin:.4em;font-weight:600}
+.btn.ghost{background:#fff;color:var(--brand)!important;border:1px solid var(--brand)}
+.toc-grid{text-align:left;margin-top:2.5em}
+.toc-grid h3{border-bottom:2px solid var(--line);padding-bottom:.3em;color:var(--brand)}
+.toc-grid .col{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.2em 1.5em;margin-bottom:1em}
+.toc-grid a{padding:.25em 0;display:block}
+</style></head><body>
+<aside id="sidebar"><div class="brand"><a href="index.html">大模型<br><span>从 Transformer 到部署 · 免费试读</span></a></div>
+<nav id="toc"><a href="math.html">第 0 章 数学基础</a><a href="ch00.html">前言</a><a href="ch01.html">第 1 章 绪论：大语言模型全景</a><a href="ch02.html">第 2 章 语言模型基础</a><a href="ch03.html">第 3 章 Transformer 详解</a><a href="ch04.html" class=active>第 4 章 分词器</a><div class="part">完整版</div><a href="https://github.com/jiejin93/llm-textbook">GitHub 仓库 / 获取完整版</a></nav></aside>
+<main><div class="topbar"><button onclick="document.getElementById('sidebar').classList.toggle('open')">☰ 目录</button></div>
+<article class="content"><div class="trial-banner">📚 当前为免费试读版 · 完整版（第 5–17 章 + 附录）获取方式见 <a href="https://github.com/jiejin93/llm-textbook" target="_blank">GitHub 仓库</a></div>
+<h1 id="4">第 4 章 分词器</h1>
+<p>在第 3 章我们实现了完整的最小 GPT，但模型的输入不是字符串，而是整数序列。把文本切分成模型可见的基本单元（token）并映射为整数 ID 的组件，就是<strong>分词器（tokenizer）</strong>。分词器处于&rdquo;文本世界&rdquo;与&rdquo;模型世界&rdquo;的边界，它的选择决定了词表大小、序列长度、处理未知词的能力，甚至影响模型的多语言能力与算术推理能力。本章从为什么需要子词出发，完整推导 BPE、WordPiece、Unigram 三大算法，介绍 SentencePiece 与字节级 BPE 两种工程方案，并动手从零写一个不依赖任何库的 BPE。</p>
+<h2 id="41">4.1 为什么需要子词分词</h2>
+<h3 id="411">4.1.1 词级与字符级的两难</h3>
+<p>假设我们按&rdquo;词&rdquo;分词，每个词一个 ID：</p>
+<ul>
+<li><strong>词表爆炸</strong>：英语的词汇量轻松超过 50 万（含变形、专有名词），中文按词切分也需要数十万词条。巨大的词表使输入嵌入矩阵 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>×</mo><mi>d</mi></mrow><annotation encoding="application/x-tex">V \times d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span> 与输出投影成为参数与显存大户（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>=</mo><mn>500000</mn></mrow><annotation encoding="application/x-tex">V=500000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">500000</span></span></span></span>、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mn>4096</mn></mrow><annotation encoding="application/x-tex">d=4096</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4096</span></span></span></span> 时仅词表就 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>1</mn><msup><mn>0</mn><mn>9</mn></msup></mrow><annotation encoding="application/x-tex">2 \times 10^9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">9</span></span></span></span></span></span></span></span></span></span></span> 参数），且 softmax 计算量同步膨胀。</li>
+<li><strong>OOV（out-of-vocabulary）问题</strong>：新词、人名、错拼、代码标识符在词表中不存在，只能映射为 <code>&lt;UNK&gt;</code>，信息全部丢失。</li>
+<li><strong>形态学关系断裂</strong>：&rdquo;play / played / playing&rdquo; 成为三个互不相关的 ID，模型难以共享知识。</li>
+</ul>
+<p>退而求其次按&rdquo;字符&rdquo;分词（中文按字、英文按字母）：</p>
+<ul>
+<li>词表极小（英文 26 个字母 + 标点），永无 OOV。</li>
+<li>但序列变得极长：一个英文单词平均 4~5 个字符，同样文本的 token 数是词级的 4~5 倍，而注意力复杂度是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>——上下文有效长度大幅缩水；且单个字符携带的语义太少，模型需要在底层花大量容量做字符组合。</li>
+</ul>
+<h3 id="412">4.1.2 子词：两者的折中</h3>
+<p><strong>子词（subword）</strong> 的思想是：高频词保留为完整 token，低频词拆成更小的片段。例如 &ldquo;tokenization&rdquo; 若不在词表中，可拆为 &ldquo;token&rdquo; + &ldquo;ization&rdquo;。这样：</p>
+<ul>
+<li>词表大小适中（几万到十几万）；</li>
+<li>理论上不产生 OOV——最坏情况可以一路拆到字符甚至字节；</li>
+<li>形态相近的词共享子词，参数效率高；</li>
+<li>高频词不被拆碎，序列长度接近词级。</li>
+</ul>
+<p>所有主流 LLM（GPT、Llama、Qwen、DeepSeek）用的都是子词方案，主要是 BPE 及其变体。</p>
+<h3 id="413">4.1.3 怎么衡量一个分词器的好坏</h3>
+<p>工程上常用的指标：</p>
+<ul>
+<li><strong>压缩率 / fertility（生育率）</strong>：每 token 平均对应的字符数（或每词对应的 token 数）。越高越好——同样文本占用上下文更少、推理更便宜。比较时必须注明语言与领域（英文 fertility 接近 1 token/词，中文按字方案也是 1，但跨语言模型在低资源语言上可能到 2~4）。</li>
+<li><strong>覆盖率 / OOV 率</strong>：测试文本中需要回退到字节/UNK 的比例。</li>
+<li><strong>无损往返</strong>：<code>decode(encode(x)) == x</code> 必须严格成立，否则生成内容会&rdquo;悄悄损坏&rdquo;（空格丢失、全半角变化是常见 bug）。</li>
+<li><strong>词表利用率</strong>：词表中大量 token 在真实语料中几乎不出现（训练不充分、浪费参数），理想情况下载荷分布应与语料匹配。</li>
+</ul>
+<p>后面几节的算法选择，最终都要落到这几个指标上做取舍。</p>
+<h3 id="414">4.1.4 中文的特殊性</h3>
+<p>中文没有空格分隔，天然以&rdquo;字&rdquo;为单位（约 7000 常用字），这带来几个特点：</p>
+<ol>
+<li><strong>字符级在中文几乎就是词级</strong>，中文按字分词并不丢人——早期模型词表里的中文条目多是单字与常用双字词。</li>
+<li><strong>BPE 在中文上的单位选择</strong>：若以字为初始词表，BPE 能学出高频双字、三字词（如 &ldquo;机器&rdquo;&ldquo;学习&rdquo;）；GPT-2 的字节级 BPE 在中文上曾因字节切分导致 1 个汉字占 2~3 个 token，效率低下；GPT-4（cl100k）与 Qwen 系列大幅扩充中文词表，1 个汉字通常 1 个 token。</li>
+<li><strong>中英混排、全半角、繁简体</strong>都会影响切分统计，是中文分词器工程的常见坑。</li>
+</ol>
+<p>顺带一提，传统 NLP 的&rdquo;中文分词&rdquo;（jieba、THULAC 等基于词典或统计的切词）解决的是<strong>给定词表如何切</strong>，而子词分词器解决的是<strong>从语料学出词表</strong>——两者层次不同。现代 LLM 训练自己的分词器时通常不再依赖 jieba：直接把汉字（或字节）作为初始符号，让 BPE 自己发现高频双字词、三字词。也有工作（如早期 ERNIE 类模型）先用词典分词再训练，但这引入了对分词工具质量的依赖，已非主流。</p>
+<p>分词粒度还直接影响成本与体验：tokenizer 压缩率（每 token 对应的字符数）越高，同样文本占用的上下文越少、推理越便宜。</p>
+<h2 id="42-byte-pair-encodingbpe">4.2 Byte Pair Encoding（BPE）</h2>
+<p>BPE 原本是 1994 年的一种数据压缩算法，Sennrich 等人 2016 年将其引入 NLP 作为子词分词方法（arXiv:1508.07909）。<strong>核心思想：从字符（或字节）出发，反复合并语料中出现频次最高的相邻符号对，直到词表达到目标大小。</strong></p>
+<h3 id="421">4.2.1 训练算法</h3>
+<p><strong>输入</strong>：语料（已按词切分并统计词频）、目标合并次数/词表大小。
+<strong>输出</strong>：合并规则表（有序！顺序决定优先级）与词表。</p>
+<p>伪代码：</p>
+<pre><code class="language-text">BPE-Train(语料词频表 corpus, 目标合并数 M):
+    vocab ← 语料中所有字符                # 初始词表 = 字符集
+    merges ← 空列表
+    把每个词表示为字符序列, 并记录词尾标记 &lt;/w&gt;
+    for m = 1 .. M:
+        统计所有相邻符号对 (a, b) 的加权频次:
+            count[(a,b)] ← Σ_词 w 中出现 (a,b) 的次数 × 词频(词 w)
+        (a*, b*) ← argmax count
+        若最大频次为 1, 跳出循环           # 没有值得合并的对了
+        merges.append((a*, b*))
+        vocab.append(a* + b*)             # 新符号 = 拼接
+        对每个词的字符序列, 把所有 (a*, b*) 替换为 a*b*
+    return vocab, merges
+</code></pre>
+<p>注意两点：(1) 频次是<strong>按词频加权</strong>的——&ldquo;t h&rdquo;在 &ldquo;the&rdquo;（出现 100 次）中贡献 100；(2) merges 是有序列表，编码时必须按训练时的优先级依次应用。</p>
+<blockquote>
+<p>📌 注：为什么要给词尾加 <code>&lt;/w&gt;</code> 标记？因为预分词已经切好了词边界，BPE 只在词内合并；若不加标记，&rdquo;low&rdquo; 里的 &ldquo;ow&rdquo; 与 &ldquo;ower&rdquo; 里的 &ldquo;ow&rdquo; 会被合并成同一个 token，编码时无法区分&rdquo;ow 出现在词尾&rdquo;与&rdquo;ow 出现在词中&rdquo;——前者可以独立成词，后者后面还有字母。<code>&lt;/w&gt;</code> 把位置信息编进符号本身，等价于让&rdquo;low</w>&ldquo;与&rdquo;low（前缀）&rdquo;成为两个不同的 token。这与 WordPiece 用 <code>##</code> 标词中片段是同一目的的两种写法。另外，本章伪代码的统计口径是&rdquo;对每对只计一次、按词频加权&rdquo;（与 HuggingFace 训练器一致）；有的教程按&rdquo;出现次数&rdquo;逐位置累计，两种口径在同一份数据上结果相同，因为同一对在一个词内的相对次序不受口径影响。更多细节见 HuggingFace <a href="https://huggingface.co/docs/tokenizers/index">tokenizers 文档</a> 与 Sennrich 原论文附录。</p>
+</blockquote>
+<p>关于贪心合并还有两个值得思考的性质。其一，<strong>顺序敏感</strong>：合并规则一旦生成便固定次序，先合并出的符号会参与后续统计，因此即使两条频次并列的对，先后选择不同也会产生不同的词表——BPE 是确定性贪心，不是全局最优。其二，<strong>频次偏爱常见词</strong>：BPE 会优先把高频词（&rdquo;the&rdquo;&ldquo;的&rdquo;）合成单 token，而形态规则但频次略低的模式（如后缀 &ldquo;tion&rdquo;）可能需要更多合并轮次才浮现。Unigram LM（4.3.2 节）正是对这类贪心偏差的修正。此外，若语料含错拼或噪声，BPE 会忠实地把高频错误拼法学成 token——分词器继承语料的偏见，这也是数据清洗（第 5 章）要在分词之前完成的原因之一。</p>
+<h3 id="422">4.2.2 编码算法</h3>
+<pre><code class="language-text">BPE-Encode(词 w, merges):
+    symbols ← w 的字符序列
+    while len(symbols) &gt; 1:
+        在 symbols 中找出所有相邻对, 选出在 merges 中排名最靠前(优先级最高)的对 (a,b)
+        若没有任何对出现在 merges 中, 跳出
+        把 symbols 中所有 (a,b) 合并为 ab
+    return symbols                         # 每个符号查词表得 token ID
+</code></pre>
+<h3 id="423">4.2.3 手算示例</h3>
+<p>设语料为（词与频次）：<code>low: 5, lower: 2, newest: 6, widest: 3</code>。</p>
+<p>初始符号序列（词尾加 <code>&lt;/w&gt;</code>）：</p>
+<pre><code class="language-text">l o w &lt;/w&gt;           ×5
+l o w e r &lt;/w&gt;       ×2
+n e w e s t &lt;/w&gt;     ×6
+w i d e s t &lt;/w&gt;     ×3
+</code></pre>
+<p>统计相邻对频次：<code>(e,s)</code> 出现于 newest×6 + widest×3 = 9 次；<code>(s,t)</code> 同样 9 次；<code>(l,o)</code> 5+2=7；<code>(o,w)</code> 7；<code>(e,s)</code> 与 <code>(s,t)</code> 并列最高，取 <code>(e,s)</code>：</p>
+<ul>
+<li>合并 1：<code>e s → es</code>。</li>
+<li>合并 2：<code>(es,t)</code> 频次 9，合并为 <code>est</code>。</li>
+<li>合并 3：<code>(est,&lt;/w&gt;)</code> 频次 9，合并为 <code>est&lt;/w&gt;</code>。</li>
+<li>合并 4：<code>(l,o)</code> 频次 7，合并为 <code>lo</code>。</li>
+<li>合并 5：<code>(lo,w)</code> 频次 7，合并为 <code>low</code>。</li>
+<li>……</li>
+</ul>
+<p>若在合并 5 后停止，则 &ldquo;lowest&rdquo;（假设出现于测试集）编码为 <code>low</code> + <code>est&lt;/w&gt;</code> 两个 token——虽然训练语料里从未见过这个词。这正是 BPE 抗 OOV 的机制。</p>
+<pre><code class="language-svg">
+
+<svg width="700" height="320" xmlns="http://www.w3.org/2000/svg">
+  <text x="350" y="26" text-anchor="middle" font-size="14" fill="#333">BPE 合并过程示意（lowest，未在训练语料中出现）</text>
+  <g font-size="14" font-family="monospace">
+    <rect x="40"  y="50" width="52" height="34" rx="6" fill="#e3f2fd" stroke="#1565c0"/><text x="66"  y="72" text-anchor="middle" fill="#0d47a1">l</text>
+    <rect x="98"  y="50" width="52" height="34" rx="6" fill="#e3f2fd" stroke="#1565c0"/><text x="124" y="72" text-anchor="middle" fill="#0d47a1">o</text>
+    <rect x="156" y="50" width="52" height="34" rx="6" fill="#e3f2fd" stroke="#1565c0"/><text x="182" y="72" text-anchor="middle" fill="#0d47a1">w</text>
+    <rect x="214" y="50" width="52" height="34" rx="6" fill="#fff3e0" stroke="#e65100"/><text x="240" y="72" text-anchor="middle" fill="#e65100">e</text>
+    <rect x="272" y="50" width="52" height="34" rx="6" fill="#fff3e0" stroke="#e65100"/><text x="298" y="72" text-anchor="middle" fill="#e65100">s</text>
+    <rect x="330" y="50" width="52" height="34" rx="6" fill="#fff3e0" stroke="#e65100"/><text x="356" y="72" text-anchor="middle" fill="#e65100">t</text>
+    <text x="120" y="120" text-anchor="middle" fill="#ad1457" font-size="13">合并优先级最高的对：es（频次 9）</text>
+    <rect x="40"  y="140" width="52" height="34" rx="6" fill="#e3f2fd" stroke="#1565c0"/><text x="66"  y="162" text-anchor="middle" fill="#0d47a1">l</text>
+    <rect x="98"  y="140" width="52" height="34" rx="6" fill="#e3f2fd" stroke="#1565c0"/><text x="124" y="162" text-anchor="middle" fill="#0d47a1">o</text>
+    <rect x="156" y="140" width="52" height="34" rx="6" fill="#e3f2fd" stroke="#1565c0"/><text x="182" y="162" text-anchor="middle" fill="#0d47a1">w</text>
+    <rect x="214" y="140" width="62" height="34" rx="6" fill="#e8f5e9" stroke="#2e7d32"/><text x="245" y="162" text-anchor="middle" fill="#2e7d32">es</text>
+    <rect x="282" y="140" width="52" height="34" rx="6" fill="#fff3e0" stroke="#e65100"/><text x="308" y="162" text-anchor="middle" fill="#e65100">t</text>
+    <text x="120" y="210" text-anchor="middle" fill="#ad1457" font-size="13">再合并 est、lo、low …</text>
+    <rect x="40"  y="230" width="80" height="40" rx="8" fill="#ede7f6" stroke="#4527a0"/><text x="80"  y="256" text-anchor="middle" fill="#4527a0">low</text>
+    <rect x="130" y="230" width="90" height="40" rx="8" fill="#ede7f6" stroke="#4527a0"/><text x="175" y="256" text-anchor="middle" fill="#4527a0">est</text>
+    <text x="290" y="256" font-size="14" fill="#333">→ 2 个 token，无 OOV</text>
+  </g>
+</svg>
+
+
+</code></pre>
+<h3 id="424-python">4.2.4 手写 Python 实现（无第三方依赖）</h3>
+<p>下面是约 60 行的完整 BPE：训练 + 编码 + 解码。</p>
+<pre><code class="language-python">import re
+from collections import Counter
+
+class SimpleBPE:
+    &quot;&quot;&quot;最简 BPE 分词器：以字符为初始符号，词尾加 '&lt;/w&gt;'&quot;&quot;&quot;
+
+    def __init__(self, num_merges=50):
+        self.num_merges = num_merges
+        self.merges = {}          # (a, b) -&gt; 优先级(越小越先合并)
+        self.vocab = {}           # 符号 -&gt; id
+
+    def get_pairs(self, word_freqs):
+        &quot;&quot;&quot;统计所有相邻符号对的加权频次&quot;&quot;&quot;
+        pairs = Counter()
+        for word, freq in word_freqs.items():
+            syms = word.split(&quot; &quot;)
+            for a, b in zip(syms, syms[1:]):
+                pairs[(a, b)] += freq          # 按词频加权
+        return pairs
+
+    def train(self, text):
+        # 1) 简易预分词 + 词频统计（英文按非字母切词）
+        words = re.findall(r&quot;\w+|[^\w\s]&quot;, text.lower())
+        word_freqs = Counter(&quot; &quot;.join(w) + &quot; &lt;/w&gt;&quot; for w in words)
+        # 2) 迭代合并
+        for i in range(self.num_merges):
+            pairs = self.get_pairs(word_freqs)
+            if not pairs or max(pairs.values()) &lt; 2:
+                break                            # 无高频对可合并
+            best = max(pairs, key=pairs.get)     # 频次最高的对
+            self.merges[best] = i
+            merged = best[0] + best[1]
+            # 3) 在所有词里应用该合并
+            new_freqs = {}
+            for word, freq in word_freqs.items():
+                syms = word.split(&quot; &quot;)
+                out, j = [], 0
+                while j &lt; len(syms):
+                    if (j &lt; len(syms) - 1
+                            and (syms[j], syms[j + 1]) == best):
+                        out.append(merged); j += 2   # 合并相邻对
+                    else:
+                        out.append(syms[j]); j += 1
+                new_freqs[&quot; &quot;.join(out)] = new_freqs.get(&quot; &quot;.join(out), 0) + freq
+            word_freqs = new_freqs
+        # 4) 收集最终词表
+        for word in word_freqs:
+            for sym in word.split(&quot; &quot;):
+                if sym not in self.vocab:
+                    self.vocab[sym] = len(self.vocab)
+        return self
+
+    def encode_word(self, word):
+        &quot;&quot;&quot;按合并优先级从高到低反复应用 merges&quot;&quot;&quot;
+        syms = list(word.lower()) + [&quot;&lt;/w&gt;&quot;]
+        while len(syms) &gt; 1:
+            # 找当前序列中优先级最高(merge 值最小)的相邻对
+            candidates = [(self.merges[(a, b)], i)
+                          for i, (a, b) in enumerate(zip(syms, syms[1:]))
+                          if (a, b) in self.merges]
+            if not candidates:
+                break
+            _, i = min(candidates)
+            syms = syms[:i] + [syms[i] + syms[i + 1]] + syms[i + 2:]
+        return syms
+
+    def encode(self, text):
+        ids = []
+        for w in re.findall(r&quot;\w+|[^\w\s]&quot;, text.lower()):
+            for sym in self.encode_word(w):
+                ids.append(self.vocab.get(sym, self.vocab[&quot;&lt;/w&gt;&quot;]))  # 未知回退
+        return ids
+
+if __name__ == &quot;__main__&quot;:
+    corpus = (&quot;low low low low low lower lower newest newest newest &quot;
+              &quot;newest newest newest widest widest widest&quot;)
+    bpe = SimpleBPE(num_merges=10).train(corpus)
+    print(&quot;合并规则:&quot;, list(bpe.merges)[:6])
+    print(&quot;编码 'lowest':&quot;, bpe.encode_word(&quot;lowest&quot;))   # 期望得到 ['low', 'est&lt;/w&gt;']
+</code></pre>
+<p>这段实现刻意保持简单（忽略正则预分词的细节、并行优化），但完整覆盖了 BPE 的两个本质：<strong>训练时的贪心高频合并</strong>与<strong>编码时的优先级重放</strong>。工业级实现（HF tokenizers、tiktoken）用优先队列与增量统计把复杂度从 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>M</mi><mo>⋅</mo><mi mathvariant="normal">∣</mi><mtext>语料</mtext><mi mathvariant="normal">∣</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(M \cdot |\text{语料}|)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord text"><span class="mord cjk_fallback">语料</span></span><span class="mord">∣</span><span class="mclose">)</span></span></span></span> 降到近似线性，并支持并行编码。</p>
+<h2 id="43-wordpiece-unigram-lm">4.3 WordPiece 与 Unigram LM</h2>
+<h3 id="431-wordpiece">4.3.1 WordPiece</h3>
+<p>WordPiece（用于 BERT、DistilBERT 等）与 BPE 训练流程几乎相同，唯一区别在<strong>合并准则</strong>：BPE 选频次最高的对，WordPiece 选使语言模型似然提升最大的对：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>score</mtext><mo stretchy="false">(</mo><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>a</mi><mi>b</mi><mo stretchy="false">)</mo></mrow><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>a</mi><mo stretchy="false">)</mo><mo>⋅</mo><mi>f</mi><mo stretchy="false">(</mo><mi>b</mi><mo stretchy="false">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\text{score}(a, b) = \frac{f(ab)}{f(a) \cdot f(b)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">score</span></span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">b</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.363em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">b</span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">ab</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span>
+<p>即合并后符号频次除以两个部分频次之积——不只看绝对频次，还看&rdquo;相对于随机共现的超出程度&rdquo;。频次低但结合紧密的对（如不常见但形态固定的词根词缀）也可能被优先合并。</p>
+<p>用一个数字感受差别：设 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mtext>es</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>9</mn></mrow><annotation encoding="application/x-tex">f(\text{es}) = 9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord text"><span class="mord">es</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">9</span></span></span></span>、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mtext>e</mtext><mo stretchy="false">)</mo><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><mtext>s</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>9</mn></mrow><annotation encoding="application/x-tex">f(\text{e}) = f(\text{s}) = 9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord text"><span class="mord">e</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord text"><span class="mord">s</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">9</span></span></span></span>，则 BPE 直接看频次 9；WordPiece 得分为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn><mi mathvariant="normal">/</mi><mo stretchy="false">(</mo><mn>9</mn><mo>×</mo><mn>9</mn><mo stretchy="false">)</mo><mo>=</mo><mn>1</mn><mi mathvariant="normal">/</mi><mn>9</mn></mrow><annotation encoding="application/x-tex">9/(9 \times 9) = 1/9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">9/</span><span class="mopen">(</span><span class="mord">9</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">9</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1/9</span></span></span></span>；而另一对 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mtext>xy</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">f(\text{xy}) = 5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord text"><span class="mord">xy</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5</span></span></span></span>、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mtext>x</mtext><mo stretchy="false">)</mo><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><mtext>y</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">f(\text{x}) = f(\text{y}) = 5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord text"><span class="mord">x</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord text"><span class="mord">y</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5</span></span></span></span> 得分 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mi mathvariant="normal">/</mi><mn>25</mn><mo>=</mo><mn>1</mn><mi mathvariant="normal">/</mi><mn>5</mn></mrow><annotation encoding="application/x-tex">5/25 = 1/5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">5/25</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1/5</span></span></span></span>，反而更高——尽管频次更低，但&rdquo;x 与 y 几乎总是连在一起&rdquo;这一规律更强。WordPiece 因此更倾向于合并&rdquo;内聚&rdquo;的片段，而不是碰巧高频的组合。</p>
+<p><strong>编码</strong>：WordPiece 采用<strong>最长匹配（greedy longest-match-first）</strong>——从词首出发，找词表中存在的最长前缀作为一个 token，剩余部分继续。词内延续片段用 <code>##</code> 前缀标记，例如：</p>
+<pre><code class="language-text">&quot;unhappiness&quot; → [&quot;un&quot;, &quot;##happi&quot;, &quot;##ness&quot;]
+</code></pre>
+<p><code>##</code> 使&rdquo;词首片段&rdquo;与&rdquo;词中片段&rdquo;是不同 token，保留了一点位置信息（这是它与 BPE 用 <code>&lt;/w&gt;</code> 词尾标记的不同取向：BPE 通常标词尾，WordPiece 标词中）。</p>
+<h3 id="432-unigram-lm">4.3.2 Unigram LM</h3>
+<p>Unigram（SentencePiece 的可选算法，arXiv:1804.10959）走的是<strong>概率生成 + 删减</strong>路线，而非逐步合并：</p>
+<ol>
+<li><strong>初始化</strong>：用候选生成（所有子串、BPE 结果等）构造一个超大的初始&rdquo;子词池&rdquo;；</li>
+<li><strong>建模</strong>：假设每个 token 独立采样，句子 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> 的概率是其切分 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span> 下各子词概率之积：</li>
+</ol>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><mrow><mi>S</mi><mo>∈</mo><mi mathvariant="script">S</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></munder><munder><mo>∏</mo><mrow><mi>t</mi><mo>∈</mo><mi>S</mi></mrow></munder><mi>p</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(x) = \max_{S \in \mathcal{S}(x)} \prod_{t \in S} p(t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.3717em;vertical-align:-1.3217em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.4306em;"><span style="top:-2.309em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">S</span><span class="mrel mtight">∈</span><span class="mord mathcal mtight" style="margin-right:0.075em;">S</span><span class="mopen mtight">(</span><span class="mord mathnormal mtight">x</span><span class="mclose mtight">)</span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">max</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.966em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.05em;"><span style="top:-1.8557em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mrel mtight">∈</span><span class="mord mathnormal mtight" style="margin-right:0.05764em;">S</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∏</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.3217em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span></span>
+<ol start="3">
+<li><strong>EM 估计</strong>：E 步用动态规划求出每个句子的最优切分（Viterbi），统计各子词的使用频次；M 步重估 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mstyle displaystyle="true" scriptlevel="0"><mfrac><mrow><mi>c</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><mrow><msub><mo>∑</mo><msup><mi>t</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></msub><mi>c</mi><mo stretchy="false">(</mo><msup><mi>t</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo></mrow></mfrac></mstyle></mrow><annotation encoding="application/x-tex">p(t) = \dfrac{c(t)}{\sum_{t&#x27;} c(t&#x27;)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4127em;vertical-align:-0.9857em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1783em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828em;"><span style="top:-2.786em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">c</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6779em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9857em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>；</li>
+<li><strong>删减</strong>：按每删除一个子词对总似然的损失排序（损失最小者先删），删掉大部分子词，直至词表达到目标大小；保留单字符以保证可覆盖。</li>
+</ol>
+<p><strong>Viterbi 分词</strong>：编码一个新词时，在字符位置上做动态规划——设 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>best</mtext><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\text{best}(i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">best</span></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span></span></span></span> 为前 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> 个字符的最优切分对数概率，则</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>best</mtext><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><mrow><mi>j</mi><mo>&lt;</mo><mi>i</mi><mo separator="true">,</mo><mtext> </mtext><mi>x</mi><mo stretchy="false">[</mo><mi>j</mi><mo lspace="0em" rspace="0em">:</mo><mi>i</mi><mo stretchy="false">]</mo><mo>∈</mo><mi>V</mi></mrow></munder><mrow><mo fence="true">[</mo><mtext>best</mtext><mo stretchy="false">(</mo><mi>j</mi><mo stretchy="false">)</mo><mo>+</mo><mi>log</mi><mo>⁡</mo><mi>p</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">[</mo><mi>j</mi><mo lspace="0em" rspace="0em">:</mo><mi>i</mi><mo stretchy="false">]</mo><mo stretchy="false">)</mo><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\text{best}(i) = \max_{j &lt; i,\ x[j{:}i] \in V}\left[\text{best}(j) + \log p(x[j{:}i])\right]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">best</span></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.716em;vertical-align:-0.966em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.4306em;"><span style="top:-2.309em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">&lt;</span><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mspace mtight"><span class="mtight"> </span></span><span class="mord mathnormal mtight">x</span><span class="mopen mtight">[</span><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mord mtight"><span class="mrel mtight">:</span></span><span class="mord mathnormal mtight">i</span><span class="mclose mtight">]</span><span class="mrel mtight">∈</span><span class="mord mathnormal mtight" style="margin-right:0.22222em;">V</span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">max</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.966em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">[</span><span class="mord text"><span class="mord">best</span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mord"><span class="mrel">:</span></span><span class="mord mathnormal">i</span><span class="mclose">])</span><span class="mclose delimcenter" style="top:0em;">]</span></span></span></span></span></span>
+<p>回溯即得概率最大的切分。相比 BPE 的贪心重放，Unigram 的编码是全局最优（在该概率模型下），且同一模型天然支持多种采样式分词（subword regularization，训练时随机采次优切分以增强鲁棒性）。</p>
+<p>三者对比：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>BPE</th>
+<th>WordPiece</th>
+<th>Unigram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>训练方向</td>
+<td>自底向上合并</td>
+<td>自底向上合并</td>
+<td>自顶向下删减</td>
+</tr>
+<tr>
+<td>合并/保留准则</td>
+<td>对频次最高</td>
+<td>似然增益最大</td>
+<td>似然损失最小</td>
+</tr>
+<tr>
+<td>编码方式</td>
+<td>按优先级重放合并</td>
+<td>最长前缀贪心匹配</td>
+<td>Viterbi 最大概率切分</td>
+</tr>
+<tr>
+<td>多种切分</td>
+<td>否</td>
+<td>否</td>
+<td>是（可采样）</td>
+</tr>
+<tr>
+<td>代表模型</td>
+<td>GPT、Llama</td>
+<td>BERT</td>
+<td>T5、ALBERT</td>
+</tr>
+</tbody>
+</table>
+<h2 id="44-sentencepiece-bpe">4.4 SentencePiece 与字节级 BPE</h2>
+<h3 id="441-sentencepiece">4.4.1 SentencePiece</h3>
+<p>SentencePiece（arXiv:1808.06226）是一个<strong>分词器框架</strong>而非新算法，内部可跑 BPE 或 Unigram。两大设计决策：</p>
+<ol>
+<li><strong>语言无关</strong>：不依赖空格预分词，把空格当作普通字符（转义为 <code>▁</code>，U+2581）直接进入 BPE/Unigram 训练，因此对中文、日文等无空格语言无需额外分词工具。</li>
+</ol>
+<p><code>text
+   "hello world" → ["▁hello", "▁world"]</code>
+2. <strong>内置字节回退（byte fallback）</strong>：开启后词表包含全部 256 个字节 token，任何不能被子词覆盖的字符（生僻 emoji、罕见文字）都退化为 UTF-8 字节序列——彻底消灭 OOV。Llama、Qwen 都采用此方案。</p>
+<p>用 SentencePiece 的命令行训练一个中文 Unigram 分词器只需：</p>
+<pre><code class="language-bash">spm_train --input=corpus.zH.txt --model_prefix=zh_sp \
+  --vocab_size=32000 --model_type=unigram \
+  --byte_fallback --character_coverage=0.9995
+</code></pre>
+<p><code>--character_coverage</code> 指定直接收录的字符覆盖率（0.9995 表示覆盖 99.95% 的字符，长尾交给字节回退），<code>--model_type=bpe</code> 则切换为 BPE 算法。Python 侧 <code>sentencepiece.SentencePieceProcessor</code> 提供 <code>encode/decode</code> 与 <code>piece_size</code> 等接口。</p>
+<pre><code class="language-svg">
+
+<svg width="680" height="240" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="fb" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#333"/></marker></defs>
+  <text x="340" y="28" text-anchor="middle" font-size="14" fill="#333">字节回退（byte fallback）流程</text>
+  <rect x="200" y="50" width="280" height="40" rx="8" fill="#e3f2fd" stroke="#1565c0"/>
+  <text x="340" y="75" text-anchor="middle" font-size="14" fill="#0d47a1">输入："温度 🌡️ 25°C"</text>
+  <line x1="340" y1="90" x2="340" y2="120" stroke="#333" marker-end="url(#fb)"/>
+  <rect x="170" y="120" width="340" height="40" rx="8" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="340" y="145" text-anchor="middle" font-size="13" fill="#2e7d32">正常子词切分："温" "度" "▁" "25" "°" "C" + 🌡️ 未覆盖</text>
+  <line x1="340" y1="160" x2="340" y2="190" stroke="#333" marker-end="url(#fb)"/>
+  <rect x="130" y="190" width="420" height="40" rx="8" fill="#fce4ec" stroke="#ad1457"/>
+  <text x="340" y="215" text-anchor="middle" font-size="13" fill="#ad1457">🌡️ → UTF-8 字节 [F0, 9F, 8C, A1] → 4 个字节 token</text>
+</svg>
+
+
+</code></pre>
+<h3 id="442-bpegpt-2-gpt-4">4.4.2 字节级 BPE（GPT-2 / GPT-4 方案）</h3>
+<p>GPT-2 的做法更彻底：<strong>不以字符而以字节为初始符号</strong>。任何字符串先编码为 UTF-8 字节序列（256 种可能），BPE 在字节层面合并。好处：</p>
+<ul>
+<li><strong>理论上零 OOV</strong>：256 个字节覆盖一切 UTF-8 文本，无需 <code>&lt;UNK&gt;</code>，无需回退逻辑——任意输入都能被编码，也能无损解码回原字符串；</li>
+<li>词表下界只有 256，对任何语言、代码、乱码都有兜底。</li>
+</ul>
+<blockquote>
+<p>📌 注：为什么&rdquo;256 个字节&rdquo;就够？UTF-8 是一种<strong>前缀无关编码</strong>：每个 Unicode 字符被编码为 1~4 个字节，且多字节序列的首字节（<code>E0</code>–<code>EF</code> 等）与后续字节（<code>80</code>–<code>BF</code>）取值区间互不重叠，因此任意字节流都能被唯一地重新切回字符序列——这正是&rdquo;无损往返&rdquo;得以成立的编码学基础。一个汉字通常占 3 个字节（U+4E00–U+9FFF 区间），一个 emoji 占 4 个字节。详见维基百科 <a href="https://en.wikipedia.org/wiki/UTF-8">UTF-8</a>。可用一行代码体会：<code>list("温".encode("utf-8"))</code> 得到 <code>[230,184,169]</code>。</p>
+</blockquote>
+<p>代价：未经优化的字节级 BPE 在非拉丁文字上很浪费（一个汉字 3 字节 → 可能 2~3 个 token）。因此 GPT-4（cl100k_base）、o200k_base 以及 Qwen、DeepSeek 的词表都大幅增加了中文等多语言子词，把常用汉字压回 1 个 token。</p>
+<p>GPT-2 同时定义了一套<strong>预分词正则</strong>，先把文本切成&rdquo;永不跨界的片段&rdquo;（如 <code>\p{L}+</code>、<code>\s+(?&lt;!\S)</code>、数字串等），BPE 在片段内进行——防止合并规则把空格、标点与单词胡乱拼在一起。可以对照理解 SentencePiece 与字节级 BPE 对&rdquo;空格&rdquo;的两种处理：SentencePiece 把空格显式转义成 <code>▁</code> 并当作子词的一部分（&rdquo;▁hello&rdquo;），GPT-2 则把&rdquo;空格 + 词&rdquo;一起做成 token（&rdquo;Ġhello&rdquo;，Ġ 是字节 0x20 的可视字符），殊途同归——都是为了让模型显式看到词边界。</p>
+<p>实际使用中，OpenAI 的 tiktoken 库（github.com/openai/tiktoken）提供了这些词表的高性能实现：</p>
+<pre><code class="language-python">import tiktoken
+enc = tiktoken.get_encoding(&quot;o200k_base&quot;)      # GPT-4o
+ids = enc.encode(&quot;大语言模型 Hello!&quot;)
+print(ids, enc.decode(ids))                     # 无损往返
+</code></pre>
+<h3 id="443-gpt-2-gpt-4o">4.4.3 词表演进：从 GPT-2 到 GPT-4o</h3>
+<p>把主流模型的词表放在一起看，能读出分词器设计的时代脉络：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>词表</th>
+<th>方案</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT-2 (2019)</td>
+<td>50,257</td>
+<td>字节级 BPE</td>
+<td>零 OOV，但中文 1 字 ≈ 2~3 token</td>
+</tr>
+<tr>
+<td>Llama-2 (2023)</td>
+<td>32,000</td>
+<td>SentencePiece BPE + 字节回退</td>
+<td>以拉丁字母为基、中文偏费</td>
+</tr>
+<tr>
+<td>GPT-3.5/4 (2022-23)</td>
+<td>~100,000 (cl100k)</td>
+<td>字节级 BPE</td>
+<td>大幅扩充多语言与代码</td>
+</tr>
+<tr>
+<td>Llama-3 (2024)</td>
+<td>128,256</td>
+<td>tiktoken 风格 BPE</td>
+<td>中文压缩率显著提升</td>
+</tr>
+<tr>
+<td>GPT-4o (2024)</td>
+<td>~200,000 (o200k)</td>
+<td>字节级 BPE</td>
+<td>多语言进一步优化</td>
+</tr>
+<tr>
+<td>Qwen2.5 (2024)</td>
+<td>~151,000</td>
+<td>字节级 BPE</td>
+<td>中英双语与代码均衡</td>
+</tr>
+</tbody>
+</table>
+<p>规律很清晰：随训练预算与多语言需求增长，词表从 3~5 万扩到 10~20 万；方案收敛到字节级 BPE（或带字节回退的 SentencePiece BPE），Unigram 在 LLM 基座中已少见（更多留在 T5 系与学术工作）。词表每翻一倍，嵌入与输出头参数（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>≈</mo><mn>2</mn><mi>V</mi><mi>d</mi></mrow><annotation encoding="application/x-tex">\approx 2Vd</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4831em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mord mathnormal">d</span></span></span></span>）随之翻倍，因此扩词表的决策本质是用参数换上下文利用率，只有当训练语料足够多、多语言占比足够高时才划算。</p>
+<h2 id="45-token">4.5 词表大小、特殊 token 与聊天模板</h2>
+<h3 id="451">4.5.1 分词器如何塑造模型能力</h3>
+<p>分词器不是&rdquo;透明的前处理&rdquo;，它直接定义了模型看到的原子世界，至少影响三种能力：</p>
+<ol>
+<li><strong>算术</strong>：如果数字被逐位切成 token（&rdquo;2024&rdquo; → &ldquo;2&rdquo;,&rdquo;0&rdquo;,&rdquo;2&rdquo;,&rdquo;4&rdquo;），模型做加法时要处理任意长度的数字序列；若切成三位一组（&rdquo;1&rdquo;,&rdquo;234&rdquo;,&rdquo;567&rdquo;，Llama 系的做法），模型能学到千进制结构，多位数运算明显更准。</li>
+<li><strong>代码</strong>：代码中的缩进、长标识符、罕见符号很多。GPT 系词表专门为代码优化（如把 4 空格缩进、常见关键字、<code>&gt;::</code> 等符号序列并入 token），这直接提升了代码模型的有效上下文。</li>
+<li><strong>多语言公平性</strong>：同一模型对英文 1 token/词、对某小语种 4 token/词，意味着该语言用户付出 4 倍的上下文与费用、且有效上下文缩短 4 倍——分词器的&rdquo;语言税&rdquo;是 LLM 公平性问题的重要来源。</li>
+</ol>
+<p>反过来，改分词器必须重训（或至少续训）嵌入层：token ID 的语义完全由训练赋予，把两个模型的词表混用是不成立的。这也是&rdquo;给 Llama 扩中文词表&rdquo;类工作的基本流程：改词表 → 初始化新嵌入（均值或随机）→ 继续预训练。</p>
+<h3 id="452">4.5.2 词表大小的权衡</h3>
+<table>
+<thead>
+<tr>
+<th>词表增大</th>
+<th>收益</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>压缩率提高（序列更短，注意力/推理更省）</td>
+<td>嵌入与输出投影参数 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>≈</mo><mn>2</mn><mi>V</mi><mi>d</mi></mrow><annotation encoding="application/x-tex">\approx 2Vd</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4831em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mord mathnormal">d</span></span></span></span> 增大</td>
+</tr>
+<tr>
+<td></td>
+<td>多语言、专业词覆盖更好</td>
+<td>softmax 计算与显存增大</td>
+</tr>
+<tr>
+<td></td>
+<td>高频词完整保留，语义单元更完整</td>
+<td>低频 token 训练不充分，表征质量差</td>
+</tr>
+</tbody>
+</table>
+<p>经验区间：早期模型 3~5 万（Llama-1/2 为 32K），现代模型因多语言需求扩到 10~25 万（Llama-3 128K、GPT-4o ~200K、Qwen2 152K）。<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>=</mo><mn>128256</mn></mrow><annotation encoding="application/x-tex">V=128256</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">128256</span></span></span></span>、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mn>4096</mn></mrow><annotation encoding="application/x-tex">d=4096</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4096</span></span></span></span> 时词表部分参数 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>≈</mo><mn>2</mn><mo>×</mo><mn>128256</mn><mo>×</mo><mn>4096</mn><mo>≈</mo><mn>1.05</mn><mtext>B</mtext></mrow><annotation encoding="application/x-tex">\approx 2 \times 128256 \times 4096 \approx 1.05\text{B}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4831em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">128256</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4096</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">1.05</span><span class="mord text"><span class="mord">B</span></span></span></span></span>——小模型（1~3B）中词表可占总参数 30% 以上，这是小模型常共享输入/输出嵌入（weight tying）的原因。</p>
+<h3 id="453-token">4.5.3 特殊 token</h3>
+<p>词表中通常预留一些<strong>不对应任何自然文本</strong>的控制 token：</p>
+<ul>
+<li><code>&lt;|begin_of_text|&gt;</code>（BOS）：序列起始；</li>
+<li><code>&lt;|end_of_text|&gt;</code>（EOS）：终止生成；</li>
+<li><code>&lt;|pad|&gt;</code>（PAD）：批内补齐，注意力需配 padding mask；</li>
+<li><code>&lt;|unk|&gt;</code>（UNK）：未知符号（字节级方案下通常不再需要）；</li>
+<li>训练分隔符：GPT-2 的 <code>&lt;|endoftext|&gt;</code> 兼作文档边界。</li>
+</ul>
+<h3 id="454-chatml">4.5.4 聊天模板（ChatML）</h3>
+<p>对话模型要求输入结构化地拼装用户/助手轮次，这个拼装规则就是<strong>聊天模板</strong>。以 ChatML（被 Qwen 等广泛采用）为例：</p>
+<pre><code class="language-text">&lt;|im_start|&gt;user
+请用一句话介绍注意力机制&lt;|im_end|&gt;
+&lt;|im_start|&gt;assistant
+注意力让每个位置按相关性加权汇聚全序列信息&lt;|im_end|&gt;
+</code></pre>
+<p>训练 SFT 时（第 10 章），通常只在助手回复部分计算损失，提示词部分被掩码。模板 token 必须与 tokenizer/训练完全一致——线上少拼一个 <code>&lt;|im_end|&gt;</code> 是&rdquo;模型停不下来&rdquo;这类部署事故的常见根源。HuggingFace 的 <code>apply_chat_template</code> 统一封装了各模型的模板。</p>
+<h2 id="46-huggingface-tokenizers-bpe">4.6 用 HuggingFace tokenizers 训练 BPE</h2>
+<pre><code class="language-python">from tokenizers import Tokenizer, models, trainers, pre_tokenizers, decoders
+
+# 1) 字节级 BPE 模型，带未知 token
+tokenizer = Tokenizer(models.BPE(unk_token=&quot;&lt;|unk|&gt;&quot;))
+tokenizer.pre_tokenizer = pre_tokenizers.ByteLevel(add_prefix_space=False)
+tokenizer.decoder = decoders.ByteLevel()
+
+# 2) 训练器：目标词表大小、特殊 token
+trainer = trainers.BpeTrainer(
+    vocab_size=8000,
+    special_tokens=[&quot;&lt;|pad|&gt;&quot;, &quot;&lt;|bos|&gt;&quot;, &quot;&lt;|eos|&gt;&quot;, &quot;&lt;|unk|&gt;&quot;],
+    initial_alphabet=pre_tokenizers.ByteLevel.alphabet(),  # 256 个字节打底
+)
+tokenizer.train([&quot;data/corpus.txt&quot;], trainer)   # 传文件列表
+
+# 3) 编码 / 解码
+enc = tokenizer.encode(&quot;机器学习是人工智能的核心&quot;)
+print(enc.tokens, enc.ids)
+print(tokenizer.decode(enc.ids))
+
+tokenizer.save(&quot;my_bpe.json&quot;)                    # 保存可复用
+</code></pre>
+<p>要点：<code>initial_alphabet</code> 保证 256 个字节全部入表（即字节级方案）；<code>pre_tokenizer</code> 决定片段边界；工业级训练支持多进程与流式读取，亿级语料几分钟即可完成。转换成 <code>transformers</code> 的 <code>PreTrainedTokenizerFast</code> 即可配合任何模型使用：</p>
+<pre><code class="language-python">from transformers import PreTrainedTokenizerFast
+tok = PreTrainedTokenizerFast(
+    tokenizer_file=&quot;my_bpe.json&quot;,
+    bos_token=&quot;&lt;|bos|&gt;&quot;, eos_token=&quot;&lt;|eos|&gt;&quot;,
+    pad_token=&quot;&lt;|pad|&gt;&quot;, unk_token=&quot;&lt;|unk|&gt;&quot;)
+ids = tok(&quot;机器学习是人工智能的核心&quot;)[&quot;input_ids&quot;]
+print(tok.convert_ids_to_tokens(ids))
+print(&quot;压缩率(字符/token):&quot;,
+      len(&quot;机器学习是人工智能的核心&quot;) / max(len(ids) - 1, 1))  # 去掉 BOS
+</code></pre>
+<p>训练完成后值得做的体检：(1) 在留出语料上算压缩率与 OOV/字节回退率；(2) 抽查高频词是否被切成可疑的碎片（如 &ldquo;▁the&rdquo; 应是单 token）；(3) 验证 <code>decode(encode(x)) == x</code> 的无损往返。这些检查能在训练模型之前就发现分词器层面的设计缺陷，避免&rdquo;词表错了、模型白训&rdquo;的惨剧。</p>
+<h2 id="_1">本章小结</h2>
+<ul>
+<li>词级分词有词表爆炸与 OOV 之痛，字符级则序列过长、语义过稀；<strong>子词（以 BPE 为代表）是主流折中</strong>，高频词完整保留、低频词拆解、最坏回退到字符/字节。</li>
+<li><strong>BPE</strong>：训练时反复合并语料中（按词频加权）频次最高的相邻对，编码时按优先级重放合并规则；天然可处理未登录词。</li>
+<li><strong>WordPiece</strong>：合并准则改为似然增益 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>a</mi><mi>b</mi><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mo stretchy="false">(</mo><mi>f</mi><mo stretchy="false">(</mo><mi>a</mi><mo stretchy="false">)</mo><mi>f</mi><mo stretchy="false">(</mo><mi>b</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(ab)/(f(a)f(b))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">ab</span><span class="mclose">)</span><span class="mord">/</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">b</span><span class="mclose">))</span></span></span></span>，编码为最长前缀贪心匹配，词中片段带 <code>##</code> 前缀。</li>
+<li><strong>Unigram</strong>：自顶向下，以 unigram 语言模型似然为目标做 EM 与删减，编码用 Viterbi 求最优切分，支持多种采样切分。</li>
+<li><strong>SentencePiece</strong>：语言无关（空格普通字符化 <code>▁</code>）、支持字节回退；<strong>字节级 BPE</strong>（GPT 系）以 256 字节打底，理论零 OOV、可无损往返。</li>
+<li>词表大小是压缩率与参数量的权衡，现代多语言模型普遍 10 万级；特殊 token（BOS/EOS/PAD）与聊天模板（ChatML 等）是训练与部署一致性的关键细节。</li>
+</ul>
+<h2 id="_2">练习</h2>
+<ol>
+<li><strong>（手算）</strong> 语料：<code>hug: 10, pug: 5, pun: 12, bun: 4, hugs: 5</code>。以字符为初始符号，手推前 5 次 BPE 合并（列出每轮所有候选对的频次）。若最终词表能拼出 &ldquo;hugs&rdquo;，写出其 token 序列。</li>
+<li><strong>（手算）</strong> 承上题：计算对 <code>(u,g)</code> 的 WordPiece 得分 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>u</mi><mi>g</mi><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mo stretchy="false">(</mo><mi>f</mi><mo stretchy="false">(</mo><mi>u</mi><mo stretchy="false">)</mo><mi>f</mi><mo stretchy="false">(</mo><mi>g</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(ug)/(f(u) f(g))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">ug</span><span class="mclose">)</span><span class="mord">/</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">u</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mclose">))</span></span></span></span>，与 <code>(p,u)</code>、<code>(h,u)</code> 比较，说明 WordPiece 与 BPE 在此处选择是否一致。</li>
+<li><strong>（手算）</strong> 设子词概率 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mtext>▁low</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">p(\text{▁low})=0.1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord text"><span class="mord">▁low</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.1</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mtext>er</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>0.05</mn></mrow><annotation encoding="application/x-tex">p(\text{er})=0.05</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord text"><span class="mord">er</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.05</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mtext>▁lower</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>0.004</mn></mrow><annotation encoding="application/x-tex">p(\text{▁low}\text{er})=0.004</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord text"><span class="mord">▁low</span></span><span class="mord text"><span class="mord">er</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.004</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mtext>▁l</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>0.02</mn></mrow><annotation encoding="application/x-tex">p(\text{▁l})=0.02</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord text"><span class="mord">▁l</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.02</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mtext>o</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>0.03</mn></mrow><annotation encoding="application/x-tex">p(\text{o})=0.03</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord text"><span class="mord">o</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.03</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mtext>w</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>0.04</mn></mrow><annotation encoding="application/x-tex">p(\text{w})=0.04</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord text"><span class="mord">w</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.04</span></span></span></span>。用 Viterbi 求 &ldquo;▁lower&rdquo; 的 Unigram 最优切分。</li>
+<li>修改 4.2.4 节的 <code>SimpleBPE</code>，把合并统计改为 WordPiece 准则，并在小语料上对比两者词表差异。</li>
+<li>用 4.6 节代码在自己的语料（如若干本小说）上训练 8K 与 32K 两个 BPE，对比压缩率（字符数/token 数）与低频 token 的实际语义质量。</li>
+<li>计算 Llama-3-8B（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>=</mo><mn>128256</mn></mrow><annotation encoding="application/x-tex">V=128256</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">128256</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mn>4096</mn></mrow><annotation encoding="application/x-tex">d=4096</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4096</span></span></span></span>）词表部分参数量及其占全模型（约 8B）的比例；若输入输出嵌入共享，节省多少？</li>
+<li>用 tiktoken 分别统计同一段中英混合文本在 <code>gpt2</code>、<code>cl100k_base</code>、<code>o200k_base</code> 下的 token 数，解释字节级 BPE 的多语言演进。</li>
+<li>思考：为什么说&rdquo;分词器的预分词正则片段是模型归纳偏置的一部分&rdquo;？举例说明数字切分方式（单数字 vs 三位一组）如何影响模型的算术能力。</li>
+<li>为 4.2.4 节实现 <code>decode(ids)</code>（token ID → 字符串），并构造测试验证 encode–decode 无损往返（提示：处理 <code>&lt;/w&gt;</code> 与空格还原）。</li>
+</ol>
+<h3 id="_3">实操：编程练习</h3>
+<p><strong>练习 A：字节级 BPE 合并统计器。</strong> 不做预分词、直接以&rdquo;字节&rdquo;为初始符号统计相邻对频次——这是 4.4.2 节 GPT-2 方案的最小内核。注意：字符级每个汉字是 1 个符号，字节级则是 3 个。</p>
+<pre><code class="language-python">from collections import Counter
+
+def byte_pair_counts(chunk):
+    &quot;&quot;&quot;统计一段字节序列中所有相邻字节对的频次。chunk: list[int]&quot;&quot;&quot;
+    return Counter(zip(chunk, chunk[1:]))
+
+def merge(chunk, pair, new_id):
+    &quot;&quot;&quot;把 chunk 中所有相邻 pair 替换为 new_id（贪心从左到右）。&quot;&quot;&quot;
+    out, i = [], 0
+    while i &lt; len(chunk):
+        if i &lt; len(chunk) - 1 and (chunk[i], chunk[i + 1]) == pair:
+            out.append(new_id); i += 2
+        else:
+            out.append(chunk[i]); i += 1
+    return out
+
+def train_byte_bpe(text, num_merges=8):
+    &quot;&quot;&quot;在单块文本上做字节级 BPE（教学版：无预分词、无增量优化）。&quot;&quot;&quot;
+    ids = list(text.encode(&quot;utf-8&quot;))                 # 初始符号 = 字节（0~255）
+    print(f&quot;初始: {len(ids)} 个字节, 前 8 个: {ids[:8]}&quot;)
+    merges = {}
+    for m in range(num_merges):
+        counts = byte_pair_counts(ids)
+        if not counts:
+            break
+        pair = counts.most_common(1)[0][0]           # 频次最高的相邻对
+        new_id = 256 + m                             # 新 token 从 256 起编号
+        merges[pair] = new_id
+        ids = merge(ids, pair, new_id)
+        print(f&quot;合并 {m+1}: {pair} (0x{pair[0]:02x},0x{pair[1]:02x}) &quot;
+              f&quot;频次 {counts[pair]} -&gt; id {new_id}, 剩余符号 {len(ids)}&quot;)
+    return ids, merges
+
+ids, merges = train_byte_bpe(&quot;low low low lower &quot; * 3, num_merges=8)
+# 预期输出（节选）：
+#   初始: 54 个字节, 前 8 个: [108, 111, 119, 32, 108, 111, 119, 32]  (即 l,o,w,空格,...)
+#   合并 1: (108, 111) 即 b'l'+b'o' —— 相邻 12 次，最高频，剩余 42 个符号
+#   合并 2: ('lo', 'w') 得到 b'low'，剩余 30 个
+#   合并 3: (0x20, 'low') 空格与 low 相邻 11 次，并到一起……
+#   每合并一次符号数递减——这就是&quot;压缩&quot;的量化体现
+</code></pre>
+<p><strong>练习 B：统计合并前后 token 数（压缩率）并验证可还原。</strong> 字节级 BPE 的&rdquo;无损&rdquo;意味着：按 merges 的逆序（后合并的先拆开）可以把 ID 序列还原回原始字节。</p>
+<pre><code class="language-python">def decode_byte_bpe(ids, merges):
+    &quot;&quot;&quot;把合并后的 id 序列还原回字符串（验证无损往返）。&quot;&quot;&quot;
+    rev = {v: k for k, v in merges.items()}
+    stack = list(ids)
+    changed = True
+    while changed:                                   # 反复合并的逆操作
+        changed, out = False, []
+        for i in stack:
+            if i in rev:                             # 新 id 拆回原来的字节对
+                out.extend(rev[i]); changed = True
+            else:
+                out.append(i)
+        stack = out
+    return bytes(stack).decode(&quot;utf-8&quot;)
+
+text = &quot;low low low lower 低 低 低&quot;
+raw = len(text.encode(&quot;utf-8&quot;))                       # 原始字节数
+ids, merges = train_byte_bpe(text + &quot; &quot; * 10, num_merges=10)
+print(f&quot;压缩率 = {raw / len(ids):.2f} 字节/token&quot;)
+print(&quot;无损还原:&quot;, decode_byte_bpe(ids, merges) == (text + &quot; &quot; * 10))
+# 预期：压缩率 &gt; 1（重复文本下可到 2~4），无损还原: True
+</code></pre>
+<p><strong>练习 C：对比三个工业分词器的压缩率。</strong> 用 tiktoken 量化 4.4.3 节&rdquo;词表演进&rdquo;的实际效果（<code>pip install tiktoken</code>）。</p>
+<pre><code class="language-python">import tiktoken
+
+zh = &quot;大语言模型正在改变世界。The quick brown fox jumps over the lazy dog. 12345&quot;
+for name in [&quot;gpt2&quot;, &quot;cl100k_base&quot;, &quot;o200k_base&quot;]:
+    enc = tiktoken.get_encoding(name)
+    n = len(enc.encode(zh))
+    print(f&quot;{name:&gt;12}: {n:3d} tokens, 压缩率 {len(zh)/n:5.2f} 字符/token&quot;)
+# 典型输出（随版本略有差异）：
+#        gpt2: ~60 tokens —— 中文按字节切，1 个汉字约 2~3 token，最浪费
+#  cl100k_base: ~35 tokens —— GPT-3.5/4 词表，常用中文已是 1 token
+#   o200k_base: ~33 tokens —— GPT-4o，进一步优化
+</code></pre>
+<h2 id="_4">延伸阅读</h2>
+<ul>
+<li>Sennrich et al., <em>Neural Machine Translation of Rare Words with Subword Units</em>, arXiv:1508.07909 — BPE 引入 NLP 的原始论文。</li>
+<li>Kudo &amp; Richardson, <em>SentencePiece: A Simple and Language Independent Subword Tokenizer and Detokenizer for Neural Text Processing</em>, arXiv:1808.06226。</li>
+<li>Kudo, <em>Subword Regularization: Improving Neural Network Translation Models with Multiple Subword Candidates</em>, arXiv:1804.10959 — Unigram LM 与采样式分词。</li>
+<li>Schuster &amp; Nakajima, <em>Japanese and Korean Voice Search</em>（2012）— WordPiece 的起源，见 ICASSP 论文集。</li>
+<li>Wu et al., <em>Google&rsquo;s Neural Machine Translation System</em>（GNMT），arXiv:1609.08144 — WordPiece 在大规模 NMT 中的应用。</li>
+<li>GPT-2 论文（Radford et al., 2019，字节级 BPE）与 OpenAI tiktoken 仓库：github.com/openai/tiktoken。</li>
+<li>HuggingFace tokenizers 文档与 <code>transformers</code> 聊天模板文档：huggingface.co/docs/tokenizers、huggingface.co/docs/transformers/chat_templating。</li>
+<li>Karpathy 的 minbpe（github.com/karpathy/minbpe）— 与本章手写实现同思路的教学级 BPE。</li>
+</ul><div class="pagenav"><a class="nav-prev" href="ch03.html">← 上一页</a></div></article></main></body></html>

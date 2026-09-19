@@ -1,0 +1,240 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>前言 · 大模型：从 Transformer 到部署（试读版）</title>
+<link rel="stylesheet" href="katex/katex.min.css"><style>:root{--ink:#1f2933;--muted:#5b6b76;--brand:#1a56db;--bg:#f7f8fa;--line:#e4e8ee;}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Noto Sans SC","Source Han Sans SC","Microsoft YaHei",-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);line-height:1.75}
+h1,h2,h3,h4{line-height:1.35;font-weight:700}
+h1{font-size:1.9em;border-bottom:3px solid var(--brand);padding-bottom:.3em;margin-top:1em}
+h2{font-size:1.45em;margin-top:2em;border-left:5px solid var(--brand);padding-left:.5em}
+h3{font-size:1.2em;margin-top:1.6em}
+code,pre{font-family:"JetBrains Mono",Consolas,"Courier New",monospace}
+code{background:#eef1f5;padding:.1em .35em;border-radius:4px;font-size:.92em}
+pre{background:#0f172a;color:#e2e8f0;padding:1em 1.2em;border-radius:8px;overflow-x:auto;line-height:1.55}
+pre code{background:none;padding:0;color:inherit}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.95em}
+th,td{border:1px solid var(--line);padding:.45em .7em;text-align:left}
+th{background:#edf1f7}
+blockquote{margin:1em 0;padding:.6em 1em;border-left:4px solid #f59e0b;background:#fffbeb;border-radius:0 6px 6px 0}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+img,svg{max-width:100%;height:auto}
+figure{margin:1.5em 0;text-align:center}
+figcaption{color:var(--muted);font-size:.9em;margin-top:.4em}
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:270px;background:#fff;border-right:1px solid var(--line);overflow-y:auto;padding:1rem;z-index:10}
+#sidebar .brand{font-size:1.25em;font-weight:800;padding:.6rem .4rem 1rem}
+#sidebar .brand a{color:var(--ink)}
+#sidebar .brand span{font-size:.55em;font-weight:500;color:var(--muted)}
+#sidebar nav a{display:block;padding:.32rem .6rem;color:#3a4a55;border-radius:6px;font-size:.92em}
+#sidebar nav a:hover{background:#eef2f8}
+#sidebar nav a.active{background:#e8effd;color:var(--brand);font-weight:600}
+#sidebar .part{font-size:.8em;color:var(--muted);margin:.9em .4em .3em;font-weight:700;letter-spacing:.05em}
+main{margin-left:270px;padding:1.5rem 3rem 4rem;max-width:1100px}
+.topbar{display:none}
+@media (max-width:960px){
+ #sidebar{transform:translateX(-100%);transition:.2s} #sidebar.open{transform:none;box-shadow:0 0 30px rgba(0,0,0,.2)}
+ main{margin-left:0;padding:1rem}
+ .topbar{display:flex;align-items:center;gap:.8em;margin-bottom:1em}
+ .topbar button{font-size:1em;padding:.3em .7em}
+}
+.content{background:#fff;padding:2.5rem 3rem;border-radius:10px;box-shadow:0 1px 4px rgba(20,30,50,.06);max-width:900px}
+.pagenav{display:flex;justify-content:space-between;margin-top:3em;border-top:1px solid var(--line);padding-top:1em;gap:1em}
+.pagenav a{flex:1;border:1px solid var(--line);border-radius:8px;padding:.6em .9em;font-size:.92em}
+.pagenav a.nav-next{text-align:right}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:.3em 0}
+/* landing */
+body.landing main{margin:0 auto;padding:3rem 1.5rem}
+.landing-main{text-align:center}
+.cover-wrap{max-width:520px;margin:0 auto}
+h1{margin-top:1.2em}
+.subtitle{color:var(--muted);font-size:1.1em}
+.btn{display:inline-block;background:var(--brand);color:#fff!important;padding:.65em 1.6em;border-radius:8px;margin:.4em;font-weight:600}
+.btn.ghost{background:#fff;color:var(--brand)!important;border:1px solid var(--brand)}
+.toc-grid{text-align:left;margin-top:2.5em}
+.toc-grid h3{border-bottom:2px solid var(--line);padding-bottom:.3em;color:var(--brand)}
+.toc-grid .col{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.2em 1.5em;margin-bottom:1em}
+.toc-grid a{padding:.25em 0;display:block}
+</style></head><body>
+<aside id="sidebar"><div class="brand"><a href="index.html">大模型<br><span>从 Transformer 到部署 · 免费试读</span></a></div>
+<nav id="toc"><a href="math.html">第 0 章 数学基础</a><a href="ch00.html" class=active>前言</a><a href="ch01.html">第 1 章 绪论：大语言模型全景</a><a href="ch02.html">第 2 章 语言模型基础</a><a href="ch03.html">第 3 章 Transformer 详解</a><a href="ch04.html">第 4 章 分词器</a><div class="part">完整版</div><a href="https://github.com/jiejin93/llm-textbook">GitHub 仓库 / 获取完整版</a></nav></aside>
+<main><div class="topbar"><button onclick="document.getElementById('sidebar').classList.toggle('open')">☰ 目录</button></div>
+<article class="content"><div class="trial-banner">📚 当前为免费试读版 · 完整版（第 5–17 章 + 附录）获取方式见 <a href="https://github.com/jiejin93/llm-textbook" target="_blank">GitHub 仓库</a></div>
+<h1 id="_1">前言</h1>
+<h2 id="_2">为什么写这本书</h2>
+<p>2020 年前后，如果你问一位深度学习工程师&rdquo;语言模型能做什么&rdquo;，得到的答案多半是&rdquo;补全句子、做翻译、写摘要&rdquo;。而今天，大语言模型（Large Language Model, LLM）已经能够编写可运行的程序、推导数学证明的步骤、阅读图表回答问题，甚至作为智能体（Agent）自主调用工具完成复杂任务。这一变化的核心，是一条看似简单到令人怀疑的路径：<strong>在海量文本上，训练一个预测下一个词的神经网络</strong>。</p>
+<p>正是这条路径的&rdquo;简单&rdquo;与效果的&rdquo;惊人&rdquo;之间的巨大反差，使得许多掌握了深度学习基础的开发者产生了同样的困惑：</p>
+<ul>
+<li>我懂 CNN、RNN、反向传播，也写过 PyTorch，但为什么就是看不懂 Transformer 论文里的 Q、K、V 到底在做什么？</li>
+<li>网上的教程要么停留在&rdquo;十行代码实现 GPT&rdquo;，要么直接跳到&rdquo;用 vLLM 起一个服务&rdquo;，中间的预训练数据工程、分布式训练、RLHF 后训练去哪里学？</li>
+<li>想动手训练一个自己的模型，从哪里获得数据、需要多少显存、怎么评估效果、又怎么量化压缩后部署上线？</li>
+</ul>
+<p>市面上的资料大致分两类：一类是学术论文与前沿技术报告，默认读者已经掌握全部背景；另一类是框架使用教程，教你调用 API 却不解释背后的原理。<strong>缺的是一本介于两者之间、把&rdquo;从 Transformer 结构&rdquo;到&rdquo;生产环境部署&rdquo;完整贯通的系统性教材。</strong> 这本书就是为了填补这个空缺。</p>
+<h2 id="_3">这本书讲什么</h2>
+<p>本书的书名已经概括了主线：<strong>从 Transformer 到部署</strong>。全书共 17 章，分为六个部分，沿着&rdquo;一个 LLM 是如何被造出来并投入使用&rdquo;的完整生命周期展开：</p>
+<ol>
+<li><strong>基础（第 1–4 章）</strong>：语言建模的概率视角、Transformer 的逐模块剖析与最小可运行实现、分词器（BPE 等）。</li>
+<li><strong>预训练（第 5–9 章）</strong>：数据清洗与去重、优化器与训练稳定性、Scaling Laws、数据/张量/流水线等分布式训练、混合专家模型（MoE）。</li>
+<li><strong>微调与评测（第 10–11 章）</strong>：SFT 与 LoRA/QLoRA、主流评测基准与评测方法论。</li>
+<li><strong>后训练与强化学习（第 12–13 章）</strong>：策略梯度与 PPO 的完整推导、RLHF 三阶段、DPO、GRPO 与推理模型（R1 式）训练。</li>
+<li><strong>推理与部署（第 14–15 章)</strong>：KV Cache、FlashAttention、PagedAttention 与 vLLM、各类量化方法（GPTQ/AWQ/FP8）、服务化与监控。</li>
+<li><strong>多模态与前沿（第 16–17 章）</strong>：ViT、CLIP、LLaVA 式视觉语言模型的设计与训练、推理模型与 Agent 等前沿专题。</li>
+</ol>
+<p>本书不满足于&rdquo;讲清楚是什么&rdquo;，而是力求让你在合上书后能够<strong>独立完成</strong>：读懂一份现代 LLM 的架构代码并指出它与 GPT-2 的差异；规划一次预训练或微调的显存与算力；选择并实现合适的评测；用 RLHF/DPO/GRPO 做对齐；用量化和推理引擎把模型部署成高吞吐服务。</p>
+<h2 id="_4">读者画像与先修要求</h2>
+<p>本书假设你已经具备一门&rdquo;深度学习入门课&rdquo;的水平，具体来说：</p>
+<ul>
+<li>理解神经网络的前向传播与<strong>反向传播</strong>（Backpropagation），能手推简单网络的梯度；</li>
+<li>用过 <strong>PyTorch</strong>，会写训练循环（<code>forward → loss → backward → step</code>）、会搭 <code>nn.Module</code>；</li>
+<li>了解 <strong>CNN</strong> 与 <strong>RNN/LSTM</strong> 的基本思想——本书会在第 2 章快速回顾神经语言模型，但不会从&rdquo;什么是神经网络&rdquo;讲起；</li>
+<li>具备基础的线性代数（矩阵乘法、softmax）、概率论（条件概率、期望）与微积分知识。</li>
+</ul>
+<p>你<strong>不需要</strong>已经了解 Transformer、注意力机制或任何 LLM 训练细节——这些正是本书要教给你的。</p>
+<p>如果你符合上述画像，本书的难度曲线是为你设计的：第 3 章（Transformer 详解）与第 8 章（分布式训练）是全书最陡的两段爬坡，我们会用大量图示、逐行代码和数值例子帮你过关。</p>
+<h2 id="_5">全书结构与学习路线图</h2>
+<p>下面的知识依赖图给出了各部分之间的关系与建议学习顺序。实线箭头表示&rdquo;强依赖&rdquo;——没学完前一章，后面的内容会明显吃力；虚线表示&rdquo;弱依赖&rdquo;——可以并行或按需查阅。</p>
+<svg width="760" height="560" viewBox="0 0 760 560" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L9,3 L0,6 Z" fill="#555"/>
+    </marker>
+    <marker id="arrowWeak" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L9,3 L0,6 Z" fill="#999"/>
+    </marker>
+  </defs>
+  <style>
+    .box { fill: #eef4ff; stroke: #3b6fd4; stroke-width: 1.5; rx: 8; }
+    .hot { fill: #fff1e8; stroke: #e07020; }
+    .txt { font-family: sans-serif; font-size: 14px; fill: #222; text-anchor: middle; }
+    .sub { font-family: sans-serif; font-size: 11px; fill: #666; text-anchor: middle; }
+    .dep { stroke: #555; stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+    .weak { stroke: #999; stroke-width: 1.2; stroke-dasharray: 5,4; fill: none; marker-end: url(#arrowWeak); }
+    .part { font-family: sans-serif; font-size: 12px; fill: #888; }
+  </style>
+
+  <text x="380" y="28" class="txt" style="font-size:16px; font-weight:bold;">《大模型：从 Transformer 到部署》学习路线</text>
+
+  <!-- 第一部分 -->
+  <text x="90" y="70" class="part">第一部分 基础</text>
+  <rect class="box" x="40" y="80" width="150" height="52" rx="8"/>
+  <text x="115" y="102" class="txt">第1章 绪论</text>
+  <text x="115" y="120" class="sub">LLM 全景</text>
+
+  <rect class="box" x="40" y="160" width="150" height="52" rx="8"/>
+  <text x="115" y="182" class="txt">第2章 语言模型基础</text>
+  <text x="115" y="200" class="sub">概率 · 困惑度 · 解码</text>
+
+  <rect class="box hot" x="40" y="240" width="150" height="52" rx="8"/>
+  <text x="115" y="262" class="txt">第3章 Transformer</text>
+  <text x="115" y="280" class="sub">核心章 · 最小 GPT 实现</text>
+
+  <rect class="box" x="40" y="320" width="150" height="52" rx="8"/>
+  <text x="115" y="342" class="txt">第4章 分词器</text>
+  <text x="115" y="360" class="sub">BPE 手写实现</text>
+
+  <!-- 第二部分 -->
+  <text x="290" y="70" class="part">第二部分 预训练</text>
+  <rect class="box" x="240" y="80" width="150" height="52" rx="8"/>
+  <text x="315" y="102" class="txt">第5章 数据工程</text>
+  <text x="315" y="120" class="sub">清洗 · 去重 · 配比</text>
+
+  <rect class="box" x="240" y="160" width="150" height="52" rx="8"/>
+  <text x="315" y="182" class="txt">第6章 训练方法</text>
+  <text x="315" y="200" class="sub">优化器 · 稳定性</text>
+
+  <rect class="box" x="240" y="240" width="150" height="52" rx="8"/>
+  <text x="315" y="262" class="txt">第7章 Scaling Laws</text>
+  <text x="315" y="280" class="sub">Kaplan · Chinchilla</text>
+
+  <rect class="box hot" x="240" y="320" width="150" height="52" rx="8"/>
+  <text x="315" y="342" class="txt">第8章 分布式训练</text>
+  <text x="315" y="360" class="sub">ZeRO · 3D 并行</text>
+
+  <rect class="box" x="240" y="400" width="150" height="52" rx="8"/>
+  <text x="315" y="422" class="txt">第9章 MoE</text>
+  <text x="315" y="440" class="sub">稀疏专家 · 路由</text>
+
+  <!-- 第三、四部分 -->
+  <text x="540" y="70" class="part">第三、四部分</text>
+  <rect class="box" x="490" y="80" width="150" height="52" rx="8"/>
+  <text x="565" y="102" class="txt">第10章 SFT 与 PEFT</text>
+  <text x="565" y="120" class="sub">LoRA · QLoRA</text>
+
+  <rect class="box" x="490" y="160" width="150" height="52" rx="8"/>
+  <text x="565" y="182" class="txt">第11章 模型评测</text>
+  <text x="565" y="200" class="sub">MMLU · GSM8K · 污染</text>
+
+  <rect class="box" x="620" y="280" width="120" height="52" rx="8"/>
+  <text x="680" y="302" class="txt">第12章 RL 基础</text>
+  <text x="680" y="320" class="sub">策略梯度 · PPO</text>
+
+  <rect class="box" x="620" y="360" width="120" height="52" rx="8"/>
+  <text x="680" y="382" class="txt">第13章 RLHF</text>
+  <text x="680" y="400" class="sub">DPO · GRPO · R1</text>
+
+  <!-- 第五部分 -->
+  <text x="380" y="490" class="part" style="text-anchor:middle;">第五部分 推理与部署</text>
+  <rect class="box" x="240" y="500" width="150" height="48" rx="8"/>
+  <text x="315" y="520" class="txt">第14章 推理优化与量化</text>
+  <text x="315" y="537" class="sub">KV Cache · vLLM · GPTQ</text>
+
+  <rect class="box" x="430" y="500" width="150" height="48" rx="8"/>
+  <text x="505" y="520" class="txt">第15章 部署与服务化</text>
+  <text x="505" y="537" class="sub">Triton · 监控 · 边缘</text>
+
+  <!-- 第六部分 -->
+  <rect class="box" x="620" y="440" width="120" height="52" rx="8"/>
+  <text x="680" y="462" class="txt">第16章 VLM</text>
+  <text x="680" y="480" class="sub">ViT · CLIP · LLaVA</text>
+
+  <rect class="box" x="620" y="500" width="120" height="48" rx="8"/>
+  <text x="680" y="520" class="txt">第17章 前沿专题</text>
+  <text x="680" y="537" class="sub">推理模型 · Agent</text>
+
+  <!-- edges -->
+  <path class="dep" d="M 115 132 L 115 160"/>
+  <path class="dep" d="M 115 212 L 115 240"/>
+  <path class="dep" d="M 115 292 L 115 320"/>
+  <path class="dep" d="M 190 106 L 240 106"/>
+  <path class="dep" d="M 190 186 L 240 186"/>
+  <path class="dep" d="M 190 266 L 240 266"/>
+  <path class="dep" d="M 315 132 L 315 160"/>
+  <path class="dep" d="M 315 212 L 315 240"/>
+  <path class="dep" d="M 315 292 L 315 320"/>
+  <path class="dep" d="M 315 372 L 315 400"/>
+  <path class="dep" d="M 390 186 L 490 186" transform="translate(0,-80)"/>
+  <path class="dep" d="M 390 106 L 490 106"/>
+  <path class="dep" d="M 490 186 L 490 186"/>
+  <path class="dep" d="M 565 132 L 565 160"/>
+  <path class="weak" d="M 565 212 C 565 250 640 250 665 280"/>
+  <path class="dep" d="M 680 332 L 680 360"/>
+  <path class="weak" d="M 315 452 C 315 480 300 490 300 500"/>
+  <path class="weak" d="M 640 300 C 560 320 470 380 420 480 C 410 492 405 496 396 500"/>
+  <path class="dep" d="M 390 524 L 430 524"/>
+  <path class="weak" d="M 620 466 C 560 470 540 500 580 518"/>
+  <path class="dep" d="M 680 412 L 680 440"/>
+  <path class="weak" d="M 680 492 L 680 500"/>
+</svg>
+<p>几条建议的路线：</p>
+<ul>
+<li><strong>完整路线（推荐，约一学期）</strong>：按章节顺序通读，每章完成配套代码与练习。第 1–4 章打地基，第 5–9 章进入预训练深水区，第 10–15 章是工程实战最密集的部分，第 16–17 章扩展视野。</li>
+<li><strong>应用工程师路线</strong>：第 1–3 章 → 第 4 章 → 第 10 章 → 第 14–15 章。目标是&rdquo;会用、会微调、会部署&rdquo;，可以暂缓分布式训练与 RL 理论。</li>
+<li><strong>研究者路线</strong>：全书通读，重点精读第 3、7、8、13 章，并完成第 6 章 TinyStories 预训练实战与第 13 章的 GRPO 实验。</li>
+</ul>
+<h2 id="_6">如何使用本教材</h2>
+<p><strong>配套代码。</strong> 本教材的口号是&rdquo;每个关键概念都有可运行的代码&rdquo;。书中所有代码块均可在配套仓库中找到完整版本（含训练脚本、数据下载与依赖清单），读者可以在本地 GPU、实验室服务器或 Colab 上复现。代码风格遵循三个原则：优先正确与可读，其次才是性能；每个超参数显式写出，不藏在配置文件深处；与工业界主流实现（如 nanoGPT、HuggingFace Transformers）对照给出链接，帮你从&rdquo;教材代码&rdquo;过渡到&rdquo;生产代码&rdquo;。</p>
+<p><strong>练习。</strong> 每章末尾的练习分为三类：概念题（检验理解）、编程题（动手实现）、思考题（没有标准答案，训练科研品味）。强烈建议至少完成编程题——LLM 是一门实践学科，看懂与写出来之间隔着一条鸿沟。</p>
+<p><strong>阅读方法。</strong> 第一遍读可以跳过所有推导，只看图、代码与小结；第二遍精读公式推导（尤其是第 3 章注意力机制、第 12–13 章强化学习部分），建议拿纸笔跟随；第三遍把书当手册查阅。数学 notation 全书统一，附录 A 提供符号表，附录 C 提供术语中英对照表。</p>
+<p><strong>硬件说明。</strong> 第 3、6、10、14 章的实战代码在单张 24 GB 显存的消费级 GPU（如 RTX 4090）上即可运行；第 8、9 章的分布式实验可用云上多卡环境或以阅读分析为主。没有 GPU 的读者可以使用 Google Colab（免费提供 T4 显卡）或国内 AutoDL 等算力平台。</p>
+<h2 id="_7">致谢与参考资料</h2>
+<p>本教材站在众多优秀开源课程与资料的肩膀上，主要参考与借鉴如下（也强烈推荐读者把它们作为延伸学习材料）：</p>
+<ul>
+<li><strong>Stanford CS336: Language Modeling from Scratch</strong>（2025 春季，Percy Liang 等主讲）——覆盖数据、架构、训练、推理的完整课程，本书预训练部分的多处组织方式受其启发：<a href="https://stanford-cs336.github.io/">https://stanford-cs336.github.io/</a></li>
+<li><strong>Sebastian Raschka, <em>Build a Large Language Model (From Scratch)</em></strong> 及其开源仓库 LLMs-from-Scratch——逐层实现 GPT 的最佳入门材料之一：<a href="https://github.com/rasbt/LLMs-from-Scratch">https://github.com/rasbt/LLMs-from-Scratch</a></li>
+<li><strong>Andrej Karpathy, nanoGPT 与 &ldquo;Let&rsquo;s build GPT&rdquo; 视频课程</strong>——本书第 3 章最小 GPT 实现的重要参照：<a href="https://github.com/karpathy/nanoGPT">https://github.com/karpathy/nanoGPT</a></li>
+<li><strong>Datawhale 自己动手，做大模型</strong>（diy-llm）——中文社区优质的 LLM 全栈教程，本书部分实战环节的组织参考了其循序渐进的设计：<a href="https://github.com/datawhalechina/diy-llm">https://github.com/datawhalechina/diy-llm</a></li>
+<li><strong>HuggingFace Transformers / PEFT / TRL 文档</strong>——微调、后训练与部署章节的工具基础：<a href="https://huggingface.co/docs/transformers/index">https://huggingface.co/docs/transformers/index</a></li>
+<li><strong>vLLM 文档与论文（Kwon et al., 2023, SOSP）</strong>——第 14–15 章推理与服务化的核心参考：<a href="https://docs.vllm.ai/">https://docs.vllm.ai/</a></li>
+<li><strong>Jay Alammar, <em>The Illustrated Transformer</em></strong>——把注意力机制讲&rdquo;活&rdquo;的经典图解博客：<a href="https://jalammar.github.io/illustrated-transformer/">https://jalammar.github.io/illustrated-transformer/</a></li>
+<li>各模型技术报告：GPT-3（arXiv:2005.14165）、Llama 系列、Qwen 系列、DeepSeek-V3/R1 等，均在对应章节的&rdquo;延伸阅读&rdquo;中给出。</li>
+</ul>
+<p>感谢为本书提供反馈的每一位读者与同行。书中难免存在错误与过时之处（这个领域发展太快了），欢迎通过仓库 Issue 指正，勘误将随版本更新。</p>
+<p>愿你享受这段从 Transformer 到部署的旅程。</p><div class="pagenav"><a class="nav-prev" href="math.html">← 上一页</a><a class="nav-next" href="ch01.html">下一页 →</a></div></article></main></body></html>
