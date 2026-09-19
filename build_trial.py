@@ -19,7 +19,8 @@ MANIFEST = [
     ("ch04.md", "第 4 章 分词器"),
 ]
 REPO = "https://github.com/jiejin93/llm-textbook"
-QR = os.path.join(ROOT, "assets", "pay-qr.png")
+QR = os.path.join(ROOT, "branding", "二维码.jpg")
+QR_NAME = "wechat-qr.jpg"
 HAS_QR = os.path.exists(QR)
 
 def md2html(text, fname):
@@ -65,17 +66,17 @@ if __name__ == "__main__":
     # index: cover + intro
     cover = open(os.path.join(BOOK, "assets", "cover.svg"), encoding="utf-8").read()
     if HAS_QR:
-        shutil.copy(QR, os.path.join(OUT, "pay-qr.png"))
+        shutil.copy(QR, os.path.join(OUT, QR_NAME))
     qr_html = ("""<div class="pay-card">
-  <img class="pay-qr" src="pay-qr.png" alt="付款二维码">
+  <img class="pay-qr" src="{qr}" alt="作者微信二维码">
   <div class="pay-info">
-    <div class="pay-title">扫码获取完整版</div>
-    <div>¥39 早鸟价（前 200 名，后恢复 ¥59）· 309 页 PDF 全书<br>
-    预训练 · 分布式 · MoE · 微调 · 评测 · RLHF/DPO/GRPO · 量化部署 · 视觉语言模型</div>
-    <div class="pay-note">付款后请截图发送至 GitHub 仓库 Issues 或作者邮箱，24 小时内发送 PDF 与更新说明。<br>
-    含代码包（¥99）与答疑社群（¥199/年）版本见 <a href="{repo}" target="_blank">GitHub 仓库</a>。</div>
+    <div class="pay-title">添加作者微信</div>
+    <div>完整版（309 页 PDF + 实操代码包）获取方式，微信咨询<br>
+    备注请写 <b>LLM 教材</b>，会尽快回复</div>
+    <div class="pay-note">也可通过 <a href="{repo}" target="_blank">GitHub 仓库</a> 了解试读章节、完整目录与勘误。<br>
+    姊妹篇《掩模版光学仿真与 die-to-database 缺陷检测》见 <a href="https://jiejin93.github.io/optic-textbook/" target="_blank"> optic 教材站</a>。</div>
   </div>
-</div>""".format(repo=REPO)) if HAS_QR else ""
+</div>""".format(repo=REPO, qr=QR_NAME)) if HAS_QR else ""
     toc = "".join(f'<a href="{os.path.splitext(f)[0]}.html">{html.escape(t)}</a>' for f, t in MANIFEST)
     idx = f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>大模型：从 Transformer 到部署 | LLM 中文教程免费在线试读 · 预训练/RLHF/量化部署</title>
@@ -89,7 +90,7 @@ if __name__ == "__main__":
 <link rel="canonical" href="https://jiejin93.github.io/llm-textbook/"><link rel="stylesheet" href="katex/katex.min.css"><style>{CSS}
 .trial-banner{{background:#fff7ed;border:1px solid #fdba74;border-radius:8px;padding:.7em 1em;margin-bottom:1.5em;font-size:.95em}}
 .pay-card{{display:flex;gap:1.5em;align-items:center;background:#fff;border:1px solid #dbe3ee;border-radius:12px;padding:1.5em;max-width:640px;margin:2em auto;text-align:left;box-shadow:0 2px 8px rgba(20,30,50,.06)}}
-.pay-qr{{width:180px;height:180px;border-radius:8px;border:1px solid #e4e8ee;flex:none}}
+.pay-qr{{width:170px;height:auto;max-height:240px;border-radius:8px;border:1px solid #e4e8ee;flex:none}}
 .pay-title{{font-size:1.25em;font-weight:800;color:#1a56db;margin-bottom:.4em}}
 .pay-note{{color:#5b6b76;font-size:.88em;margin-top:.6em}}
 @media (max-width:600px){{.pay-card{{flex-direction:column;text-align:center}}}}
