@@ -1,0 +1,289 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>前言 · 大模型：从 Transformer 到部署（试读版）</title>
+<link rel="stylesheet" href="katex/katex.min.css"><style>:root{--ink:#1f2933;--muted:#5b6b76;--brand:#1a56db;--bg:#f7f8fa;--line:#e4e8ee;}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Noto Sans SC","Source Han Sans SC","Microsoft YaHei",-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);line-height:1.75}
+h1,h2,h3,h4{line-height:1.35;font-weight:700}
+h1{font-size:1.9em;border-bottom:3px solid var(--brand);padding-bottom:.3em;margin-top:1em}
+h2{font-size:1.45em;margin-top:2em;border-left:5px solid var(--brand);padding-left:.5em}
+h3{font-size:1.2em;margin-top:1.6em}
+code,pre{font-family:"JetBrains Mono",Consolas,"Courier New",monospace}
+code{background:#eef1f5;padding:.1em .35em;border-radius:4px;font-size:.92em}
+pre{background:#f7f9fc;color:#111;border:1px solid #dbe2ea;padding:1em 1.2em;border-radius:8px;overflow-x:auto;line-height:1.55}
+pre code{background:none;padding:0;color:inherit;font-size:.94em}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.95em}
+th,td{border:1px solid var(--line);padding:.45em .7em;text-align:left;vertical-align:top}
+th{background:#edf1f7}
+blockquote{margin:1em 0;padding:.6em 1em;border-left:4px solid #f59e0b;background:#fffbeb;border-radius:0 6px 6px 0}
+blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+img,svg{max-width:100%;height:auto}
+.svgwrap{margin:1.4em 0;text-align:center}
+.svgwrap svg{max-width:100%;height:auto;display:block;margin:0 auto}
+p.figcap{text-align:center;color:var(--muted);font-size:.92em;margin:.3em 0 1.6em}
+p.tabcap{font-size:.95em;margin:1.4em 0 .2em}
+.tablewrap{overflow-x:auto}
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;background:#fff;border-right:1px solid var(--line);overflow-y:auto;padding:1rem;z-index:10}
+#sidebar .brand{font-size:1.25em;font-weight:800;padding:.6rem .4rem 1rem}
+#sidebar .brand a{color:var(--ink)}
+#sidebar .brand span{font-size:.55em;font-weight:500;color:var(--muted)}
+#sidebar nav a{display:block;padding:.3rem .6rem;color:#3a4a55;border-radius:6px;font-size:.9em}
+#sidebar nav a:hover{background:#eef2f8}
+#sidebar nav a.active{background:#e8effd;color:var(--brand);font-weight:600}
+#sidebar nav a.sub{padding-left:1.4rem;font-size:.84em;color:#5b6b76}
+#sidebar .part{font-size:.78em;color:var(--muted);margin:.9em .4em .3em;font-weight:700;letter-spacing:.05em}
+main{margin-left:280px;padding:1.5rem 3rem 4rem;max-width:1120px}
+.topbar{display:none}
+@media (max-width:960px){
+ #sidebar{transform:translateX(-100%);transition:.2s} #sidebar.open{transform:none;box-shadow:0 0 30px rgba(0,0,0,.2)}
+ main{margin-left:0;padding:1rem}
+ .topbar{display:flex;align-items:center;gap:.8em;margin-bottom:1em}
+ .topbar button{font-size:1em;padding:.3em .7em}
+}
+.content{background:#fff;padding:2.5rem 3rem;border-radius:10px;box-shadow:0 1px 4px rgba(20,30,50,.06);max-width:940px}
+.pagenav{display:flex;justify-content:space-between;margin-top:3em;border-top:1px solid var(--line);padding-top:1em;gap:1em}
+.pagenav a{flex:1;border:1px solid var(--line);border-radius:8px;padding:.6em .9em;font-size:.92em}
+.pagenav a.nav-next{text-align:right}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:.3em 0}
+/* landing */
+body.landing main{margin:0 auto;padding:3rem 1.5rem}
+.landing-main{text-align:center}
+.cover-wrap{max-width:520px;margin:0 auto}
+h1{margin-top:1.2em}
+.subtitle{color:var(--muted);font-size:1.1em}
+.btn{display:inline-block;background:var(--brand);color:#fff!important;padding:.65em 1.6em;border-radius:8px;margin:.4em;font-weight:600}
+.btn.ghost{background:#fff;color:var(--brand)!important;border:1px solid var(--brand)}
+.toc-grid{text-align:left;margin-top:2.5em}
+.toc-grid h3{border-bottom:2px solid var(--line);padding-bottom:.3em;color:var(--brand)}
+.toc-grid .col{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.2em 1.5em;margin-bottom:1em}
+.toc-grid a{padding:.25em 0;display:block}
+</style></head><body>
+<aside id="sidebar"><div class="brand"><a href="index.html">大模型<br><span>从 Transformer 到部署 · 免费试读</span></a></div>
+<nav id="toc"><a href="math.html">第 0 章 数学基础</a><a href="ch00.html" class=active>前言</a><a href="ch01.html">第 1 章 绪论：大语言模型全景</a><a href="ch02.html">第 2 章 语言模型基础</a><a href="ch03.html">第 3 章 Transformer 详解</a><a href="ch04.html">第 4 章 分词器</a><div class="part">完整版</div><a href="https://github.com/jiejin93/llm-textbook">GitHub 仓库 / 获取完整版</a></nav></aside>
+<main><div class="topbar"><button onclick="document.getElementById('sidebar').classList.toggle('open')">☰ 目录</button></div>
+<article class="content"><div class="trial-banner">📚 当前为免费试读版 · 完整版（第 5–17 章 + 附录）获取方式见 <a href="https://github.com/jiejin93/llm-textbook" target="_blank">GitHub 仓库</a></div>
+<h1 id="_1">前言</h1>
+<h2 id="_2">为什么写这本书</h2>
+<p>2020 年前后，如果你问一位深度学习工程师“语言模型能做什么”，得到的答案多半是“补全句子、做翻译、写摘要”。而今天，大语言模型（Large Language Model, LLM）已经能够编写可运行的程序、推导数学证明的步骤、阅读图表回答问题，甚至作为智能体（Agent）自主调用工具完成复杂任务。这一变化的核心，是一条看似简单到令人怀疑的路径：<strong>在海量文本上，训练一个预测下一个词的神经网络</strong>。</p>
+<p>正是这条路径的“简单”与效果的“惊人”之间的巨大反差，使得许多掌握了深度学习基础的开发者产生了同样的困惑：</p>
+<ul>
+<li>我懂 CNN、RNN、反向传播，也写过 PyTorch，但为什么就是看不懂 Transformer 论文里的 Q、K、V 到底在做什么？</li>
+<li>网上的教程要么停留在“十行代码实现 GPT”，要么直接跳到“用 vLLM 起一个服务”，中间的预训练数据工程、分布式训练、RLHF 后训练去哪里学？</li>
+<li>想动手训练一个自己的模型，从哪里获得数据、需要多少显存、怎么评估效果、又怎么量化压缩后部署上线？</li>
+</ul>
+<p>市面上的资料大致分两类：一类是学术论文与前沿技术报告，默认读者已经掌握全部背景；另一类是框架使用教程，教你调用 API 却不解释背后的原理。<strong>缺的是一本介于两者之间、把“从 Transformer 结构”到“生产环境部署”完整贯通的系统性教材。</strong> 这本书就是为了填补这个空缺。</p>
+<h2 id="_3">这本书讲什么</h2>
+<p>本书的书名已经概括了主线：<strong>从 Transformer 到部署</strong>。全书由第 0 章数学准备（选读）、17 章正文与 3 个附录组成，正文分为六个部分，沿着“一个 LLM 是如何被造出来并投入使用”的完整生命周期展开：</p>
+<ol>
+<li><strong>基础（第 1–4 章）</strong>：LLM 全景与语言建模的概率视角、Transformer 的逐模块剖析与最小可运行实现、分词器（BPE 等）。</li>
+<li><strong>预训练（第 5–9 章）</strong>：数据清洗与去重、优化器与训练稳定性、Scaling Laws、数据/张量/流水线等分布式训练、混合专家模型（MoE）。</li>
+<li><strong>微调与评测（第 10–11 章）</strong>：SFT 与 LoRA/QLoRA、主流评测基准与评测方法论。</li>
+<li><strong>后训练（第 12–13 章）</strong>：策略梯度与 PPO 的完整推导、RLHF 三阶段、DPO、GRPO 与推理模型（R1 式）训练。</li>
+<li><strong>推理与部署（第 14–15 章）</strong>：KV Cache、FlashAttention、PagedAttention 与 vLLM、各类量化方法（GPTQ/AWQ/FP8）、服务化与监控。</li>
+<li><strong>多模态与前沿（第 16–17 章）</strong>：ViT、CLIP、LLaVA 式视觉语言模型的设计与训练、推理模型与 Agent 等前沿专题。</li>
+</ol>
+<p>在正文六个部分之前是<strong>第零部分 数学准备（选读）：第 0 章 面向大模型的数学基础</strong>，内容是线性代数、概率与信息论、微积分与矩阵求导、优化和浮点数表示。它<strong>不计入正文的 17 章编号</strong>，读法只有一句话：<strong>不确定就读，确定了就跳过，卡住了再回来查</strong>（具体建议见“如何使用本教材”）。</p>
+<p>正文之后还有三个附录，供随时查阅：<strong>附录 A 数学符号表</strong>（全书符号速查，看公式卡住时先查它）、<strong>附录 B 常用开源仓库与资料清单</strong>（按章节整理的仓库、课程与文档链接）、<strong>附录 C 术语中英对照表</strong>（统一中文译名，中英对照）。六部分正文加第 0 章与三个附录，才构成这本书的完整目录，如图 P-1 所示。</p>
+<p>本书不满足于“讲清楚是什么”，而是力求让你在合上书后能够<strong>独立完成</strong>：读懂一份现代 LLM 的架构代码并指出它与 GPT-2 的差异；规划一次预训练或微调的显存与算力；选择并实现合适的评测；用 RLHF/DPO/GRPO 做对齐；用量化和推理引擎把模型部署成高吞吐服务。</p>
+<h2 id="_4">读者画像与先修要求</h2>
+<p>本书假设你已经具备一门“深度学习入门课”的水平，具体来说：</p>
+<ul>
+<li>理解神经网络的前向传播与<strong>反向传播</strong>（Backpropagation），能手推简单网络的梯度；</li>
+<li>用过 <strong>PyTorch</strong>，会写训练循环（<code>forward → loss → backward → step</code>）、会搭 <code>nn.Module</code>；</li>
+<li>了解 <strong>CNN</strong> 与 <strong>RNN/LSTM</strong> 的基本思想——本书会在第 2 章 2.3 节快速回顾从 n-gram 到神经语言模型的发展，但不会从“什么是神经网络”讲起；</li>
+<li>具备<strong>基础的线性代数、概率论与微积分</strong>：矩阵乘法与转置、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow><annotation encoding="application/x-tex">\mathrm{softmax}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"><span class="mord mathrm">softmax</span></span></span></span></span>、条件概率与期望、链式法则。这一条不是客套话：第 3 章用矩阵形式推导注意力（含 softmax 的雅可比），第 7 章要读懂 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>≈</mo><mn>6</mn><mi>N</mi><mi>D</mi></mrow><annotation encoding="application/x-tex">C \approx 6ND</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">6</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span></span> 与幂律拟合，第 8 章要按 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>16</mn><mi>N</mi></mrow><annotation encoding="application/x-tex">16N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">16</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 估算显存。<strong>如果你对这几项已经生疏，请先花 3–5 小时读第 0 章。</strong></li>
+</ul>
+<p>你<strong>不需要</strong>已经了解 Transformer、注意力机制或任何 LLM 训练细节——这些正是本书要教给你的。
+你也不需要“数学很好”：所有公式都从本科低年级的基础推起，第 0 章就是为补齐这些基础而写的“数学补丁”，附录 A 另提供全书符号速查表。</p>
+<p>如果你符合上述画像，本书的难度曲线是为你设计的：第 3 章（Transformer 详解）与第 8 章（分布式训练）是全书最陡的两段爬坡，我们会用大量图示、逐行代码和数值例子帮你过关。经验上，只要第 3、4 章的代码亲手跑通，后面的章节会顺很多；如果反复卡在符号上，回看第 0.2 节（线性代数）与第 0.5 节（微积分与矩阵求导）通常就能解开。</p>
+<h2 id="_5">全书结构与学习路线图</h2>
+<p>下面的学习路线图（图 P-1）给出了各部分之间的关系与建议学习顺序：第 0 章作为可选前置放在最上方，正文六个部分自左上向右下依次排列，三个附录放在图底供随时查阅。</p>
+<svg width="760" height="640" viewBox="0 0 760 640" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L9,3 L0,6 Z" fill="#555"/>
+    </marker>
+    <marker id="arrowWeak" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L9,3 L0,6 Z" fill="#999"/>
+    </marker>
+  </defs>
+  <style>
+    .box { fill: #eef4ff; stroke: #3b6fd4; stroke-width: 1.5; rx: 8; }
+    .hot { fill: #fff1e8; stroke: #e07020; }
+    .txt { font-family: sans-serif; font-size: 14px; fill: #222; text-anchor: middle; }
+    .sub { font-family: sans-serif; font-size: 11px; fill: #666; text-anchor: middle; }
+    .dep { stroke: #555; stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+    .weak { stroke: #999; stroke-width: 1.2; stroke-dasharray: 5,4; fill: none; marker-end: url(#arrowWeak); }
+    .part { font-family: sans-serif; font-size: 12px; fill: #888; }
+  </style>
+
+  <text x="380" y="26" class="txt" text-anchor="middle" style="font-size:16px; font-weight:bold;">《大模型：从 Transformer 到部署》学习路线</text>
+
+  <!-- 第零部分：数学准备（选读）——虚线框表示按需查阅 -->
+  <rect class="box" x="25" y="52" width="150" height="52" rx="8" style="stroke-dasharray:5,4"/>
+  <text x="100" y="74" class="txt" text-anchor="middle">第0章 数学基础</text>
+  <text x="100" y="92" class="sub" text-anchor="middle">选读 · 按需查阅</text>
+
+  <!-- 第一部分 -->
+  <text x="100" y="124" class="part" text-anchor="middle">第一部分 基础</text>
+  <rect class="box" x="25" y="132" width="150" height="52" rx="8"/>
+  <text x="100" y="154" class="txt" text-anchor="middle">第1章 绪论</text>
+  <text x="100" y="172" class="sub" text-anchor="middle">LLM 全景</text>
+
+  <rect class="box" x="25" y="212" width="150" height="52" rx="8"/>
+  <text x="100" y="234" class="txt" text-anchor="middle">第2章 语言模型基础</text>
+  <text x="100" y="252" class="sub" text-anchor="middle">概率 · 困惑度 · 解码</text>
+
+  <rect class="box hot" x="25" y="292" width="150" height="52" rx="8"/>
+  <text x="100" y="314" class="txt" text-anchor="middle">第3章 Transformer</text>
+  <text x="100" y="332" class="sub" text-anchor="middle">核心章 · 最小 GPT 实现</text>
+
+  <rect class="box" x="25" y="372" width="150" height="52" rx="8"/>
+  <text x="100" y="394" class="txt" text-anchor="middle">第4章 分词器</text>
+  <text x="100" y="412" class="sub" text-anchor="middle">BPE 手写实现</text>
+
+  <!-- 第二部分 -->
+  <text x="290" y="124" class="part" text-anchor="middle">第二部分 预训练</text>
+  <rect class="box" x="215" y="132" width="150" height="52" rx="8"/>
+  <text x="290" y="154" class="txt" text-anchor="middle">第5章 数据工程</text>
+  <text x="290" y="172" class="sub" text-anchor="middle">清洗 · 去重 · 配比</text>
+
+  <rect class="box" x="215" y="212" width="150" height="52" rx="8"/>
+  <text x="290" y="234" class="txt" text-anchor="middle">第6章 训练方法</text>
+  <text x="290" y="252" class="sub" text-anchor="middle">优化器 · 稳定性</text>
+
+  <rect class="box" x="215" y="292" width="150" height="52" rx="8"/>
+  <text x="290" y="314" class="txt" text-anchor="middle">第7章 Scaling Laws</text>
+  <text x="290" y="332" class="sub" text-anchor="middle">Kaplan · Chinchilla</text>
+
+  <rect class="box hot" x="215" y="372" width="150" height="52" rx="8"/>
+  <text x="290" y="394" class="txt" text-anchor="middle">第8章 分布式训练</text>
+  <text x="290" y="412" class="sub" text-anchor="middle">ZeRO · 3D 并行</text>
+
+  <rect class="box" x="215" y="452" width="150" height="52" rx="8"/>
+  <text x="290" y="474" class="txt" text-anchor="middle">第9章 MoE</text>
+  <text x="290" y="492" class="sub" text-anchor="middle">稀疏专家 · 路由</text>
+
+  <!-- 第三、四部分 -->
+  <text x="480" y="124" class="part" text-anchor="middle">第三部分 微调与评测</text>
+  <rect class="box" x="405" y="132" width="150" height="52" rx="8"/>
+  <text x="480" y="154" class="txt" text-anchor="middle">第10章 SFT 与 PEFT</text>
+  <text x="480" y="172" class="sub" text-anchor="middle">LoRA · QLoRA</text>
+
+  <rect class="box" x="405" y="212" width="150" height="52" rx="8"/>
+  <text x="480" y="234" class="txt" text-anchor="middle">第11章 模型评测</text>
+  <text x="480" y="252" class="sub" text-anchor="middle">MMLU · GSM8K · 污染</text>
+
+  <text x="480" y="284" class="part" text-anchor="middle">第四部分 后训练</text>
+  <rect class="box" x="405" y="292" width="150" height="52" rx="8"/>
+  <text x="480" y="314" class="txt" text-anchor="middle">第12章 RL 基础</text>
+  <text x="480" y="332" class="sub" text-anchor="middle">策略梯度 · PPO</text>
+
+  <rect class="box" x="405" y="372" width="150" height="52" rx="8"/>
+  <text x="480" y="394" class="txt" text-anchor="middle">第13章 RLHF</text>
+  <text x="480" y="412" class="sub" text-anchor="middle">DPO · GRPO · R1</text>
+
+  <!-- 第五、六部分 -->
+  <text x="670" y="124" class="part" text-anchor="middle">第五部分 推理与部署</text>
+  <rect class="box" x="595" y="132" width="150" height="52" rx="8"/>
+  <text x="670" y="154" class="txt" text-anchor="middle">第14章 推理与量化</text>
+  <text x="670" y="172" class="sub" text-anchor="middle">KV Cache · vLLM</text>
+
+  <rect class="box" x="595" y="212" width="150" height="52" rx="8"/>
+  <text x="670" y="234" class="txt" text-anchor="middle">第15章 部署与服务</text>
+  <text x="670" y="252" class="sub" text-anchor="middle">Triton · 监控 · 边缘</text>
+
+  <text x="670" y="284" class="part" text-anchor="middle">第六部分 多模态与前沿</text>
+  <rect class="box" x="595" y="292" width="150" height="52" rx="8"/>
+  <text x="670" y="314" class="txt" text-anchor="middle">第16章 视觉语言模型</text>
+  <text x="670" y="332" class="sub" text-anchor="middle">ViT · CLIP · LLaVA</text>
+
+  <rect class="box" x="595" y="372" width="150" height="52" rx="8"/>
+  <text x="670" y="394" class="txt" text-anchor="middle">第17章 前沿专题</text>
+  <text x="670" y="412" class="sub" text-anchor="middle">推理模型 · Agent</text>
+
+  <!-- 依赖关系：实线箭头＝强依赖，虚线＝弱依赖或按需查阅 -->
+  <path class="weak" d="M 100 104 L 100 132"/>
+  <path class="dep" d="M 100 184 L 100 212"/>
+  <path class="dep" d="M 100 264 L 100 292"/>
+  <path class="dep" d="M 100 344 L 100 372"/>
+  <path class="dep" d="M 175 158 L 215 158"/>
+  <path class="dep" d="M 175 238 L 215 238"/>
+  <path class="dep" d="M 175 318 L 215 318"/>
+  <path class="dep" d="M 290 184 L 290 212"/>
+  <path class="dep" d="M 290 264 L 290 292"/>
+  <path class="dep" d="M 290 344 L 290 372"/>
+  <path class="dep" d="M 290 424 L 290 452"/>
+  <path class="dep" d="M 365 158 L 405 158"/>
+  <path class="dep" d="M 480 184 L 480 212"/>
+  <path class="dep" d="M 480 264 L 480 292"/>
+  <path class="dep" d="M 480 344 L 480 372"/>
+  <path class="dep" d="M 555 398 L 576 398 L 576 108 L 670 108 L 670 127"/>
+  <path class="dep" d="M 670 184 L 670 212"/>
+  <path class="weak" d="M 670 264 L 670 292"/>
+  <path class="weak" d="M 670 344 L 670 372"/>
+
+  <!-- 附录：随用随查 -->
+  <text x="380" y="530" class="part" text-anchor="middle">附录：随用随查，不占顺序阅读时间</text>
+  <rect class="box" x="115" y="540" width="150" height="48" rx="8" style="stroke-dasharray:4,3"/>
+  <text x="190" y="560" class="txt" text-anchor="middle">附录 A 数学符号表</text>
+  <text x="190" y="577" class="sub" text-anchor="middle">公式符号速查</text>
+
+  <rect class="box" x="305" y="540" width="150" height="48" rx="8" style="stroke-dasharray:4,3"/>
+  <text x="380" y="560" class="txt" text-anchor="middle">附录 B 开源仓库清单</text>
+  <text x="380" y="577" class="sub" text-anchor="middle">仓库与资料链接</text>
+
+  <rect class="box" x="495" y="540" width="150" height="48" rx="8" style="stroke-dasharray:4,3"/>
+  <text x="570" y="560" class="txt" text-anchor="middle">附录 C 术语对照表</text>
+  <text x="570" y="577" class="sub" text-anchor="middle">中英术语统一</text>
+
+  <path class="weak" d="M 115 564 L 60 564 L 60 430"/>
+
+  <text x="380" y="616" class="part" text-anchor="middle">实线箭头＝强依赖（建议先学完再往下）　虚线＝弱依赖或按需查阅　虚线框＝选读/速查内容</text>
+</svg>
+<p><strong>图 P-1　全书学习路线与章节依赖关系</strong></p>
+<p>如图 P-1 所示，全书的关系可以概括为一句话：<strong>第 0 章按需查阅，第 1–4 章打地基，第 5–9 章进入预训练深水区，第 10–11 章学会微调与评测，第 12–13 章做对齐，第 14–15 章把模型变成服务，第 16–17 章扩展视野</strong>；三个附录不参与顺序阅读，遇到陌生符号或术语时随手翻查。图中<strong>实线箭头是强依赖</strong>（前一章没学完，后面的内容会明显吃力），<strong>虚线是弱依赖或按需查阅</strong>（可以并行，也可以先跳过），<strong>虚线框表示选读或速查内容</strong>。</p>
+<p>读图时有三点提示。第一，第 0 章画在第 1 章上方并标为“选读 · 按需查阅”，它提供的是工具而非门槛，跳过它不会影响你读懂第 1、2 章。第二，第 3 章（Transformer 详解）与第 8 章（分布式训练）以橙色框标出，它们是全书最陡的两段坡，建议各留出整块时间，而不是“睡前翻两页”。第三，第一部分到第二部分之间是“单卡到多卡”的台阶：第 8、9 章只有多卡环境才能完整实操，单卡读者请按“读＋算”的方式推进（见下文“硬件与成本”）；第 16–17 章对前置要求最宽松，赶时间时可以留到最后再读。</p>
+<h2 id="_6">如何使用本教材</h2>
+<p><strong>先选一条路线。</strong> 不同的目标不需要读同样的章节。下面三条路线的章节范围与时间投入是经验估计（按每周投入 6–10 小时计；“读完”指读完正文并至少完成各章的编程题）：</p>
+<ul>
+<li><strong>完整路线（读到第 17 章，约 120–180 小时／一个学期）</strong>：按第 1–17 章顺序通读，第 0 章按需查阅，每章完成配套代码与练习。第 1–4 章打地基，第 5–9 章进入预训练深水区，第 10–15 章是工程实战最密集的部分，第 16–17 章扩展视野。适合想系统建立完整认知、要做技术选型或准备深入研究的读者。</li>
+<li><strong>应用工程师路线（读到第 15 章，约 40–60 小时／6–8 周业余时间）</strong>：第 1–4 章 → 第 10 章 → 第 14–15 章，目标是“会用、会微调、会部署”。第 5–9 章与第 12–13 章可以只读各章导语与本章小结，遇到 ZeRO、MoE、DPO 这类名词时回查对应小节，不必精读推导。适合马上要在业务里落地模型的读者。</li>
+<li><strong>研究者路线（读到第 17 章，约 200 小时以上）</strong>：第 0 章通读，第 1–17 章通读并精读第 3、7、8、13 章，同时完成第 6 章的 TinyStories 预训练实战与第 13 章的 GRPO 实验。适合要读论文、复现方法或准备做 LLM 方向研究的读者。</li>
+</ul>
+<p><strong>第 0 章什么时候读。</strong> 三条路线都不要求“先学完数学再开始”，第 0 章是补丁而不是门槛：</p>
+<ul>
+<li><strong>可以跳过</strong>：如果你能顺畅看懂矩阵乘法 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>B</mi></mrow><annotation encoding="application/x-tex">AB</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span> 的形状、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow><annotation encoding="application/x-tex">\mathrm{softmax}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"><span class="mord mathrm">softmax</span></span></span></span></span> 的输入输出、条件概率与期望、链式法则，以及“为什么 FP16 会溢出”，那就直接进第 1 章。</li>
+<li><strong>建议先读</strong>：如果上面任何一项让你犹豫，先花 3–5 小时读第 0 章（重点 0.2 线性代数、0.4 信息论、0.5 微积分与矩阵求导），再回来读第 1 章。这几小时会在第 3 章加倍赚回来。</li>
+<li><strong>卡壳了再回来读</strong>：第 2 章看不懂交叉熵与困惑度 → 回看第 0.4 节；第 3 章注意力推导卡在矩阵形状或 softmax 的雅可比 → 回看第 0.2 节与第 0.5 节；第 6 章混合精度里不明白 FP16 为什么上溢 → 回看第 0.7 节。附录 A 的符号表可以当作常备索引，不必强记。</li>
+</ul>
+<p><strong>配套代码。</strong> 本教材的口号是“每个关键概念都有可运行的代码”。书中每一段代码都写成可直接运行的形式：给出了所需的安装命令、关键参数与预期输出，可以按章复制到本地 GPU、实验室服务器或 Colab 上跑通。配套的完整代码（训练脚本、数据下载与依赖清单）随本教材一并发布，获取方式见书末说明。代码风格遵循三个原则：优先正确与可读，其次才是性能；每个超参数显式写出，不藏在配置文件深处；与工业界主流实现（如 nanoGPT、HuggingFace Transformers）对照给出链接，帮你从“教材代码”过渡到“生产代码”。</p>
+<p><strong>练习。</strong> 每章末尾的练习统一按三组编排：<strong>概念题</strong>（检验理解）、<strong>编程题</strong>（动手实现）、<strong>思考题</strong>（没有标准答案，训练科研品味）；动手量较大的章节会在最后追加一个<strong>实操项目</strong>（一个完整的动手任务，给出输入、输出与验收标准）。强烈建议至少完成编程题——LLM 是一门实践学科，看懂与写出来之间隔着一条鸿沟。</p>
+<p><strong>阅读方法。</strong> 第一遍读可以跳过所有推导，只看图、代码与小结；第二遍精读公式推导（尤其是第 3 章注意力机制、第 12–13 章强化学习部分），建议拿纸笔跟随；第三遍把书当手册查阅。数学符号全书统一，附录 A 提供符号表，附录 C 提供术语中英对照表。</p>
+<p><strong>硬件与成本。</strong> 本书的实战代码按“尽量让读者跑得起来”设计。各章的最低配置是（汇总于第 1 章表 1-3）：第 3 章最小 GPT 训练约 4 GB 显存（CPU 也能跑，只是慢得多）；第 6 章 TinyStories 预训练约 8 GB；第 10 章 LoRA 微调 7B 约 16 GB、QLoRA 约 8 GB（同为 7B 模型，全参微调要 100 GB 量级，见第 10 章 10.5 节）；第 13 章在小模型上跑 GRPO 约 24 GB；第 14–15 章用 vLLM 部署 7B 约 20 GB。换算成硬件，可以这样理解：</p>
+<ul>
+<li><strong>一张 24 GB 的消费级显卡（RTX 3090/4090）足够走完绝大部分主线</strong>：从零训练 10M–100M 参数的小 GPT、用 QLoRA 微调 7B 甚至 13B（4 bit 量化后权重只有数 GB）、以 BF16 部署 7B 模型做推理（权重约 14 GB，剩下的显存要留给 KV Cache——上下文越长，能并发的请求越少，详见第 14 章 14.2 节）。但全参微调 7B，或从零预训练 1B 以上的模型，24 GB 就不够了。</li>
+<li><strong>免费算力够不够用</strong>：Google Colab 免费额度提供 T4（16 GB 显存），跑通第 3 章的最小 GPT、缩小规模的第 6 章 TinyStories 实验、以及 7B 模型的 4 bit 推理都没问题；但免费会话有闲置断开与时长上限，长训练必须配合 checkpoint 与网盘挂载（第 6 章 6.7 节），否则容易白跑。国内平台（如 AutoDL）按小时租卡，可以连续开机、按量计费，更适合需要跑数小时训练的场景。</li>
+<li><strong>必须多卡、只能“读＋算”的章节</strong>：第 8 章（分布式训练）的 DDP、ZeRO、张量并行、流水线并行，只有真正跑在多卡上才有体感；单卡读者建议按第 8 章 8.1 节的显存公式把每种策略“算一遍”（书中有 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>16</mn><mi>N</mi></mrow><annotation encoding="application/x-tex">16N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">16</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 法则与可直接复算的例子），并把并行代码当作对照阅读。第 9 章（MoE）的完整训练同样需要多卡（专家并行依赖 all-to-all 通信），单卡上能做的是第 9 章 9.7 节“60 行内的简化 MoE 层”那一类实验（观察路由与负载均衡的真实行为），外加显存与算力的账目估算。这两章的目标是“看懂并能规划”，而不是“人人都在本机复现”。</li>
+<li><strong>公有云 GPU 的价格量级</strong>：要用云上算力，请先算成本再开机。按公开报价的量级看，海外平台单张数据中心级显卡（B200/H100 级）约每小时 5–8 美元（Stanford CS336 课程页面为自学者列出的公开报价，会随行情更新）；国内平台按小时计费，从消费级卡到数据中心卡大致横跨“每小时几元”到“每小时几十元”人民币两个量级。价格随平台、地区、库存与计费方式（按量、竞价、包月）波动很大，<strong>请以平台实时报价为准</strong>；做实验时优先保证“随时能停、随时能续”。</li>
+</ul>
+<h2 id="_7">致谢与参考资料</h2>
+<p>本教材站在众多优秀开源课程与资料的肩膀上，主要参考与借鉴如下（也强烈推荐读者把它们作为延伸学习材料）：</p>
+<ul>
+<li><strong>Stanford CS336: Language Modeling from Scratch</strong>（Percy Liang、Tatsunori Hashimoto 主讲，每年春季开课，讲义与作业持续更新）——覆盖数据、架构、训练、推理的完整课程，本书预训练部分的多处组织方式受其启发：<a href="https://stanford-cs336.github.io/">https://stanford-cs336.github.io/</a></li>
+<li><strong>Sebastian Raschka, <em>Build a Large Language Model (From Scratch)</em></strong> 及其开源仓库 LLMs-from-Scratch——逐层实现 GPT 的最佳入门材料之一：<a href="https://github.com/rasbt/LLMs-from-Scratch">https://github.com/rasbt/LLMs-from-Scratch</a></li>
+<li><strong>Andrej Karpathy, nanoGPT 与 “Let&rsquo;s build GPT” 视频课程</strong>——本书第 3 章最小 GPT 实现的重要参照：<a href="https://github.com/karpathy/nanoGPT">https://github.com/karpathy/nanoGPT</a></li>
+<li><strong>Datawhale 自己动手，做大模型</strong>（diy-llm）——中文社区优质的 LLM 全栈教程，本书部分实战环节的组织参考了其循序渐进的设计：<a href="https://github.com/datawhalechina/diy-llm">https://github.com/datawhalechina/diy-llm</a></li>
+<li><strong>《大语言模型》</strong>（赵鑫、李军毅、周昆、唐天一、文继荣，高等教育出版社）——中文系统教材，覆盖面比本书更广（含提示工程与检索增强），可作为对照阅读：<a href="https://llmbook-zh.github.io/">https://llmbook-zh.github.io/</a></li>
+<li><strong>《动手学深度学习》</strong>（阿斯顿·张、李沐等）——如果第 0 章的数学或 PyTorch 基础让你吃力，先在这里补课（中文、可运行）：<a href="https://zh.d2l.ai/">https://zh.d2l.ai/</a></li>
+<li><strong>HuggingFace Transformers / PEFT / TRL 文档</strong>——微调、后训练与部署章节的工具基础：<a href="https://huggingface.co/docs/transformers/index">https://huggingface.co/docs/transformers/index</a></li>
+<li><strong>vLLM 文档与论文（Kwon et al., 2023, SOSP）</strong>——第 14–15 章推理与服务化的核心参考：<a href="https://docs.vllm.ai/">https://docs.vllm.ai/</a></li>
+<li><strong>Jay Alammar, <em>The Illustrated Transformer</em></strong>——把注意力机制讲“活”的经典图解博客：<a href="https://jalammar.github.io/illustrated-transformer/">https://jalammar.github.io/illustrated-transformer/</a></li>
+<li>各模型技术报告：GPT-3（arXiv:2005.14165）、Llama 系列、Qwen 系列、DeepSeek-V3/R1 等，均在对应章节的“延伸阅读”中给出。</li>
+</ul>
+<h2 id="_8">版本与勘误</h2>
+<p><strong>这是一本开源教材。</strong> 本书的正文、插图与配套代码都以源文件的形式维护，因此勘误可以像修 bug 一样快速进入下一个版本：发现技术错误、错别字、失效链接或跑不通的代码，欢迎反馈给我们（反馈渠道与配套代码的获取方式一并在书末说明），并尽量附上“所在小节 + 现象 + 期望结果”，这样我们能更快定位。勘误随版本更新，每次修订会更新版本号，重要更正会在对应小节显式标注。请注意，涉及<strong>框架 API、显存需求、云平台价格、模型配置</strong>的内容都以“截至本书定稿”为准——这个领域变化很快，动手前请再核对一次官方文档。</p>
+<p><strong>配套代码与构建方式。</strong> 全书配套代码与本书的 Markdown 源文件一起维护：各章代码用 Python + PyTorch 编写，可按章独立运行；书籍本身由 Node.js 脚本从 <code>chapters/*.md</code> 渲染为网页版与 PDF（公式用 KaTeX 排版、插图用内嵌 SVG、图注与表注编号由自检脚本校验）。因此只要勘误能定位到具体的源文件与小节，修正就能可靠地同步到下一个版本，而不会在排版环节丢失。</p>
+<p>感谢为本书提供反馈的每一位读者与同行。书中难免存在错误与过时之处（这个领域发展太快了），欢迎指正，勘误将随版本更新。</p>
+<p>愿你享受这段从 Transformer 到部署的旅程。</p><div class="pagenav"><a class="nav-prev" href="math.html">← 上一页</a><a class="nav-next" href="ch01.html">下一页 →</a></div></article></main></body></html>
