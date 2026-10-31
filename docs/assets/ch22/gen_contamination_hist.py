@@ -142,8 +142,8 @@ ax.text(TH + 0.015, ax.get_ylim()[1] * 0.92, f"判污染阈值 {TH}",
         fontsize=10)
 ax.set_xlabel("训练-测试重合度（与语料最相似文档的 8-gram Jaccard）")
 ax.set_ylabel("题数")
-ax.set_title("数据污染检测：污染组重合度接近 1，干净组接近 0\n"
-             "（真实模拟：300 题、字符级 3% 变异近拷贝，由本脚本真实计算）")
+ax.set_title("数据污染检测：污染组（近拷贝入语料）重合度系统性右移\n"
+             "（模拟：300 题，其中 100 题的 3% 字符变异近拷贝存入语料）")
 ax.text(0.68, ax.get_ylim()[1] * 0.62,
         f"阈值 {TH} 下：\n召回 {tp}/{tp + fn}，误报 {fp} 题",
         fontsize=10, bbox=dict(fc="#fffbe6", ec="gray"))

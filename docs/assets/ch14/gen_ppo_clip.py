@@ -49,7 +49,7 @@ for ax in axes:
     ax.legend(fontsize=8.5, loc="upper left")
 axes[0].set_ylabel("截断代理目标 $L^{CLIP}(\\rho, A)$")
 
-fig.suptitle("PPO 的 clip 机制：把单步更新限制在置信区间附近（$\\epsilon=0.2$，真实绘制）", fontsize=11.5, y=1.02)
+fig.suptitle("PPO 的 clip 机制：把单步更新限制在置信区间附近（$\\epsilon=0.2$）", fontsize=11.5, y=1.02)
 fig.tight_layout()
 fig.savefig("gen_ppo_clip.png", dpi=150, bbox_inches="tight")
 print("已保存 gen_ppo_clip.png")

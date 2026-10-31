@@ -75,7 +75,7 @@ ax.set_title(f"数据量同步增长，$D^*/N^* \\approx {ratio.min():.0f}\\sim{
 ax.legend(fontsize=10, loc="upper left")
 ax.grid(True, which="both", alpha=0.3)
 
-fig.suptitle("用 Chinchilla 论文公开数据点真实拟合计算最优前沿（由代码生成，脚本同目录可复现）",
+fig.suptitle("用 Chinchilla 论文公开数据点真实拟合计算最优前沿",
              fontsize=13, y=1.02)
 fig.tight_layout()
 fig.savefig("gen_scaling_fit.png", dpi=150, bbox_inches="tight")

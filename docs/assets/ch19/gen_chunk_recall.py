@@ -156,16 +156,16 @@ best = SIZES[int(np.argmax(r3))]
 ax.axvline(best, color="gray", ls=":", lw=1.4)
 ax.annotate(f"最佳平台自 {best} 字符起：\n再大召回持平，但单块信息密度下降、\n"
             "生成阶段要塞进更多无关文本",
-            xy=(best, max(r3)), xytext=(best + 40, max(r3) - 0.30),
-            fontsize=11, arrowprops=dict(arrowstyle="->"))
+            xy=(best, 0.975), xytext=(78, 0.862),
+            fontsize=10.5, arrowprops=dict(arrowstyle="->"))
 ax.set_xlabel("切块大小（字符，重叠 15%）")
 ax.set_ylabel("比例（50 条文档-问题对）")
-ax.set_ylim(0.85, 1.02)
+ax.set_ylim(0.82, 1.03)
 ax.set_title("切块大小 vs 检索召回：太小把答案句切碎，召回骤降\n"
-             "（真实实验：50 条“文档+问题”对，字符 2-gram TF-IDF 检索器）")
+             "（50 条文档-问题对，字符 2-gram TF-IDF 检索器，Recall@3）")
 ax.grid(alpha=0.3)
-ax.legend(loc="lower right")
+ax.legend(loc="upper left", fontsize=10)
 fig.tight_layout()
 fig.savefig(__file__.replace("gen_chunk_recall.py", "chunk_recall.png"),
-            dpi=150, bbox_inches="tight")
+            dpi=150)
 print("已保存 chunk_recall.png")

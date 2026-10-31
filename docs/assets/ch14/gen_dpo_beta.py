@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""生成 14.5.1 节图：DPO 中不同 β 的损失函数族与"认对概率"（真实绘制）。
+"""生成 14.5.1 节图：DPO 中不同 β 的损失函数族与"认对概率"。
 
 记偏好对的似然比差（log-prob margin）为
     m = log[pi_theta(y_w)/pi_ref(y_w)] - log[pi_theta(y_l)/pi_ref(y_l)]
@@ -44,7 +44,7 @@ for beta, c in zip(betas, colors):
     y_at_5 = 1.0 / (1.0 + np.exp(-beta * 5))
     ax.scatter([5], [y_at_5], color=c, s=28, zorder=5)
 ax.axvline(5, color="k", ls=":", lw=1)
-ax.annotate("$m=5$ 处：$\\beta=0.05$ 仍只有 0.62，\n损失继续推大 margin；\n$\\beta=1$ 已 0.99，几乎不再更新",
+ax.annotate("$m=5$ 处：$\\beta=0.1$ 仅 0.62、$\\beta=0.05$ 仅 0.56，\n损失继续推大 margin；\n$\\beta=1$ 已 0.99，几乎不再更新",
             xy=(5, 0.8), xytext=(5.6, 0.42), fontsize=9,
             arrowprops=dict(arrowstyle="->", lw=1))
 ax.set_xlabel("似然比差 $m$")
@@ -53,7 +53,7 @@ ax.set_title("(b) 隐式 BT 概率：$\\beta$ 越大越早饱和（越保守）"
 ax.grid(alpha=0.3)
 ax.legend(fontsize=9, loc="lower right")
 
-fig.suptitle("DPO 的 $\\beta$ 旋钮：KL 锚定强度决定\"推多狠\"与\"多稳\"（真实绘制）", fontsize=11.5, y=1.02)
+fig.suptitle("DPO 的 $\\beta$ 旋钮：KL 锚定强度决定\"推多狠\"与\"多稳\"", fontsize=11.5, y=1.02)
 fig.tight_layout()
 fig.savefig("gen_dpo_beta.png", dpi=150, bbox_inches="tight")
 

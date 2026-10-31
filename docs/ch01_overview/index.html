@@ -658,7 +658,7 @@
   <a href="#142" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.4.2 涌现能力及其争议：一次测量学上的正面对账
+        1.4.2 涌现能力及其争议
       
     </span>
   </a>
@@ -2175,7 +2175,7 @@
   <a href="#142" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.4.2 涌现能力及其争议：一次测量学上的正面对账
+        1.4.2 涌现能力及其争议
       
     </span>
   </a>
@@ -2668,13 +2668,13 @@ step 3:  输入 &lt;s&gt; 今天 天气 很    → 采出 "好"   ……直到�
 <li><strong>W 初始化为全零</strong>：softmax(0) = 均匀分布，起点精确落在"瞎猜"上——这就是观察 1 能严格成立的技巧。</li>
 <li><strong>标签 = 输入左移一位</strong>（<code>x = corpus[:-1]</code>，<code>y = corpus[1:]</code>）：一句话里每个位置都同时是别处的"条件"和别处的"标签"，监督信号一个都不浪费；nanoGPT 与所有 LLM 的损失对齐都是这一行。</li>
 </ul>
-<p>还有一个值得知道的彩蛋：这张表的老前辈是 1980 年代的 <strong>n-gram 统计语言模型</strong>——直接数语料里"上一字符→下一字符"的出现次数再归一化。可以证明：在全体语料上用梯度下降训练这张表直到收敛，得到的正是计数极大似然解。换句话说，1.2 节的 30 行代码用神经网络的方法"重新发明"了 n-gram，而神经化的收益在下一步就显现：把表换成神经网络参数，未见过的搭配开始有了平滑的概率——泛化，从这里开始。</p>
-<p>把同样的训练循环跑久一点、换大语料，loss 曲线与生成样本如何演变？下图是训练 6000 步的真实记录（脚本 <code>gen_bigram_demo.py</code>，语料为 16 句各不相同的短文）：</p>
+<p>还有一个值得知道的彩蛋：这张表的老前辈是 1980 年代的 <strong>n-gram 统计语言模型</strong>——直接数语料里"上一字符→下一字符"的出现次数再归一化。可以证明：在全体语料上用梯度下降训练这张表直到收敛，得到的正是计数极大似然解。换句话说，上面这 30 行代码用神经网络的方法"重新发明"了 n-gram，而神经化的收益在下一步就显现：把表换成神经网络参数，未见过的搭配开始有了平滑的概率——泛化，从这里开始。</p>
+<p>把同样的训练循环跑久一点、换更大的语料，loss 曲线与生成样本如何演变？下图是同一模型在更大语料上训练 6000 步的真实记录：</p>
 <p><img alt="字符级 bigram 训练演示" src="../assets/ch01/bigram_demo.png" /></p>
-<p><em>图 2：字符级 bigram 语言模型训练演示（由代码生成，脚本 assets/ch01/gen_bigram_demo.py 同目录可复现）。左：损失从瞎猜水平 <span class="arithmatex">\(\ln V = 4.95\)</span> 一路压到 0.76 后持平——所有常见二字搭配学完后无处可学；右：同一模型在不同训练程度下的续写，从纯乱码变成局部通顺但整体漂移的句子。</em></p>
+<p><em>图 2：字符级 bigram 语言模型训练演示。左：损失从瞎猜水平 <span class="arithmatex">\(\ln V = 4.95\)</span> 一路压到 0.76 后持平——所有常见二字搭配学完后无处可学；右：同一模型在不同训练程度下的续写，从纯乱码变成局部通顺但整体漂移的句子。</em></p>
 <h2 id="13">1.3 公式逐项拆解：语言模型到底在算什么<a class="headerlink" href="#13" title="Permanent link">&para;</a></h2>
 <h3 id="130-logits-softmax">1.3.0 从打分到概率：logits 与 softmax<a class="headerlink" href="#130-logits-softmax" title="Permanent link">&para;</a></h3>
-<p>1.2 节的 <code>W[cur]</code> 是一串任意实数，叫 <strong>logits</strong>（打分）。神经网络的所有输出都是 logits——它可正可负、不归一，还不是概率。把它变成概率分布的是 softmax：</p>
+<p>1.2 节的 <code>W[cur]</code> 是一串任意实数，叫 logits（打分）。神经网络的所有输出都是 logits——它可正可负、不归一，还不是概率。把它变成概率分布的是 softmax：</p>
 <div class="arithmatex">\[
 P_\theta(x_{t+1} = j \mid x_{\le t}) = \frac{e^{z_j}}{\sum_{k \in V} e^{z_k}}
 \]</div>
@@ -2699,7 +2699,7 @@ P(x_1, x_2, \dots, x_T) = \prod_{t=1}^{T} P\left(x_t \mid x_{&lt;t}\right) = \pr
 <li>近似发生在哪：我们用参数为 <span class="arithmatex">\(\theta\)</span> 的神经网络 <span class="arithmatex">\(P_\theta(x_t \mid x_{&lt;t})\)</span> 去拟合每个条件分布——<strong>分解是精确的，近似只在神经网络拟合处发生</strong>。这句话的含义：只要每个条件分布拟合得好，整句联合概率就准，因此"下一词预测"这个看似简单的任务足以逼模型学会语言。</li>
 </ul>
 <h3 id="132">1.3.2 训练目标：负对数似然<a class="headerlink" href="#132" title="Permanent link">&para;</a></h3>
-<p>训练目标是最小化负对数似然：</p>
+<p>分解式给了模型结构，训练目标随之确定：让每个真实词元的条件概率尽可能大，等价地，最小化负对数似然：</p>
 <div class="arithmatex">\[
 \mathcal{L}(\theta) = -\frac{1}{T}\sum_{t=1}^{T} \log P_\theta\left(x_t \mid x_{&lt;t}\right)
 \]</div>
@@ -2754,9 +2754,9 @@ P(x_1, x_2, \dots, x_T) = \prod_{t=1}^{T} P\left(x_t \mid x_{&lt;t}\right) = \pr
 </tbody>
 </table>
 <h2 id="14-llm">1.4 训练一个 LLM 的完整流水线：三阶段、数据规模与算力<a class="headerlink" href="#14-llm" title="Permanent link">&para;</a></h2>
-<p>有了损失函数，"训练一个 LLM"仍是三场性质完全不同的马拉松。开源生态里你会反复看到 base、instruct、chat 三种后缀的模型——分界线正是训练的三个阶段。图 3 用一张代码生成的对数坐标图把它们讲清（数据量级依据：GPT-3 预训练约 <span class="arithmatex">\(3.1 \times 10^{23}\)</span> FLOPs、3000 亿 token，见 arXiv:2005.14165；InstructGPT 的 SFT 仅约 1.3 万条示范、后训练算力不足预训练 3%，见 arXiv:2203.02155）：</p>
+<p>有了损失函数，"训练一个 LLM"仍是三场性质完全不同的马拉松。开源生态里你会反复看到 base、instruct、chat 三种后缀的模型——分界线正是训练的三个阶段。图 3 用对数坐标把三个阶段的量级差距讲清（数据量级依据：GPT-3 预训练约 <span class="arithmatex">\(3.1 \times 10^{23}\)</span> FLOPs、3000 亿 token，见 arXiv:2005.14165；InstructGPT 的 SFT 仅约 1.3 万条示范、后训练算力不足预训练 3%，见 arXiv:2203.02155）：</p>
 <p><img alt="训练一个 LLM 的完整流水线" src="../assets/ch01/pipeline_scale.png" /></p>
-<p><em>图 3：训练一个 LLM 的完整流水线（由代码生成，脚本 assets/ch01/gen_pipeline_scale.py 同目录可复现）。上：三阶段流程框图，共用同一模型骨架；左下：各阶段数据规模（对数坐标）——预训练比后训练多 6~10 个数量级；右下：各阶段算力（对数坐标）——能力几乎全部产生于预训练。</em></p>
+<p><em>图 3：训练一个 LLM 的完整流水线。上：三阶段流程框图，共用同一模型骨架；左下：各阶段数据规模（对数坐标）——预训练比后训练多 6~10 个数量级；右下：各阶段算力（对数坐标）——能力几乎全部产生于预训练。</em></p>
 <table>
 <thead>
 <tr>
@@ -2798,17 +2798,16 @@ P(x_1, x_2, \dots, x_T) = \prod_{t=1}^{T} P\left(x_t \mid x_{&lt;t}\right) = \pr
 <p><strong>怎么把图 3 用到你自己的项目</strong>（以单卡玩家为例）。假设一张 RTX 4090：bf16 稠密算力约 <span class="arithmatex">\(1.65 \times 10^{14}\)</span> FLOPs/s，实际利用率按 30% 计即 <span class="arithmatex">\(5 \times 10^{13}\)</span> FLOPs/s；连续训 7 天 ≈ <span class="arithmatex">\(3 \times 10^{19}\)</span> FLOPs。按 <span class="arithmatex">\(C \approx 6ND\)</span> 与 Chinchilla 配比 <span class="arithmatex">\(D = 20N\)</span> 反推：<span class="arithmatex">\(N \approx 5 \times 10^8\)</span>、<span class="arithmatex">\(D \approx 10^{10}\)</span> token——大约是 GPT-2 中量级、10B token 语料。这就是"为什么单卡玩家从 GPT-2 级别起步而不是从 7B 起步"的算术答案；也是本书动手环节都围绕小模型设计的理由。后训练阶段（SFT/偏好优化）则按预训练算力的百分之几预留即可（图 3 右下）。</p>
 <p>三个阶段<strong>共用同一个模型骨架</strong>，区别只在数据与目标函数——这是"一次预训练、多次后训练"的工程基础，也是同一基座能衍生出 instruct/chat/代码/数学一大家子变体的原因。②③合称<strong>后训练（post-training）</strong>，经典 RLHF 流程如图 4：</p>
 <p><img alt="RLHF 三阶段训练流程" src="../assets/ch01/rlhf_pipeline.png" /></p>
-<p><em>图 4：RLHF 三阶段流程——先用示范数据做监督微调；再让标注员对同一提示的多个回答排序、训练奖励模型；最后以奖励模型打分为信号，用强化学习（如 PPO）优化策略模型。（图源：本书自绘，流程参考 InstructGPT，arXiv:2203.02155；仅作教学用途）</em></p>
-<p><strong>为什么说"预训练学到能力，后训练塑造行为"</strong>。看图 3 右下角的数量级：SFT 只用约 1.3 万条示范，而 GPT-3 预训练用了约 3000 亿 token——相差 7 个数量级。世界知识、语法、代码、推理模式这些"能力"几乎全部来自预训练的压缩；SFT 与偏好优化改变的主要是条件分布的<strong>格式、风格与取向</strong>——把基座中已存在的能力"对齐"到对话界面上。旁证：GPT-3 时代的基座靠 few-shot 提示就已经很强。更严谨的表述是：<strong>预训练决定上限，后训练决定下限与可用性</strong>。且边界在松动——o1/DeepSeek-R1 表明，后训练的强化学习也能"激励"出新的推理行为，而不只是改格式（见 <a href="../ch14_alignment_rl/">第 14 章</a>）。</p>
+<p><em>图 4：RLHF 三阶段流程——先用示范数据做监督微调；再让标注员对同一提示的多个回答排序、训练奖励模型；最后以奖励模型打分为信号，用强化学习（如 PPO）优化策略模型。流程参考 InstructGPT（arXiv:2203.02155）。</em></p>
+<p><strong>预训练学到能力，后训练塑造行为</strong>——为什么这么说？看图 3 右下角的数量级：SFT 只用约 1.3 万条示范，而 GPT-3 预训练用了约 3000 亿 token，相差 7 个数量级。世界知识、语法、代码、推理模式这些"能力"几乎全部来自预训练的压缩；SFT 与偏好优化改变的主要是条件分布的<strong>格式、风格与取向</strong>——把基座中已存在的能力"对齐"到对话界面上（旁证：GPT-3 时代的基座靠 few-shot 提示就已经很强）。更严谨的表述是：<strong>预训练决定上限，后训练决定下限与可用性</strong>。边界也在松动——o1/DeepSeek-R1 表明，后训练的强化学习能"激励"出新的推理行为，而不只是改格式（见 <a href="../ch14_alignment_rl/">第 14 章</a>）。</p>
 <h3 id="141">1.4.1 规模定律：算力可预测地兑换损失下降<a class="headerlink" href="#141" title="Permanent link">&para;</a></h3>
 <p>买多少算力、训多大模型、配多少数据？Kaplan et al. (2020) 给出经验答案：测试损失随参数量 <span class="arithmatex">\(N\)</span>、数据量 <span class="arithmatex">\(D\)</span>、算力 <span class="arithmatex">\(C\)</span> 呈<strong>幂律</strong>平滑下降，且近似满足</p>
 <div class="arithmatex">\[
 C \approx 6 N D
 \]</div>
 <p>依据：每个参数在每个 token 上前向约 2 FLOPs、反向约 4 FLOPs，合计 6（第 2 章会从矩阵乘 FLOPs 计数推导；前向：反向 ≈ 1:2 也是"训练比推理贵 3 倍"的出处）。用 GPT-3 做一次实算校验：<span class="arithmatex">\(N = 175 \times 10^9\)</span>，<span class="arithmatex">\(D = 300 \times 10^9\)</span>，则 <span class="arithmatex">\(C \approx 6ND \approx 3.15 \times 10^{23}\)</span> FLOPs，与其技术报告一致——一道乘法就能估算任何训练预算。Chinchilla (2022) 进一步修正：给定算力预算，<span class="arithmatex">\(D\)</span> 应与 <span class="arithmatex">\(N\)</span> <strong>同步</strong>扩展（约 20 token/参数），"盲目堆参数"不是最优。这两条是把训练预算从玄学变成工程决策的全部数学，深入讨论见 <a href="../ch10_pretrain/">第 10 章</a>。</p>
-<h3 id="142">1.4.2 涌现能力及其争议：一次测量学上的正面对账<a class="headerlink" href="#142" title="Permanent link">&para;</a></h3>
-<p>给模型加显卡，能力是"均匀变好"还是"突然开窍"？Wei et al. (2022) 定义<strong>涌现能力（emergent ability）</strong>为"在小模型中不存在、但在大模型中突然出现的能力"，典型例子：多步算术（小模型 few-shot 准确率接近随机，越过某规模后陡增）、思维链增益（提示中加"一步一步想"只在足够大的模型上生效）、指令泛化。</p>
-<p><strong>争议（务必搞清的测量学论点）</strong>：Schaeffer et al. (2023) 指出，涌现可能只是<strong>指标的产物</strong>——能力本身在平滑进步，但不连续的指标把它显示成了跳变。机制：多选题/Exact Match 这类指标把"部分正确"记为零分；小模型每一步都在变好（困惑度平滑下降，符合规模定律），但只有当"每题都接近全对"的累积效果越过"全对才得分"的阈值时，分数才从随机水平跳起——曲线形状由<strong>指标的非线性</strong>决定，而非能力突变。换连续指标（token 编辑距离、对数概率），同一批实验的"跳变"消失、变成平滑改善。</p>
+<h3 id="142">1.4.2 涌现能力及其争议<a class="headerlink" href="#142" title="Permanent link">&para;</a></h3>
+<p>给模型加显卡，能力是"均匀变好"还是"突然开窍"？Wei et al. (2022) 把<strong>涌现能力（emergent ability）</strong>定义为"在小模型中不存在、但在大模型中突然出现的能力"，典型例子是多步算术与思维链增益（提示中加"一步一步想"只在足够大的模型上生效）。Schaeffer et al. (2023) 随即给出测量学质疑：<strong>能力本身在平滑进步，是不连续指标把它显示成了跳变</strong>——多选题/Exact Match 这类指标把"部分正确"记为零分，小模型的困惑度按规模定律平滑下降，但只有"每题都接近全对"的累积效果越过"全对才得分"的阈值时，分数才从随机水平跳起；换连续指标（token 编辑距离、对数概率），同一批实验的"跳变"就变回平滑改善。</p>
 <table>
 <thead>
 <tr>
@@ -2837,7 +2836,7 @@ C \approx 6 N D
 <h3 id="143">1.4.3 训练只是花钱的开始：部署侧的账<a class="headerlink" href="#143" title="Permanent link">&para;</a></h3>
 <p><span class="arithmatex">\(C \approx 6ND\)</span> 只覆盖训练。模型上线后每次生成一个 token 都要做一次前向，而自回归生成是逐 token 串行的（1.1 节），部署侧的成本结构完全不同：batch=1 解码时矩阵乘退化为矩阵-向量乘，瓶颈从算力转移到<strong>显存带宽</strong>——每生成一个词都要把全部权重和缓存读一遍。这解释了三件你早晚会碰到的事：为什么推理服务按"吞吐/时延/显存"三个指标分别优化、为什么量化（把权重压到 8/4 bit）对部署如此重要、为什么 KV 缓存是推理引擎的核心数据结构。这些是 <a href="../ch15_inference/">第 15–18 章</a>的主题，此处只需建立"训练一次、推理亿万次"的成本直觉。</p>
 <h2 id="15-nanogpt-30-bigram">1.5 官方源码对照：nanoGPT 与你的 30 行 bigram<a class="headerlink" href="#15-nanogpt-30-bigram" title="Permanent link">&para;</a></h2>
-<p>1.2 节的三要素——查表取特征、对词表打分、交叉熵对账、采样循环——在公认的最好教材仓库 nanoGPT（karpathy/nanoGPT，约 300 行训练 GPT-2）里逐行都有对应。以下节选自该仓库 <code>model.py</code> 的 <code>GPT.forward</code>（仓库：<a href="https://github.com/karpathy/nanoGPT">karpathy/nanoGPT</a>，文件 <code>model.py</code>）：</p>
+<p>1.2 节的全部要素——查表取特征、对词表打分、交叉熵对账、采样循环——在公认的最好教材仓库 nanoGPT（karpathy/nanoGPT，约 300 行训练 GPT-2）里逐行都有对应。以下节选自该仓库 <code>model.py</code> 的 <code>GPT.forward</code>（仓库：<a href="https://github.com/karpathy/nanoGPT">karpathy/nanoGPT</a>，文件 <code>model.py</code>）：</p>
 <div class="highlight"><pre><span></span><code><span class="n">tok_emb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformer</span><span class="o">.</span><span class="n">wte</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="c1"># token embeddings of shape (b, t, n_embd)</span>
 <span class="n">pos_emb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformer</span><span class="o">.</span><span class="n">wpe</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="c1"># position embeddings of shape (t, n_embd)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformer</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">tok_emb</span> <span class="o">+</span> <span class="n">pos_emb</span><span class="p">)</span>
@@ -2894,7 +2893,7 @@ C \approx 6 N D
 <tr>
 <td>无</td>
 <td><code>logits[:, -1, :]</code> 只算最后位置</td>
-<td>自回归一次只新增一个词，算整个序列是浪费——推理优化的第一课（<a href="../ch15_inference/">第 15 章</a>）</td>
+<td>自回归一次只新增一个词，算<strong>整个序列</strong>是浪费——推理优化的第一课（<a href="../ch15_inference/">第 15 章</a>）</td>
 </tr>
 <tr>
 <td>无</td>
@@ -2903,7 +2902,7 @@ C \approx 6 N D
 </tr>
 </tbody>
 </table>
-<p>还有一个值得注意的"没写的"：nanoGPT 的生成循环每一步都把<strong>整个序列</strong>重新前向一遍（<code>self(idx_cond)</code>），没有任何缓存——教材为了简单牺牲了效率；真实推理引擎会把每层的中间结果缓存下来只算新 token（KV 缓存，<a href="../ch15_inference/">第 15 章</a>），速度差几个数量级。读教材代码时要分清"机制"与"工程优化"，两者混为一谈是新手最常见的误读。</p>
+<p>还有一个值得注意的"没写的"：nanoGPT 的生成循环每一步都把整个序列重新前向一遍（<code>self(idx_cond)</code>），没有任何缓存——教材为了简单牺牲了效率；真实推理引擎会把每层的中间结果缓存下来只算新 token（KV 缓存，<a href="../ch15_inference/">第 15 章</a>），速度差几个数量级。读教材代码时要分清"机制"与"工程优化"，两者混为一谈是新手最常见的误读。</p>
 <p><strong>改一改</strong>：把 <code>generate</code> 里的 <code>F.softmax(W[cur], dim=-1)</code> 换成 <code>F.softmax(W[cur] / 0.5, dim=-1)</code> 与 <code>F.softmax(W[cur] / 5.0, dim=-1)</code> 各跑几次。低温下输出很快退化成对训练句的逐字复读，高温下又退回乱码——温度是控制"确定性与多样性"的连续旋钮，<a href="../ch02_math_optim/">第 2 章</a> 2.3 节会用一张分布曲线图把它讲透。</p>
 <h2 id="16-llm-bigram-llm">1.6 LLM 里的改造：从 bigram 到现代 LLM<a class="headerlink" href="#16-llm-bigram-llm" title="Permanent link">&para;</a></h2>
 <p>把 1.2 节的种子模型逐步"改造"一遍，改造路径就是八十年语言模型史，也是本书的目录：</p>
@@ -3066,7 +3065,7 @@ C \approx 6 N D
 <tr>
 <td>算法工程师（训练/后训练）</td>
 <td>数据配比、训练稳定性、对齐效果</td>
-<td>第 2、3、8 章（数学/网络/注意力）+ 第 10–14 章（预训练、数据、分布式、SFT、对齐）</td>
+<td><strong>第 2、3、8 章</strong>（数学/网络/注意力）+ 第 10–14 章（预训练、数据、分布式、SFT、对齐）</td>
 <td>第 15–18 章了解推理侧约束即可</td>
 </tr>
 <tr>
@@ -3083,7 +3082,7 @@ C \approx 6 N D
 </tr>
 </tbody>
 </table>
-<p>三条路线共用同一块承重墙：<strong>第 2、3、8 章</strong>（数学、网络与反向传播、注意力）。给自己安排进度时可参照"四周路线"：第 1 周第 1–2 章（全景 + 数学工具箱），第 2 周第 3–5 章（组件层），第 3 周第 6–9 章（模型层），第 4 周按岗位选修训练层或部署层——每一步都有独立可用的产出，停在任何一周都不亏。</p>
+<p>三条路线共用同一块承重墙：第 2、3、8 章（数学、网络与反向传播、注意力）。给自己安排进度时可参照"四周路线"：第 1 周第 1–2 章（全景 + 数学工具箱），第 2 周第 3–5 章（组件层），第 3 周第 6–9 章（模型层），第 4 周按岗位选修训练层或部署层——每一步都有独立可用的产出，停在任何一周都不亏。</p>
 <h3 id="171">1.7.1 本书章节地图<a class="headerlink" href="#171" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -3133,7 +3132,7 @@ C \approx 6 N D
 </tr>
 </tbody>
 </table>
-<p>自检清单（三条路线通用，每学完一章合上书问自己）：(1) 这一章的核心公式我能在白纸上从假设推到结论吗？(2) 我能写出 ≤30 行的最小实现并与官方 API 数值对账吗？(3) 我能说出这条公式的三个工程坑吗？三问全"是"才算吃透；任何一问卡住，回到对应小节重做双向对账。第 2 章我们从承重墙的第一块砖开始：梯度下降与交叉熵。</p>
+<p>自检清单（三条路线通用，每学完一章合上书问自己）：(1) 这一章的核心公式我能在白纸上从假设推到结论吗？(2) 我能写出 ≤30 行的最小实现并与官方 API 数值对账吗？(3) 我能说出这条公式的三个工程坑吗？三问全"是"才算吃透；任何一问卡住，回到对应小节重做双向对账。</p>
 <h2 id="18">1.8 常见误区与坑<a class="headerlink" href="#18" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>拿 base 模型当 chat 模型用，然后得出"模型很笨"的结论</strong>。base 只有预训练，你问它问题，它更可能续写出更多问题。三种后缀的分界线见 1.4 节；选型第一件事是确认训练阶段。</li>
@@ -3148,11 +3147,11 @@ C \approx 6 N D
 <li>语言模型 = 对"下一词条件分布 <span class="arithmatex">\(P(x_t \mid x_{&lt;t})\)</span>"建模的自回归机器；链式分解是精确恒等式，近似只发生在神经网络拟合处。</li>
 <li>未训练模型 loss ≈ <span class="arithmatex">\(\ln V\)</span> 是你实现任何 LM 后的第一个对账点；训练的全部目标是把 loss 从 <span class="arithmatex">\(\ln V\)</span> 往下压。</li>
 <li>bigram 实验（图 2）同时展示了能力（局部通顺）与天花板（无长程记忆）——看得更远是 Transformer/注意力的任务。</li>
-<li>训练三阶段共用同一骨架：预训练给能力（&gt;95% 算力）、SFT 教格式、偏好优化塑行为；<strong>预训练决定上限，后训练决定下限与可用性</strong>。</li>
+<li>训练三阶段共用同一骨架：预训练给能力（&gt;95% 算力）、SFT 教格式、偏好优化塑行为；预训练决定上限，后训练决定下限与可用性。</li>
 <li><span class="arithmatex">\(C \approx 6ND\)</span> 与"约 20 token/参数"是规模定律最常用的两条；涌现部分是不连续指标的测量假象，评测应同时报告连续指标。</li>
 <li>nanoGPT 与 30 行 bigram 在"查表取特征、词表打分、交叉熵、采样循环"四处逐行同构——大模型不是另一种东西，是同一件事的放大。</li>
 <li>开源生态记住 7 个类别（地基/权重/微调/推理/数据/评测/应用），每类先深入 1–2 个。</li>
-<li>岗位路线可三分（算法/应用/推理优化），但第 2、3、8 章是所有路线共用的承重墙——下一章就从第 2 章的梯度下降与交叉熵开始。</li>
+<li>岗位路线可三分（算法/应用/推理优化），但第 2、3、8 章是所有路线共用的承重墙——下一章要回答的正是第一块砖：参数到底怎么调？梯度下降与交叉熵。</li>
 </ul>
 <h2 id="_2">本章术语详解<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <h4 id="token">词元（token）<a class="headerlink" href="#token" title="Permanent link">&para;</a></h4>
@@ -3160,13 +3159,13 @@ C \approx 6 N D
 <h4 id="language-modeling">语言建模（language modeling）<a class="headerlink" href="#language-modeling" title="Permanent link">&para;</a></h4>
 <p>对"给定前文，下一个词元是什么"的条件分布 <span class="arithmatex">\(P(x_t \mid x_{&lt;t})\)</span> 建模的任务，1.3 节全部数学的出发点。它把"理解语言"这个模糊目标转化为可计算、可优化的监督学习问题——互联网上的任意文本都自动成为训练信号，无需人工标注。工程里预训练目标、<code>F.cross_entropy</code> 的左移对齐、"未训练 loss 应等于 <span class="arithmatex">\(\ln V\)</span>"的对账检查都是它的影子。与分类任务的区别：标签空间是整个词表且每个位置都有标签。</p>
 <h4 id="autoregressive-generation">自回归生成（autoregressive generation）<a class="headerlink" href="#autoregressive-generation" title="Permanent link">&para;</a></h4>
-<p>把模型的一次"下一词预测"循环起来：输出拼回输入、再预测下一个，直到产出结束符（1.1 节示意）。它解决"如何用单步预测器生成任意长文本"，代价是生成只能逐 token 串行——这是后续推理章节 KV 缓存、连续批处理等技术的根本动机。工程中 <code>generate()</code> 循环、流式输出接口直接面对它。与一次前向出整句的非自回归方法（常见于语音）相对，文本 LLM 几乎清一色自回归。</p>
+<p>把模型的一次"下一词预测"循环起来：输出拼回输入、再预测下一个，直到产出结束符（1.1 节示意）。它解决"如何用单步预测器生成任意长文本"，代价是生成只能逐 token 串行——这是后续推理章节 KV 缓存、连续批处理等技术的根本动机。工程中 <code>generate</code> 循环、流式输出接口直接面对它。与一次前向出整句的非自回归方法（常见于语音）相对，文本 LLM 几乎清一色自回归。</p>
 <h4 id="generative-model">生成模型（generative model）<a class="headerlink" href="#generative-model" title="Permanent link">&para;</a></h4>
 <p>建模数据本身分布 <span class="arithmatex">\(P(x)\)</span>（因此能采样生成新数据）的模型，与只建模 <span class="arithmatex">\(P(y \mid x)\)</span> 的判别模型相对。这个区别决定训练信号来源：生成模型用无标注数据自监督，判别模型必须有标签——所以语言模型能吃下整个互联网。工程中选型注意：同一个 Transformer 骨架配不同训练目标就分属两类（GPT 式生成、BERT 式判别式理解）。</p>
 <h4 id="decoder-only-architecture">解码器架构（decoder-only architecture）<a class="headerlink" href="#decoder-only-architecture" title="Permanent link">&para;</a></h4>
 <p>只保留 Transformer 解码器一侧、以因果注意力遮蔽未来的架构，是 GPT 之后几乎所有主流 LLM 的选择。胜出的工程原因在 1.1 节末尾：目标与用途统一、每个位置有监督信号、结构简单易扩展。与编码器架构（BERT：双向注意力、掩码重建）对照理解：编码器输出"每个位置的上下文表示"，适合理解类任务；解码器输出分布，天然适合生成。第 8 章逐行拆解其核心组件。</p>
 <h4 id="causal-attention">因果注意力（causal attention）<a class="headerlink" href="#causal-attention" title="Permanent link">&para;</a></h4>
-<p>只允许每个位置 attend 到它自己及之前的token、用上三角掩码遮蔽"未来"的注意力形式，1.1 节表中"单向"二字的实现。它解决"训练时不能偷看答案"的问题：既然任务是预测下一个词，第 <span class="arithmatex">\(t\)</span> 个位置的计算就绝不能包含 <span class="arithmatex">\(t\)</span> 之后的信息，否则训练就是在自欺。工程中训练与推理都要维护这个掩码（推理中表现为"只能增量地看到新 token"）。与双向注意力的区别：BERT 类编码器可以看全文，因此只能做"填空"类目标而不能做自回归生成。</p>
+<p>只允许每个位置 attend 到它自己及之前的 token、用上三角掩码遮蔽"未来"的注意力形式，1.1 节表中"单向"二字的实现。它解决"训练时不能偷看答案"的问题：既然任务是预测下一个词，第 <span class="arithmatex">\(t\)</span> 个位置的计算就绝不能包含 <span class="arithmatex">\(t\)</span> 之后的信息，否则训练就是在自欺。工程中训练与推理都要维护这个掩码（推理中表现为"只能增量地看到新 token"）。与双向注意力的区别：BERT 类编码器可以看全文，因此只能做"填空"类目标而不能做自回归生成。</p>
 <h4 id="perplexity-ppl">困惑度（perplexity, PPL）<a class="headerlink" href="#perplexity-ppl" title="Permanent link">&para;</a></h4>
 <p>平均交叉熵的指数 <span class="arithmatex">\(\exp(\overline{\mathrm{CE}})\)</span>，含义是"模型每一步像在多少个词里犹豫"（等效均匀候选数）。它把抽象的 nat 翻译成直觉：PPL 7.4 ≈ 每步只在约 7 个候选中挑选；未训练模型 PPL ≈ 词表大小。工程中论文与模型卡用它报告基座质量，它是任务无关的模型固有指标。与准确率的区别：PPL 对"错得多离谱"敏感，对具体任务不敏感。</p>
 <h4 id="self-supervised-learning">自监督学习（self-supervised learning）<a class="headerlink" href="#self-supervised-learning" title="Permanent link">&para;</a></h4>

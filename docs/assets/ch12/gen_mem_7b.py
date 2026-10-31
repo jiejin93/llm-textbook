@@ -40,15 +40,16 @@ for i, (s, a) in enumerate(zip(states, acts)):
     ax.text(i, s + a/2, f"{a:.1f}", ha="center", fontsize=9.5)
 
 ax.axhline(80, color="#d62728", ls="--", lw=1.3)
-ax.text(4.42, 82, "H100 80GB", color="#d62728", fontsize=10, ha="right")
+ax.text(4.48, 82, "H100 80GB", color="#d62728", fontsize=10, ha="left")
 ax.axhline(12, color="#2ca02c", ls="--", lw=1.3)
-ax.text(4.42, 14, "RTX 4070Ti 12GB", color="#2ca02c", fontsize=10, ha="right")
+ax.text(4.48, 13.5, "RTX 4070Ti 12GB", color="#2ca02c", fontsize=10, ha="left")
 
 ax.set_xticks(list(x))
 ax.set_xticklabels(names, fontsize=11.5)
 ax.set_ylabel("每卡显存（GB）", fontsize=12)
 ax.set_ylim(0, 165)
-ax.set_title("7B 模型 8 卡各并行方案的每卡显存（由代码按本章公式计算，脚本同目录可复现）",
+ax.set_xlim(-0.6, 5.9)
+ax.set_title("7B 模型 8 卡各并行方案的每卡显存（按本章公式计算）",
              fontsize=12.5)
 ax.legend(fontsize=10.5, loc="upper right")
 ax.grid(axis="y", alpha=0.3)

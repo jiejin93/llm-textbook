@@ -95,7 +95,7 @@ ax.annotate("页脚模板带来的中等相似对\n（8 篇模板页 + 8 篇带�
             arrowprops=dict(arrowstyle="->", color="#7f4fc9"))
 ax.set_xlabel("文档对相似度：字符 8-gram 集合的 Jaccard", fontsize=12)
 ax.set_ylabel("文档对数量（对数轴）", fontsize=12)
-ax.set_title("去重前后文档间 n-gram 重合度分布（由代码生成，脚本同目录可复现）", fontsize=13)
+ax.set_title("去重前后文档间 n-gram 重合度分布：高相似峰消失，页脚中等峰仍在", fontsize=13)
 ax.legend(fontsize=11)
 ax.grid(alpha=0.3)
 fig.tight_layout()

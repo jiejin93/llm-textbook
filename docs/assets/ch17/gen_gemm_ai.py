@@ -39,7 +39,7 @@ ax.text(70, PEAK * 1.22, "算力屋顶：330 TFLOPS（fp16 Tensor Core，fp16 �
 ax.plot(ns, bw_ceiling, color="#2e7d32", ls="-.", lw=1.6,
         label="HBM 带宽上限 = 1008 GB/s × n/3（AI = n/3 FLOP/Byte）")
 ax.plot(ns, achieved, color="#c62828", lw=2.4, marker="o", ms=4.5,
-        label="cuBLAS 实际达成（建模估算：效率锚点插值，fp32 累加）")
+        label="cuBLAS 实际达成（解析模型：效率锚点插值，fp32 累加）")
 
 ridge_n = PEAK / BW_TFLOPS_PER_FLOPB * 3
 ax.axvline(ridge_n, color="#2e7d32", ls=":", lw=1.2)
@@ -61,7 +61,7 @@ ax.set_xticklabels(["64", "256", "1024", "4096", "16384"])
 ax.set_xlabel("方阵尺寸 n（A、B、C 均为 n×n，fp16）", fontsize=11)
 ax.set_ylabel("可达算力（TFLOPS，对数轴）", fontsize=11)
 ax.set_ylim(1, 900)
-ax.set_title("GEMM 的算术强度随矩阵尺寸增长：小矩阵乘是“带宽的囚徒”（RTX 4090，建模估算）", fontsize=12)
+ax.set_title("GEMM 的算术强度随矩阵尺寸增长：小矩阵乘是“带宽的囚徒”（RTX 4090，按解析模型计算）", fontsize=12)
 ax.legend(loc="lower right", fontsize=9.5)
 ax.grid(True, which="both", alpha=0.3)
 

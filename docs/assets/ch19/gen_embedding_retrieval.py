@@ -90,7 +90,7 @@ ax.set_ylim(-3.6, 4.4)
 ax.set_xlabel("嵌入维度 1（toy 2D，真实模型为 512~1024 维）")
 ax.set_ylabel("嵌入维度 2")
 ax.set_title("嵌入空间检索：语义相近的文档向量彼此靠近，\n"
-             "查询按余弦相似度圈选 top-k（图中数值由本脚本真实计算）")
+             "查询按余弦相似度圈选 top-k（k=3）")
 ax.legend(loc="lower right", fontsize=10)
 fig.tight_layout()
 fig.savefig(__file__.replace("gen_embedding_retrieval.py", "embedding_retrieval.png"),

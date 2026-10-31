@@ -28,7 +28,7 @@ for mfu, style in [(0.3, ":"), (0.4, "-"), (0.5, "--")]:
     plt.plot(Ns, days, style, lw=lw, color="#1f77b4" if mfu == 0.4 else "#9bb8d8",
              label=f"1T token，MFU={int(mfu*100)}%")
     if mfu == 0.4:
-        label_pos = {7e9: (1.1e9, 1750), 1.3e10: (2.1e10, 3600), 7e10: (3.6e10, 24000)}
+        label_pos = {7e9: (1.1e9, 1750), 1.3e10: (2.6e10, 1350), 7e10: (3.3e10, 24000)}
         for N, name in [(7e9, "7B"), (1.3e10, "13B"), (7e10, "70B")]:
             d = gpu_days(np.array([N]), D_FIX, 0.4)[0]
             cost = d * 24 * PRICE / 1e4
@@ -52,7 +52,7 @@ plt.text(1.05e9, 11, "8 GPU·天 = 1 台 8×H100 跑 1 天", fontsize=9.5, color
 plt.xscale("log"); plt.yscale("log")
 plt.xlabel("模型参数量 N", fontsize=12)
 plt.ylabel("所需 GPU·天（H100，对数轴）", fontsize=12)
-plt.title("训练预算计算器：$6ND$ 公式在不同规模/数据量下的 GPU·天\n（由代码生成，脚本同目录可复现）",
+plt.title("训练预算计算器：$6ND$ 公式在不同规模/数据量下的 GPU·天",
           fontsize=13)
 plt.legend(fontsize=10, loc="upper left")
 plt.grid(True, which="both", alpha=0.3)

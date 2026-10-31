@@ -91,7 +91,7 @@ ax2.set_title("长多轮负载（$\\eta$=0.85）：\n命中率 × 路由才是�
 ax2.legend(fontsize=9.5, loc="upper right")
 ax2.grid(alpha=0.3, which="both")
 
-fig.suptitle("vLLM vs SGLang 相对吞吐：命中率解析模型（模型化估算，非实测；实测见本章延伸阅读）",
+fig.suptitle("vLLM vs SGLang：按命中率模型计算的相对吞吐（无缓存基线 = 1）",
              fontsize=12.5, y=1.03)
 fig.tight_layout()
 fig.savefig("engine_relative_throughput.png", dpi=140, bbox_inches="tight")

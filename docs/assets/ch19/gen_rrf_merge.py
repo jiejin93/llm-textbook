@@ -68,7 +68,7 @@ ax.set_xlim(-2.9, 1.35)
 for spine in ("top", "right"):
     ax.spines[spine].set_visible(False)
 ax.set_title("混合检索：BM25 与稠密检索分数量纲不同不可相加，RRF 只看名次融合\n"
-             "绿=融合后进 top-3 且名次上升，红=进 top-3 但名次下降（本脚本真实计算，k=60）",
+             "绿=融合后进 top-3 且名次上升，红=进 top-3 但名次下降（RRF 参数 k=60）",
              fontsize=11.5)
 ax.grid(alpha=0.25, axis="y")
 fig.tight_layout()

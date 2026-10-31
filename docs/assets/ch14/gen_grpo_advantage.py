@@ -68,7 +68,7 @@ ax.set_xlabel("组内回答编号 $i$")
 ax.set_title("(b) 全对组：组内无差异，替代 critic 的基线失效", fontsize=11)
 ax.legend(fontsize=9, loc="lower left")
 
-fig.suptitle("GRPO 的组内标准化优势：用一组真实采样奖励的统计量替代 critic（真实计算，种子=42）",
+fig.suptitle("GRPO 的组内标准化优势：用一组真实采样奖励的统计量替代 critic",
              fontsize=11.5, y=1.02)
 fig.tight_layout()
 fig.savefig("gen_grpo_advantage.png", dpi=150, bbox_inches="tight")

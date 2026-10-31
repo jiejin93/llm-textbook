@@ -70,7 +70,7 @@ ax.set_xlabel("接受率 α（草稿 token 被 target 接受的概率）")
 ax.set_ylabel("期望加速比 S（相对普通 decode）")
 ax.set_title("投机解码期望加速比 vs 接受率 α\n"
              r"$S=\dfrac{1-\alpha^{\gamma+1}}{(1-\alpha)(\gamma c+1)}$"
-             f"，草稿开销 c={C_DRAFT}（由代码按公式真实绘制）")
+             f"，草稿开销 c={C_DRAFT}")
 ax.grid(alpha=0.3)
 ax.legend(loc="upper left", fontsize=10)
 

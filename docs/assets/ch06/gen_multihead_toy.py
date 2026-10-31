@@ -1,6 +1,6 @@
 # gen_multihead_toy.py —— 多头 vs 单头的真实训练对照实验（CPU 可跑，约 10 分钟）
 # 复现：python gen_multihead_toy.py   （依赖 torch matplotlib numpy）
-# 任务：莎士比亚字符级语言模型（与 6.5 节同一语料，取自 ../ch04/data_en.txt 前 40 万字符）
+# 任务：莎士比亚字符级语言模型（与 6.18 节同一语料，取自 ../ch04/data_en.txt 前 40 万字符）
 # 对照：两个小模型（2 层、d=128、T=64），一个 h=1（单头）、一个 h=4（多头），同种子同数据
 # 产物：ch06_gen_multihead_patterns.png —— 层 2 各头注意力权重热图网格（每头一格）
 import os
@@ -32,7 +32,7 @@ def get_batch(split):
     y = torch.stack([d[i + 1:i + T + 1] for i in ix])
     return x, y
 
-# ---------------- 模型：本章 6.4 节 minigpt 的紧凑版 ----------------
+# ---------------- 模型：本章 6.17 节 minigpt 的紧凑版 ----------------
 class Attn(nn.Module):
     def __init__(self, d, h):
         super().__init__()

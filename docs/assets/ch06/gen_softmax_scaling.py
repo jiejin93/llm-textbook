@@ -18,7 +18,7 @@ D_KS = np.unique(np.concatenate([
 
 def stats(d_k, divisor_mode):
     """对给定 d_k 与缩放方式，返回 softmax 的平均熵与平均最大概率。
-    q,k 各分量独立标准正态——这是 6.2.2 节方差推导的假设本身。"""
+    q,k 各分量独立标准正态——这是 6.3.3 节方差推导的假设本身。"""
     q = rng.standard_normal((N_TRIAL, d_k))
     k = rng.standard_normal((N_TRIAL, T, d_k))
     logits = np.einsum("nd,ntd->nt", q, k)          # 未缩放点积

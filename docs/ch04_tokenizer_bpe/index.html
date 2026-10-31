@@ -2576,8 +2576,8 @@
 <h1 id="4-bpe">第 4 章 分词器：BPE 与现代分词算法<a class="headerlink" href="#4-bpe" title="Permanent link">&para;</a></h1>
 <blockquote>
 <p><strong>本章导读</strong>：你大概见过 GPT 数不清 "strawberry" 里有两个 r 的翻车现场，也见过手机
-输入法永远联想不出昨天刚诞生的新梗——这两件事是同一个原因：<strong>模型和词库都只认识
-"训练时定死的单元"</strong>。大模型读到的从来不是字母或汉字，而是 token id；切分方式直接
+输入法永远联想不出昨天刚诞生的新梗——这两件事是同一个原因：模型和词库都只认识
+"训练时定死的单元"。大模型读到的从来不是字母或汉字，而是 token id；切分方式直接
 决定模型的成本（序列长度）、能力边界（OOV）与多语言公平性。本章从这两个生活场景
 出发，完整推导字节对编码（BPE）的训练与推理算法并逐行手算复现，再给出约 90 行的
 从零实现，与 OpenAI 官方源码逐行对账；随后覆盖 Byte-level BPE、WordPiece、Unigram
@@ -2588,7 +2588,8 @@
 如何被模型消费，见 <a href="../ch05_embedding_pos/">第 5 章</a> 与 <a href="../ch06_transformer/">第 6 章</a>。</p>
 </blockquote>
 <h2 id="41-gpt-strawberry-r">4.1 问题先行：为什么 GPT 数不清 "strawberry" 里有几个 r<a class="headerlink" href="#41-gpt-strawberry-r" title="Permanent link">&para;</a></h2>
-<p>先把两个现象摆在一起看：</p>
+<p>第 3 章把"预测下一个 token 的机器"的积木配齐了，但流水线的第一环一直没问：
+<strong>模型吃的 token 从哪来？</strong>先把两个现象摆在一起看：</p>
 <ul>
 <li><strong>现象一（模型的）</strong>：让早期 GPT-4 数 "strawberry" 有几个 <code>r</code>，它会自信地答 2 或 3。</li>
 <li><strong>现象二（输入法的）</strong>：手机输入法能联想"人工智能"，却联想不出上周刚火起来的新梗。</li>
@@ -2649,7 +2650,7 @@ tiktoken 实测（4.5 节代码可复现）：</p>
 <td>高：常用词整词，罕见词切碎</td>
 </tr>
 <tr>
-<td>形态丰富语言（德/土/芬）</td>
+<td><strong>形态丰富语言</strong>（德/土/芬）</td>
 <td>词形爆炸</td>
 <td>可行但序列太长</td>
 <td>天然契合：词干 + 词缀</td>
@@ -2662,7 +2663,7 @@ tiktoken 实测（4.5 节代码可复现）：</p>
 </tr>
 </tbody>
 </table>
-<p><strong>形态丰富语言</strong>（morphologically rich languages）中，芬兰语一个词干可有几十种屈折
+<p>形态丰富语言（morphologically rich languages）中，芬兰语一个词干可有几十种屈折
 形式，词级词表要么爆炸、要么大量 OOV。子词把 <code>unbelievably</code> 切成 <code>un + believ + ably</code>
 这样的"词根/词缀"，用有限词表组合出无限词形——这正是 BPE 用于 NMT 的原始动机
 （Sennrich et al., 2016）。</p>
@@ -2672,7 +2673,7 @@ tiktoken 实测（4.5 节代码可复现）：</p>
 实验与图 3/图 4 实测）。现代中文友好模型（Qwen、GLM）用 15 万+ 大词表把常用词/词组收进词表来压成本。</p>
 <p>先"眼见为实"：下面的截图是 Karpathy 在 minbpe 仓库中使用的 tiktokenizer 在线工具，
 同一屏里英文常用词是单个 token，数字被切碎，韩文几乎逐字节——不同语言/文本类型的
-成本差异一眼可见，这正是本章要建模和度量的事情。</p>
+成本差异一眼可见，这正是本章要量化的核心成本问题。</p>
 <p><img alt="tiktokenizer 多语言切分可视化" src="../assets/ch04/tiktokenizer.png" /></p>
 <p><em>图 1：tiktokenizer 对中/韩/英/代码混合文本的 GPT-2 切分可视化（右侧彩色块即 token 边界）——英文常用词整词、韩文近乎逐字节、数字与标点被切碎，"每 token 成本"因语言而异。（图源：karpathy/minbpe 仓库，https://github.com/karpathy/minbpe；仅作教学用途，版权归原作者）</em></p>
 <div class="admonition note">
@@ -2687,7 +2688,7 @@ tiktoken 实测（4.5 节代码可复现）：</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
 
 <span class="n">corpus</span> <span class="o">=</span> <span class="s2">"low low low lower lower newest newest newest newest widest widest"</span>
-<span class="n">words</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>                    <span class="c1"># 词频表</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>                  <span class="c1"># 词频表</span>
 <span class="n">splits</span> <span class="o">=</span> <span class="p">{</span><span class="n">w</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"&lt;/w&gt;"</span><span class="p">]</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">}</span>    <span class="c1"># 初始切分：单字符 + 词尾标记</span>
 
 <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">):</span>                              <span class="c1"># 做 7 次合并</span>
@@ -2744,7 +2745,7 @@ Sennrich 等人 2016 年把它搬进 NMT 后思想未变，只是"字节"换成�
 <p>下面的示意图把"统计—合并—入表"的循环压缩成一屏，建议先看图建立动态过程的感觉，
 再对照 4.3.2 的手算表逐步核对。</p>
 <p><img alt="BPE 合并过程示意" src="../assets/ch04/bpe_merge.svg" /></p>
-<p><em>图 2：BPE 训练循环：每轮基于<strong>当前切分</strong>统计词内相邻对频次，把最高频对合并为新符号并写入词表（rank 递增），高频词逐步合并为整词。（图源：作者自绘）</em></p>
+<p><em>图 2：BPE 训练循环：每轮基于<strong>当前切分</strong>统计词内相邻对频次，把最高频对合并为新符号并写入词表（rank 递增），高频词逐步合并为整词。</em></p>
 <h3 id="432-7">4.3.2 手算示例：7 步合并全过程<a class="headerlink" href="#432-7" title="Permanent link">&para;</a></h3>
 <p>语料（故意含重复模式）：</p>
 <div class="highlight"><pre><span></span><code>low low low lower lower newest newest newest newest widest widest
@@ -2803,23 +2804,23 @@ newest 4 次）、<span class="arithmatex">\((e,s)=6\)</span>、<span class="ari
 <tr>
 <td>6</td>
 <td><span class="arithmatex">\((newe,st\text{&lt;/w&gt;})=4\)</span></td>
-<td><code>newest&lt;/w&gt;</code></td>
-<td>newest→<strong><code>newest&lt;/w&gt;</code></strong>（整词入表）</td>
+<td><strong><code>newest&lt;/w&gt;</code></strong></td>
+<td>newest→<code>newest&lt;/w&gt;</code>（整词入表）</td>
 </tr>
 </tbody>
 </table>
-<p>7 步后的合并规则表（rank 越小越优先合并）：</p>
+<p>7 步后的合并<strong>规则表</strong>（rank 越小越优先合并）：</p>
 <div class="arithmatex">\[R = \big[\,(w,e),\ (s,t),\ (st,\text{&lt;/w&gt;}),\ (l,o),\ (n,e),\ (ne,we),\ (newe,st\text{&lt;/w&gt;})\,\big]\]</div>
 <p>最终切分：<code>low → lo|w|&lt;/w&gt;</code>，<code>lower → lo|we|r|&lt;/w&gt;</code>，<code>newest → newest&lt;/w&gt;</code>，
 <code>widest → w|i|d|e|st&lt;/w&gt;</code>。词表 = 11 个初始符号（10 字母 + <code>&lt;/w&gt;</code>）+ 7 个合并符号 = 18。</p>
 <div class="admonition note">
 <p class="admonition-title">手算的两个关键点</p>
-<p>① 第 1 步后 newest 的 <span class="arithmatex">\((e,s)\)</span> 变成了 <span class="arithmatex">\((we,s)\)</span>——统计必须基于<strong>当前切分</strong>重算；
+<p>① 第 1 步后 newest 的 <span class="arithmatex">\((e,s)\)</span> 变成了 <span class="arithmatex">\((we,s)\)</span>——统计必须基于当前切分重算；
 ② 第 2 步后 <span class="arithmatex">\((t,\text{&lt;/w&gt;})\)</span> 消失（被 <code>st&lt;/w&gt;</code> 吸收），高频对是动态变化的。
 建议先自己推一遍，再用 4.5 节代码逐行对照。</p>
 </div>
 <h3 id="433">4.3.3 编码（推理）算法<a class="headerlink" href="#433" title="Permanent link">&para;</a></h3>
-<p>训练得到的是<strong>规则表</strong>；对任意新词，按优先级贪心合并：</p>
+<p>训练得到的是规则表；对任意新词，按优先级贪心合并：</p>
 <div class="highlight"><pre><span></span><code>算法：BPE 编码（推理）
 1:  syms ← 新词拆成单字符 + &lt;/w&gt;
 2:  loop:
@@ -2845,8 +2846,7 @@ newest 4 次）、<span class="arithmatex">\((e,s)=6\)</span>、<span class="ari
 工程实现用优先队列把"候选对"组织起来，近似 <span class="arithmatex">\(\mathcal{O}(L\log L)\)</span>。</p>
 <p><strong>并行性</strong>。预切分之后各词的编码互相独立——这是分词器能被 Rust/多核加速到极限的
 结构原因：tiktoken 按预切分单元切开后并行编码、HF fast tokenizer 同理。</p>
-<p><strong>实测吞吐</strong>（本机 Windows / Python 3.11，语料为莎剧全集前 50 万字符，完整脚本见
-4.5 节）：</p>
+<p><strong>实测吞吐</strong>：</p>
 <table>
 <thead>
 <tr>
@@ -2931,7 +2931,7 @@ token 串拼回文本。<strong>这段代码可以原样跑通并复现 4.3.2 �
     <span class="k">def</span><span class="w"> </span><span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""按合并优先级贪心切分：每轮找 rank 最小且在当前切分中出现的对。"""</span>
         <span class="n">tokens</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>         <span class="c1"># 极简预切分：按空格</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>       <span class="c1"># 极简预切分：按空格</span>
             <span class="n">syms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">END</span><span class="p">]</span>
             <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">syms</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">cand</span> <span class="o">=</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">merges</span><span class="p">[</span><span class="n">p</span><span class="p">],</span> <span class="n">i</span><span class="p">)</span>
@@ -2979,8 +2979,7 @@ token 串拼回文本。<strong>这段代码可以原样跑通并复现 4.3.2 �
 <h2 id="45-bpe">4.5 实验与插图：训练真实 BPE，量化"中文为什么贵"<a class="headerlink" href="#45-bpe" title="Permanent link">&para;</a></h2>
 <p>现在用生产级实现（HF tokenizers，Rust）在<strong>真实语料</strong>上训练不同词表大小的 BPE，
 把本章开头"中文更贵"的断言变成可测量的两条曲线。</p>
-<p><strong>实验设置</strong>（完整脚本 <code>assets/ch04/gen_bpe_vocab_scaling.py</code>，可一键复现）：
-语料为公有领域文本——英文用莎剧全集（约 111 万字符），中文用《孟子》全文（约 4.8 万
+<p><strong>实验设置</strong>：语料为公有领域文本——英文用莎剧全集（约 111 万字符），中文用《孟子》全文（约 4.8 万
 字符，繁体转简体）；各取前 80% 训练、后 20% 做 held-out 评测；用 byte-level BPE 分别
 以 <span class="arithmatex">\(V \in \{1000, 2000, 4000, 8000\}\)</span> 真实训练 8 个分词器，测两个指标：</p>
 <div class="arithmatex">\[\text{CR} \;=\; \frac{N_{\text{tok}}}{N_{\text{char}}},\qquad
@@ -2988,9 +2987,9 @@ token 串拼回文本。<strong>这段代码可以原样跑通并复现 4.3.2 �
 <p>压缩率（CR）的分母是<strong>字符数</strong>（回答"每字符多少钱"），fertility 的分母是<strong>语言单元数</strong>
 （英文按正则切出的词数、中文按汉字数）——后者才是跨语言可比的粒度（4.9 节详述）。</p>
 <p><img alt="词表大小 vs 压缩率" src="../assets/ch04/ch04_gen_vocab_compression.png" /></p>
-<p><em>图 3：词表大小 vs 中英文压缩率（token 数/字符数，由代码生成，脚本 assets/ch04/gen_bpe_vocab_scaling.py 同目录可复现；语料：英文莎剧全集、中文《孟子》全文，均为公有领域）。两条曲线同向下降但中文始终比英文高约 2.4–2.6 倍——中文的"每字符 token 溢价"不随词表消失。</em></p>
+<p><em>图 3：词表大小 vs 中英文压缩率（token 数/字符数。语料：英文莎剧全集、中文《孟子》全文，均为公有领域，训练与评测按上文设置）。两条曲线同向下降但中文始终比英文高约 2.4–2.6 倍——中文的"每字符 token 溢价"不随词表消失。</em></p>
 <p><img alt="词素比 fertility 柱状图" src="../assets/ch04/ch04_gen_fertility.png" /></p>
-<p><em>图 4：词素比 fertility（平均每个语言单元的 token 数，由代码生成，脚本同目录可复现）。中文从 1.29 降到 1.00（一字一 token），英文从 2.27 降到 1.61；小词表下英文 fertility 反而更高——英文的"溢价"藏在词内碎片里，中文的溢价藏在多字节编码里。</em></p>
+<p><em>图 4：词素比 fertility（平均每个语言单元的 token 数）。中文从 1.29 降到 1.00（一字一 token），英文从 2.27 降到 1.61；小词表下英文 fertility 反而更高——英文的"溢价"藏在词内碎片里，中文的溢价藏在多字节编码里。</em></p>
 <p>读图三个结论：</p>
 <ul>
 <li><strong>压缩率随词表单调改善，但边际递减</strong>：英文 0.417 → 0.296，中文 0.992 → 0.769，
@@ -3023,12 +3022,12 @@ token 串拼回文本。<strong>这段代码可以原样跑通并复现 4.3.2 �
 
 <span class="n">tok</span> <span class="o">=</span> <span class="n">Tokenizer</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BPE</span><span class="p">(</span><span class="n">unk_token</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>     <span class="c1"># 字节级 BPE 天然无 OOV</span>
 <span class="n">tok</span><span class="o">.</span><span class="n">pre_tokenizer</span> <span class="o">=</span> <span class="n">pre_tokenizers</span><span class="o">.</span><span class="n">ByteLevel</span><span class="p">(</span><span class="n">add_prefix_space</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">tok</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">decoders</span><span class="o">.</span><span class="n">ByteLevel</span><span class="p">()</span>              <span class="c1"># 字节级解码：无损还原多字节汉字</span>
+<span class="n">tok</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">decoders</span><span class="o">.</span><span class="n">ByteLevel</span>              <span class="c1"># 字节级解码：无损还原多字节汉字</span>
 
 <span class="n">trainer</span> <span class="o">=</span> <span class="n">trainers</span><span class="o">.</span><span class="n">BpeTrainer</span><span class="p">(</span>
     <span class="n">vocab_size</span><span class="o">=</span><span class="mi">20000</span><span class="p">,</span>
     <span class="n">special_tokens</span><span class="o">=</span><span class="p">[</span><span class="s2">"&lt;|bos|&gt;"</span><span class="p">,</span> <span class="s2">"&lt;|eos|&gt;"</span><span class="p">,</span> <span class="s2">"&lt;|pad|&gt;"</span><span class="p">],</span>       <span class="c1"># 特殊 token 注册进词表</span>
-    <span class="n">initial_alphabet</span><span class="o">=</span><span class="n">pre_tokenizers</span><span class="o">.</span><span class="n">ByteLevel</span><span class="o">.</span><span class="n">alphabet</span><span class="p">(),</span>   <span class="c1"># 256 字节全部保留</span>
+    <span class="n">initial_alphabet</span><span class="o">=</span><span class="n">pre_tokenizers</span><span class="o">.</span><span class="n">ByteLevel</span><span class="o">.</span><span class="n">alphabet</span><span class="p">,</span>   <span class="c1"># 256 字节全部保留</span>
 <span class="p">)</span>
 <span class="n">tok</span><span class="o">.</span><span class="n">train_from_iterator</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">trainer</span><span class="p">)</span>
 <span class="n">tok</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">"zh_bpe.json"</span><span class="p">)</span>
@@ -3278,7 +3277,7 @@ rank"</strong>——这就是"同一 tokenizer 任何正确实现给出完全相
 </tbody>
 </table>
 <h2 id="48-token-chat-template">4.8 特殊 token 与 chat template<a class="headerlink" href="#48-token-chat-template" title="Permanent link">&para;</a></h2>
-<p><strong>特殊 token</strong>：不参与子词切分、映射到固定 id 的保留符号。</p>
+<p>特殊 token：不参与子词切分、映射到固定 id 的保留符号。</p>
 <ul>
 <li><code>BOS</code> / <code>EOS</code>：序列起止。EOS 是训练目标的一部分——模型必须学会"在合适的地方输出
   EOS"，否则生成永不停止；</li>
@@ -3339,7 +3338,7 @@ add_generation_prompt=True))</code>，与官方推理示例<strong>逐字符</st
 </div>
 <div class="admonition tip">
 <p class="admonition-title">实战提示（消费级 GPU）</p>
-<p>本地微调对话模型（<a href="../ch13_sft_peft/">第 13 章</a>）时，训练样本必须用
+<p>在消费级 GPU 上微调对话模型（<a href="../ch13_sft_peft/">第 13 章</a>）时，训练样本必须用
 <code>apply_chat_template</code> 渲染后再喂给 tokenizer，并确保 <code>pad_token</code> 存在
 （LLaMA 系常借用 <code>unk</code> 或新增 <code>&lt;|pad|&gt;</code>）。</p>
 </div>
@@ -3356,8 +3355,8 @@ add_generation_prompt=True))</code>，与官方推理示例<strong>逐字符</st
 <div class="highlight"><pre><span></span><code><span class="c1"># pip install tiktoken</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span><span class="o">,</span><span class="w"> </span><span class="nn">tiktoken</span>
 
-<span class="n">EN</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"en_sample.txt"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>   <span class="c1"># 任选一段代表性英文</span>
-<span class="n">ZH</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"zh_sample.txt"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>   <span class="c1"># 等量的中文</span>
+<span class="n">EN</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"en_sample.txt"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>  <span class="c1"># 任选一段代表性英文</span>
+<span class="n">ZH</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"zh_sample.txt"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>  <span class="c1"># 等量的中文</span>
 
 <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"gpt2"</span><span class="p">,</span> <span class="s2">"cl100k_base"</span><span class="p">,</span> <span class="s2">"o200k_base"</span><span class="p">]:</span>
     <span class="n">enc</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">get_encoding</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -3476,7 +3475,7 @@ SentencePiece 字节回退（byte fallback，LLaMA 采用：子词切不动时�
 <h2 id="411">4.11 常见误区与坑<a class="headerlink" href="#411" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>把 <code>Ġ</code>/<code>▁</code> 当乱码"修"掉</strong>。有人在日志里看到 <code>Ġworld</code> 以为是编码错误，做
-   <code>strip()</code>/正则清洗后再 decode，结果把空格删了、句子粘连。正确姿势：<code>Ġ</code>（GPT 系）、
+   <code>strip</code>/正则清洗后再 decode，结果把空格删了、句子粘连。正确姿势：<code>Ġ</code>（GPT 系）、
    <code>▁</code>（SentencePiece 系）都是"带前导空格"的可视化记号，decode 时由配套 decoder
    还原，不要手工清洗中间表示。</li>
 <li><strong>特殊 token 没注册，被普通 BPE 切碎</strong>。自定义 <code>&lt;|工具调用|&gt;</code> 这类控制符时若忘了
@@ -3513,6 +3512,8 @@ SentencePiece 字节回退（byte fallback，LLaMA 采用：子词切不动时�
 <li>度量分词成本：压缩率（tok/字符）管成本估算，fertility（tok/词、tok/字）管跨语言
   公平性——真实训练实验显示中文压缩率约为英文 2.4–2.6 倍，且不随词表增大消失。</li>
 </ul>
+<p>至此，任意文本都已被确定性地编码成 token id 序列。但这个序列只是"目录行号"的排列，
+<strong>没有位置概念</strong>——id 本身不含语义，序号也不含顺序。语义与顺序从哪里来？这是下一章的主题。</p>
 <h2 id="_2">本章术语详解<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <h4 id="tokenizer">分词器（Tokenizer）<a class="headerlink" href="#tokenizer" title="Permanent link">&para;</a></h4>
 <p>从文本到整数 id 序列的确定性映射，在预训练开始前于语料上学习，之后冻结。它不可微、
@@ -3615,11 +3616,11 @@ ALBERT、T5、LLaMA（SentencePiece-Unigram 模式）采用。与 BPE 相比切�
    写出每步的切分与规则表；再用 4.4 节代码（<code>num_merges=3</code>）验证。（难度★ / 15 分钟 /
    无需 GPU）</li>
 <li><strong>测量你自己的文本</strong>：找一段 500 字中文 + 一段等长英文，分别用 4.5 节代码的
-   cl100k 与 o200k 统计 token 数与 fertility，回答"中文比英文贵多少"；再运行
-   <code>assets/ch04/gen_bpe_vocab_scaling.py</code>，对比自训小词表与现成大词表的曲线形状。
+   cl100k 与 o200k 统计 token 数与 fertility，回答"中文比英文贵多少"；再把结果与
+   图 3/图 4 自训小词表的曲线形状对比。
    （难度★ / 20 分钟 / CPU）</li>
-<li><strong>词表实验</strong>：把 gen 脚本的 <code>VOCAB_SIZES</code> 改成 <code>[2000, 4000, 8000, 16000]</code> 并换
-   你自己的语料，回答：词表从 8k 提到 16k，中文压缩率改善百分之多少？若你的语料
+<li><strong>词表实验</strong>：用 4.5.1 节的训练代码，把词表序列改成 <code>[2000, 4000, 8000, 16000]</code>
+   并换你自己的语料，回答：词表从 8k 提到 16k，中文压缩率改善百分之多少？若你的语料
    70% 是中文，词表建议设多大？写 200 字结论并给出参数代价估算（用 4.10 节公式）。
    （难度★★ / 40 分钟 / CPU）</li>
 </ol>
@@ -3635,8 +3636,6 @@ ALBERT、T5、LLaMA（SentencePiece-Unigram 模式）采用。与 BPE 相比切�
 <li><a href="https://github.com/openai/gpt-2/blob/master/src/encoder.py">GPT-2 encoder.py</a> —— 字节↔可见 Unicode 双射（<code>bytes_to_unicode</code>）与正则预切分的原始实现，100 行读懂 GPT-2 分词。</li>
 <li>Schuster &amp; Nakajima, "Japanese and Korean Voice Search"（ICASSP 2012）—— WordPiece 原始出处（无稳定 arXiv 号，按标题搜索），了解 PMI 打分的最早形态。</li>
 </ul>
-<p>至此，任意文本都已被确定性地编码成 token id 序列。但 id 只是"目录行号"，语义与顺序
-从哪里来？这是下一章的主题。</p>
 
 
 

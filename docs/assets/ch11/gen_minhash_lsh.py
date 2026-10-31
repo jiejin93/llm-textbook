@@ -129,7 +129,7 @@ ax.set_ylabel("检出概率", fontsize=12)
 ax.set_title("不同 $(b,r)$ 配置的 S 曲线：调参=平移阈值", fontsize=13)
 ax.legend(fontsize=10, loc="upper left"); ax.grid(alpha=0.3)
 
-fig.suptitle("MinHash+LSH 候选对检出概率 S 曲线（由代码生成，脚本同目录可复现）", fontsize=13, y=1.02)
+fig.suptitle("MinHash+LSH 候选对检出概率 S 曲线：模拟与解析一致，配置决定阈值", fontsize=13, y=1.02)
 fig.tight_layout()
 fig.savefig("gen_minhash_lsh.png", dpi=150, bbox_inches="tight")
 cross = np.where(freq >= 0.5)[0]

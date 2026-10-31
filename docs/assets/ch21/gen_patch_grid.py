@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-"""图①：ViT 的 patch 切分可视化——读入本章已有图片资产，中心裁方后按 14×14 叠加网格。
+"""图①：ViT 的 patch 切分可视化——读入一张真实照片，中心裁方后按 14×14 叠加网格。
 
 左：整图 + 14×14 网格与按行编号的几个 patch；右：把其中一个 patch 展平成
 16×16×3=768 维向量（线性投影后即 1 个视觉 token）。
+照片来源：skimage.data.astronaut()（NASA，公有领域）。
 脚本同目录可复现：python gen_patch_grid.py
 """
 import numpy as np
@@ -10,14 +11,15 @@ from PIL import Image
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from skimage import data
 
 plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei"]
 plt.rcParams["axes.unicode_minus"] = False
 
 P, S = 16, 224                     # patch 大小 16、输入分辨率 224（ViT-B/16）；14×14=196 个 patch
 
-# ---- 1) 读入本地已有图片资产：中心裁方 + 缩放到 224×224 ----------------------
-img = Image.open(__file__.replace("gen_patch_grid.py", "clip.png")).convert("RGB")
+# ---- 1) 读入真实照片：中心裁方 + 缩放到 224×224 ------------------------------
+img = Image.fromarray(data.astronaut()).convert("RGB")
 w, h = img.size
 side = min(w, h)
 img = img.crop(((w - side) // 2, (h - side) // 2,
@@ -36,7 +38,7 @@ for k in range(1, n):
 ax.set_xticks([]);
 ax.set_yticks([])
 # 按行优先顺序给 patch 标号（展示“图像 → 序列”的排布方式），只标一部分避免拥挤
-shown = [0, 5, 27, 55, 98, 130, 180, 195]
+shown = [0, 5, 27, 47, 55, 98, 130, 180, 195]
 for idx in shown:
     r, c = divmod(idx, n)
     ax.add_patch(plt.Rectangle((c * P, r * P), P, P, fill=False,
@@ -48,7 +50,7 @@ ax.set_title(f"输入 224×224，切成 {n}×{n}={n*n} 个 16×16 patch\n"
              "（黄色网格；红框 patch 按行优先编号 → 一维序列）", fontsize=10.5)
 
 # ---- 3) 中图：选中 patch；右图：展平成 768 维向量条 --------------------------
-sel = 98
+sel = 47
 r, c = divmod(sel, n)
 patch = arr[r * P:(r + 1) * P, c * P:(c + 1) * P]          # 16×16×3
 vec = patch.reshape(-1).astype(float)                       # 768 维

@@ -47,7 +47,7 @@ ax.set_ylabel("每卡每步通信量（GB，bf16 计价）", fontsize=12)
 ax.set_ylim(0, 48)
 ax.set_xticks(range(len(names)))
 ax.set_xticklabels(names, fontsize=10.5)
-ax.set_title(f"7B 模型 n={n} 卡一步训练的每卡通信量（由代码按公式计算，脚本同目录可复现）",
+ax.set_title(f"7B 模型 n={n} 卡一步训练的每卡通信量（按本章公式计算）",
              fontsize=12.5)
 ax.grid(axis="y", alpha=0.3)
 fig.text(0.5, -0.015,
