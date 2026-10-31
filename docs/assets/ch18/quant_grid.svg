@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="920" height="400" viewBox="0 0 920 400" font-family="'Segoe UI','Microsoft YaHei','Noto Sans SC',sans-serif">
+  <rect x="0" y="0" width="920" height="400" fill="#ffffff"/>
+  <text x="460" y="26" text-anchor="middle" font-size="19" font-weight="bold" fill="#222">量化网格：scale（间距）、zero-point（平移）与 clipping（截断）</text>
+
+  <!-- real value axis (top) -->
+  <line x1="80" y1="140" x2="862" y2="140" stroke="#333" stroke-width="1.8"/>
+  <polygon points="868,140 856,134 856,146" fill="#333"/>
+  <text x="80" y="122" font-size="14" fill="#333">真实值 x（浮点，连续）</text>
+  <g stroke="#333" stroke-width="1.5">
+    <line x1="140" y1="134" x2="140" y2="146"/>
+    <line x1="430" y1="134" x2="430" y2="146"/>
+    <line x1="780" y1="134" x2="780" y2="146"/>
+  </g>
+  <g font-size="14" fill="#222" text-anchor="middle">
+    <text x="140" y="164">x_min</text>
+    <text x="430" y="164">0</text>
+    <text x="780" y="164">x_max</text>
+  </g>
+
+  <!-- real sample points -->
+  <circle cx="570" cy="140" r="6" fill="#1f77b4"/>
+  <text x="570" y="122" text-anchor="middle" font-size="13" fill="#1a4f80">真实权重 x</text>
+  <circle cx="838" cy="140" r="6" fill="#d62728"/>
+  <text x="838" y="122" text-anchor="middle" font-size="13" fill="#d62728">离群值</text>
+
+  <!-- rounding arrow -->
+  <path d="M 570 150 Q 585 215 588 276" fill="none" stroke="#1f77b4" stroke-width="1.6" stroke-dasharray="5,4"/>
+  <polygon points="588,282 582,272 594,272" fill="#1f77b4"/>
+  <text x="640" y="212" font-size="13.5" fill="#1a4f80">round(x/s)（就近取整，</text>
+  <text x="640" y="231" font-size="13.5" fill="#1a4f80">舍入误差 ≈ s²/12）</text>
+
+  <!-- clipping arrow -->
+  <path d="M 838 150 Q 828 215 784 276" fill="none" stroke="#d62728" stroke-width="1.6" stroke-dasharray="5,4"/>
+  <polygon points="780,282 778,271 789,274" fill="#d62728"/>
+  <text x="845" y="212" font-size="13.5" fill="#d62728">超出范围 →</text>
+  <text x="845" y="231" font-size="13.5" fill="#d62728">截断 clip</text>
+
+  <!-- dashed projection of real 0 -->
+  <line x1="430" y1="150" x2="430" y2="268" stroke="#888" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- quantized grid (bottom) -->
+  <line x1="120" y1="290" x2="800" y2="290" stroke="#333" stroke-width="1.8"/>
+  <g stroke="#1a73e8" stroke-width="2.2">
+    <line x1="140" y1="282" x2="140" y2="306"/>
+    <line x1="204" y1="282" x2="204" y2="306"/>
+    <line x1="268" y1="282" x2="268" y2="306"/>
+    <line x1="332" y1="282" x2="332" y2="306"/>
+    <line x1="396" y1="282" x2="396" y2="306"/>
+    <line x1="460" y1="282" x2="460" y2="306"/>
+    <line x1="524" y1="282" x2="524" y2="306"/>
+    <line x1="588" y1="282" x2="588" y2="306"/>
+    <line x1="652" y1="282" x2="652" y2="306"/>
+    <line x1="716" y1="282" x2="716" y2="306"/>
+    <line x1="780" y1="282" x2="780" y2="306"/>
+  </g>
+  <g font-size="13" fill="#1a4f80" text-anchor="middle">
+    <text x="140" y="326">q_min</text>
+    <text x="396" y="326">q = z ↔ 0</text>
+    <text x="780" y="326">q_max</text>
+  </g>
+  <text x="60" y="274" font-size="14" fill="#333">量化电平（离散网格）</text>
+
+  <!-- zero-point arrow -->
+  <line x1="396" y1="255" x2="430" y2="255" stroke="#e67e22" stroke-width="2"/>
+  <polygon points="392,255 402,250 402,260" fill="#e67e22"/>
+  <polygon points="434,255 424,250 424,260" fill="#e67e22"/>
+  <text x="300" y="248" font-size="13.5" fill="#b35c11" text-anchor="end">零点 z（网格平移）</text>
+  <text x="300" y="266" font-size="12.5" fill="#8a6d3b" text-anchor="end">对称量化时 z = 0</text>
+
+  <!-- scale arrow -->
+  <line x1="524" y1="340" x2="588" y2="340" stroke="#e67e22" stroke-width="2"/>
+  <polygon points="520,340 530,335 530,345" fill="#e67e22"/>
+  <polygon points="592,340 582,335 582,345" fill="#e67e22"/>
+  <text x="556" y="368" text-anchor="middle" font-size="13.5" fill="#b35c11">scale s（相邻电平间距）</text>
+  <text x="556" y="387" text-anchor="middle" font-size="12.5" fill="#8a6d3b">s 越大越不怕截断，但舍入误差越大</text>
+</svg>

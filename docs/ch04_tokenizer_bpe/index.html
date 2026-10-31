@@ -1,0 +1,3713 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="理论、公式、代码与生态的全景中文教程">
+      
+      
+      
+        <link rel="canonical" href="https://jiejin93.github.io/llm-textbook/ch04_tokenizer_bpe/">
+      
+      
+        <link rel="prev" href="../ch03_nn_backprop/">
+      
+      
+        <link rel="next" href="../ch05_embedding_pos/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>第4章 分词器与BPE - 大模型：从入门到精通</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../assets/katex/katex.min.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#4-bpe" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="大模型：从入门到精通" class="md-header__button md-logo" aria-label="大模型：从入门到精通" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            大模型：从入门到精通
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第4章 分词器与BPE
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="blue"  aria-label="切换深色"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换深色" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="light-blue"  aria-label="切换浅色"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换浅色" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../ch01_overview/" class="md-tabs__link">
+          
+  
+  
+  Part A 基础篇
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../ch07_architectures/" class="md-tabs__link">
+          
+  
+  
+  Part B 架构篇
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../ch10_pretrain/" class="md-tabs__link">
+          
+  
+  
+  Part C 训练篇
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../ch15_inference/" class="md-tabs__link">
+          
+  
+  
+  Part D 系统篇
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../ch19_prompt_rag/" class="md-tabs__link">
+          
+  
+  
+  Part E 应用篇
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../appendix_a_glossary/" class="md-tabs__link">
+          
+  
+  
+  附录
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../buy/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  获取完整版
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="大模型：从入门到精通" class="md-nav__button md-logo" aria-label="大模型：从入门到精通" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    大模型：从入门到精通
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part A 基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Part A 基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 大模型全景
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02_math_optim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2章 数学与优化基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03_nn_backprop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 神经网络与反向传播
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 分词器与BPE
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 分词器与BPE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#41-gpt-strawberry-r" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 问题先行：为什么 GPT 数不清 "strawberry" 里有几个 r
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42-30-bpe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 最小可运行例子：30 行摸到 BPE
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#43-bpe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 BPE 训练算法完整版
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 BPE 训练算法完整版">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#431" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.1 训练流程与伪代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#432-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.2 手算示例：7 步合并全过程
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#433" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.3 编码（推理）算法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#434" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.4 编码复杂度与性能
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#44-bpe-90" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 从零实现 BPE（约 90 行，训练 + 编码 + 解码）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#45-bpe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 实验与插图：训练真实 BPE，量化"中文为什么贵"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.5 实验与插图：训练真实 BPE，量化&#34;中文为什么贵&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#451-tiktoken-hf-tokenizers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5.1 tiktoken / HF tokenizers 实战
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#46-tiktoken-gpt-2-encoderpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 官方源码对照：tiktoken 与 GPT-2 encoder.py
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#47-byte-level-bpe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7 Byte-level BPE 与分词算法全景（现代改造）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.7 Byte-level BPE 与分词算法全景（现代改造）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#471-byte-level-bpegpt-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7.1 Byte-level BPE：GPT-2 的选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#472-wordpiecebert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7.2 WordPiece（BERT 系）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#473-unigram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7.3 Unigram 语言模型（自顶向下剪枝）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#474-sentencepiece" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7.4 SentencePiece
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#48-token-chat-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.8 特殊 token 与 chat template
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#49-fertility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.9 词素比（fertility）：跨语言成本的标准度量
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#410-v" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.10 工程权衡：词表大小 \(V\)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#411" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.11 常见误区与坑
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章术语详解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="本章术语详解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tokenizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分词器（Tokenizer）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subword" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        子词（Subword）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vocabulary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        词表（Vocabulary）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oovout-of-vocabulary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OOV（Out-of-Vocabulary）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#byte-pair-encoding-bpe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        字节对编码（Byte Pair Encoding, BPE）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#merge-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        合并规则（Merge Rule）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#end-of-word-marker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        词尾标记（End-of-Word Marker）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-tokenization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        预切分（Pre-Tokenization）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bpebyte-level-bpe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        字节级 BPE（Byte-Level BPE）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bytes_to_unicode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        字节可见映射（bytes_to_unicode）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compression-ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        压缩率（Compression Ratio）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fertility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        词素比（Fertility）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wordpiece" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WordPiece
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unigram-unigram-lm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unigram 语言模型（Unigram LM）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sentencepiece" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SentencePiece
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tokenspecial-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        特殊 token（Special Token）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chat-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对话模板（Chat Template）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#byte-fallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        字节回退（Byte Fallback）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        动手环节
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        延伸阅读
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05_embedding_pos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5章 词嵌入与位置编码
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06_transformer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6章 Transformer全解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part B 架构篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Part B 架构篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07_architectures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7章 主流模型架构剖析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08_attention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8章 注意力机制演进
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09_moe/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 混合专家MoE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part C 训练篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Part C 训练篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10_pretrain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10章 预训练与Scaling Law
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11_data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11章 数据工程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12_distributed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12章 分布式训练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13_sft_peft/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13章 SFT与参数高效微调
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14_alignment_rl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 对齐：RLHF / DPO / GRPO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part D 系统篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Part D 系统篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15_inference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15章 推理优化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch16_serving/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 推理引擎实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch17_gpu_kernel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 GPU/Triton与编译器栈
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch18_quantization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18章 量化与压缩
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part E 应用篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Part E 应用篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch19_prompt_rag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19章 Prompt/RAG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch20_agent_mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 Agent与MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch21_multimodal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 多模态与扩散模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch22_eval_safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 评测与安全
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    附录
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    附录
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appendix_a_glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    附录A 术语表
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appendix_b_papers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    附录B 论文书单
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appendix_c_env/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    附录C 环境与硬件指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../buy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    获取完整版
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#41-gpt-strawberry-r" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 问题先行：为什么 GPT 数不清 "strawberry" 里有几个 r
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42-30-bpe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 最小可运行例子：30 行摸到 BPE
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#43-bpe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 BPE 训练算法完整版
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 BPE 训练算法完整版">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#431" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.1 训练流程与伪代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#432-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.2 手算示例：7 步合并全过程
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#433" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.3 编码（推理）算法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#434" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.4 编码复杂度与性能
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#44-bpe-90" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 从零实现 BPE（约 90 行，训练 + 编码 + 解码）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#45-bpe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 实验与插图：训练真实 BPE，量化"中文为什么贵"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.5 实验与插图：训练真实 BPE，量化&#34;中文为什么贵&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#451-tiktoken-hf-tokenizers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5.1 tiktoken / HF tokenizers 实战
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#46-tiktoken-gpt-2-encoderpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 官方源码对照：tiktoken 与 GPT-2 encoder.py
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#47-byte-level-bpe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7 Byte-level BPE 与分词算法全景（现代改造）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.7 Byte-level BPE 与分词算法全景（现代改造）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#471-byte-level-bpegpt-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7.1 Byte-level BPE：GPT-2 的选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#472-wordpiecebert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7.2 WordPiece（BERT 系）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#473-unigram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7.3 Unigram 语言模型（自顶向下剪枝）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#474-sentencepiece" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7.4 SentencePiece
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#48-token-chat-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.8 特殊 token 与 chat template
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#49-fertility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.9 词素比（fertility）：跨语言成本的标准度量
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#410-v" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.10 工程权衡：词表大小 \(V\)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#411" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.11 常见误区与坑
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章术语详解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="本章术语详解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tokenizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        分词器（Tokenizer）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subword" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        子词（Subword）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vocabulary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        词表（Vocabulary）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oovout-of-vocabulary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OOV（Out-of-Vocabulary）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#byte-pair-encoding-bpe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        字节对编码（Byte Pair Encoding, BPE）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#merge-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        合并规则（Merge Rule）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#end-of-word-marker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        词尾标记（End-of-Word Marker）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-tokenization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        预切分（Pre-Tokenization）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bpebyte-level-bpe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        字节级 BPE（Byte-Level BPE）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bytes_to_unicode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        字节可见映射（bytes_to_unicode）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compression-ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        压缩率（Compression Ratio）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fertility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        词素比（Fertility）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wordpiece" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WordPiece
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unigram-unigram-lm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unigram 语言模型（Unigram LM）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sentencepiece" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SentencePiece
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tokenspecial-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        特殊 token（Special Token）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chat-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对话模板（Chat Template）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#byte-fallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        字节回退（Byte Fallback）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        动手环节
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        延伸阅读
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="4-bpe">第 4 章 分词器：BPE 与现代分词算法<a class="headerlink" href="#4-bpe" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>本章导读</strong>：你大概见过 GPT 数不清 "strawberry" 里有两个 r 的翻车现场，也见过手机
+输入法永远联想不出昨天刚诞生的新梗——这两件事是同一个原因：<strong>模型和词库都只认识
+"训练时定死的单元"</strong>。大模型读到的从来不是字母或汉字，而是 token id；切分方式直接
+决定模型的成本（序列长度）、能力边界（OOV）与多语言公平性。本章从这两个生活场景
+出发，完整推导字节对编码（BPE）的训练与推理算法并逐行手算复现，再给出约 90 行的
+从零实现，与 OpenAI 官方源码逐行对账；随后覆盖 Byte-level BPE、WordPiece、Unigram
+与 SentencePiece，讨论特殊 token、chat template 与词表大小的工程权衡。读完你将能
+从零实现并解释三个高频问题："为什么中文更贵"、"为什么数不清字母"、"为什么换对话
+模板效果骤降"。</p>
+<p><strong>预计阅读时间</strong>：65 分钟（含动手环节 25 分钟）。前置：第 1 章（全景图）；token id
+如何被模型消费，见 <a href="../ch05_embedding_pos/">第 5 章</a> 与 <a href="../ch06_transformer/">第 6 章</a>。</p>
+</blockquote>
+<h2 id="41-gpt-strawberry-r">4.1 问题先行：为什么 GPT 数不清 "strawberry" 里有几个 r<a class="headerlink" href="#41-gpt-strawberry-r" title="Permanent link">&para;</a></h2>
+<p>先把两个现象摆在一起看：</p>
+<ul>
+<li><strong>现象一（模型的）</strong>：让早期 GPT-4 数 "strawberry" 有几个 <code>r</code>，它会自信地答 2 或 3。</li>
+<li><strong>现象二（输入法的）</strong>：手机输入法能联想"人工智能"，却联想不出上周刚火起来的新梗。</li>
+</ul>
+<p>共同根因：<strong>双方的"感知单元"都不是字符，而是训练时定死的更大单元</strong>。输入法的词库
+里没有新梗，联想无从谈起；而 GPT 眼中的 "strawberry" 根本不是一个字母串——用
+tiktoken 实测（4.5 节代码可复现）：</p>
+<div class="highlight"><pre><span></span><code>"strawberry"  →  ['st', 'raw', 'berry']      （GPT-2 与 GPT-4o 词表均如此）
+覆盖区间       →  st:[0,2)  raw:[2,5)  berry:[5,10)
+</code></pre></div>
+<p>三个字母 <code>r</code> 分别藏在 <code>raw</code>（1 个）和 <code>berry</code>（2 个）<strong>内部</strong>，从未作为独立单元出现。
+"数字母"对模型是一个<strong>逆分词任务</strong>：先要把 token 拆回字符，才能数——这与"人类默读
+时按词读、问第几个字母要放慢拼读"是同构的困难。它无关智力，而是<strong>感知粒度</strong>问题；
+后续模型靠思维链"先拼写出 s-t-r-a-w-b-e-r-r-y 再数"绕过了它，恰恰反证了瓶颈在
+输入表示。</p>
+<p><strong>分词器（Tokenizer）</strong> 就是从文本到整数序列的确定性映射
+<span class="arithmatex">\(\text{text} \to [t_1,\dots,t_T]\)</span>，在训练开始前于语料上"学习"出来，随后固定不变——
+它不可微，也不随模型一起更新。词表（vocabulary）<span class="arithmatex">\(V\)</span> 是全部合法 token 的集合，典型
+规模 3 万–25 万。它决定三件事：</p>
+<ol>
+<li><strong>成本</strong>：token 数 = 计算量与费用（API 按 token 计价），也决定有效上下文长度；</li>
+<li><strong>能力边界</strong>：词表外的单元如何兜底（OOV 问题）；</li>
+<li><strong>多语言公平</strong>：同样一段话，中文比英文多花多少 token。</li>
+</ol>
+<p>三种切分粒度的权衡：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>词级（word）</th>
+<th>字符级（char）</th>
+<th>子词级（subword）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>词表规模</td>
+<td>数十万甚至百万</td>
+<td>极小（数百）</td>
+<td>适中（3 万–25 万）</td>
+</tr>
+<tr>
+<td>OOV（未登录词）</td>
+<td>严重，需 <code>&lt;unk&gt;</code> 兜底</td>
+<td>几乎没有</td>
+<td>无 OOV（字节级保证，见 4.8）</td>
+</tr>
+<tr>
+<td>序列长度</td>
+<td>短</td>
+<td>极长（约 3–6 倍）</td>
+<td>适中</td>
+</tr>
+<tr>
+<td>单 token 语义密度</td>
+<td>高</td>
+<td>低（学的是拼写）</td>
+<td>高：常用词整词，罕见词切碎</td>
+</tr>
+<tr>
+<td>形态丰富语言（德/土/芬）</td>
+<td>词形爆炸</td>
+<td>可行但序列太长</td>
+<td>天然契合：词干 + 词缀</td>
+</tr>
+<tr>
+<td>代表</td>
+<td>早期 NMT</td>
+<td>ByT5、char-RNN</td>
+<td>GPT / LLaMA / Qwen 全系</td>
+</tr>
+</tbody>
+</table>
+<p><strong>形态丰富语言</strong>（morphologically rich languages）中，芬兰语一个词干可有几十种屈折
+形式，词级词表要么爆炸、要么大量 OOV。子词把 <code>unbelievably</code> 切成 <code>un + believ + ably</code>
+这样的"词根/词缀"，用有限词表组合出无限词形——这正是 BPE 用于 NMT 的原始动机
+（Sennrich et al., 2016）。</p>
+<p><strong>中文的特例</strong>：中文没有空格、单字本身就是语素，"词"边界模糊，因此<strong>字符级对中文
+意外地合理</strong>。但单字 token 语义偏碎（"蝴""蝶"分开），且在字节级词表下每个汉字占
+3 个 UTF-8 字节：词表小时一个汉字要 2–3 个 token，成本是英文的数倍（4.5 节
+实验与图 3/图 4 实测）。现代中文友好模型（Qwen、GLM）用 15 万+ 大词表把常用词/词组收进词表来压成本。</p>
+<p>先"眼见为实"：下面的截图是 Karpathy 在 minbpe 仓库中使用的 tiktokenizer 在线工具，
+同一屏里英文常用词是单个 token，数字被切碎，韩文几乎逐字节——不同语言/文本类型的
+成本差异一眼可见，这正是本章要建模和度量的事情。</p>
+<p><img alt="tiktokenizer 多语言切分可视化" src="../assets/ch04/tiktokenizer.png" /></p>
+<p><em>图 1：tiktokenizer 对中/韩/英/代码混合文本的 GPT-2 切分可视化（右侧彩色块即 token 边界）——英文常用词整词、韩文近乎逐字节、数字与标点被切碎，"每 token 成本"因语言而异。（图源：karpathy/minbpe 仓库，https://github.com/karpathy/minbpe；仅作教学用途，版权归原作者）</em></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>分词器与模型<strong>分开训练</strong>：换分词器等于换输入分布，必须重训模型。这就是词表大小
+是架构级超参数而非训练细节的原因（4.10 节）。</p>
+</div>
+<h2 id="42-30-bpe">4.2 最小可运行例子：30 行摸到 BPE<a class="headerlink" href="#42-30-bpe" title="Permanent link">&para;</a></h2>
+<p>不需要 GPU、不需要 PyTorch，30 行标准库代码就能摸到 BPE 的全部灵魂：<strong>反复合并语料
+中最高频的相邻符号对</strong>。（本章算法均为纯字符串统计，PyTorch 从下一章才登场。）</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># mini_bpe.py —— 30 行摸到 BPE：统计最高频相邻对并合并（仅标准库）</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+
+<span class="n">corpus</span> <span class="o">=</span> <span class="s2">"low low low lower lower newest newest newest newest widest widest"</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>                    <span class="c1"># 词频表</span>
+<span class="n">splits</span> <span class="o">=</span> <span class="p">{</span><span class="n">w</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"&lt;/w&gt;"</span><span class="p">]</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">}</span>    <span class="c1"># 初始切分：单字符 + 词尾标记</span>
+
+<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">):</span>                              <span class="c1"># 做 7 次合并</span>
+    <span class="n">pairs</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>                              <span class="c1"># 统计词内相邻对（按词频加权）</span>
+    <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="n">words</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">splits</span><span class="p">[</span><span class="n">w</span><span class="p">],</span> <span class="n">splits</span><span class="p">[</span><span class="n">w</span><span class="p">][</span><span class="mi">1</span><span class="p">:]):</span>
+            <span class="n">pairs</span><span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)]</span> <span class="o">+=</span> <span class="n">freq</span>
+    <span class="n">best</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">pairs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">pairs</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>               <span class="c1"># 最高频对</span>
+    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">splits</span><span class="p">:</span>                               <span class="c1"># 在全部词上执行合并</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">syms</span> <span class="o">=</span> <span class="p">[],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">splits</span><span class="p">[</span><span class="n">w</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">syms</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">syms</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">syms</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">syms</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="n">best</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">syms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">syms</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">2</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">syms</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">splits</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"step </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">: 合并 </span><span class="si">{</span><span class="n">best</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">splits</span><span class="p">[</span><span class="s2">"newest"</span><span class="p">])</span>    <span class="c1"># ['newest&lt;/w&gt;']  —— 高频词 7 步后合并成了整词</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">splits</span><span class="p">[</span><span class="s2">"widest"</span><span class="p">])</span>    <span class="c1"># ['w', 'i', 'd', 'e', 'st&lt;/w&gt;'] —— 低频词仍是碎片</span>
+</code></pre></div>
+<p>最后两行输出已经预告了 BPE 的全部行为：<strong>高频词被合并成整词（省 token），低频词被
+切成碎片（靠词表组合表达）</strong>。接下来把这个直觉升级成精确算法。</p>
+<h2 id="43-bpe">4.3 BPE 训练算法完整版<a class="headerlink" href="#43-bpe" title="Permanent link">&para;</a></h2>
+<p>BPE 最初是 1994 年的数据压缩算法：把文本里最常见的字节对替换成一个新符号，迭代压缩。
+Sennrich 等人 2016 年把它搬进 NMT 后思想未变，只是"字节"换成了"词内符号"——
+<strong>哪些子串值得成为 token，这个决策完全交给数据统计</strong>，而不是语言学规则。</p>
+<h3 id="431">4.3.1 训练流程与伪代码<a class="headerlink" href="#431" title="Permanent link">&para;</a></h3>
+<p>输入语料 <span class="arithmatex">\(C\)</span>、目标合并次数 <span class="arithmatex">\(k\)</span>（最终词表 = 初始符号数 <span class="arithmatex">\(+k\)</span>）：</p>
+<div class="highlight"><pre><span></span><code>算法：BPE 训练
+输入：语料 C，合并次数 k
+输出：合并规则表 R（rank 0..k-1，越小优先级越高），词表 Vocab
+1:  预切分（pre-tokenize）：把 C 切成词，统计词频 word_freq
+2:  初始符号：每个词拆成单字符 + 词尾标记 &lt;/w&gt;，得到初始切分 S
+3:  for step = 0 .. k-1:
+4:      P ← 统计所有词内相邻符号对 (a,b) 的加权频次（权重 = 词频）
+5:      (a*, b*) ← argmax P（并列时按确定性规则打破：本章实现取该轮统计中
+         先被记录的对，即语料扫描顺序）
+6:      对每个词 w ∈ S：把 (a*, b*) 从左到右、不回溯地合并为新符号 a*b*
+7:      R[step] ← (a*, b*)；Vocab ← Vocab ∪ {a*b*}
+8:  return R, Vocab
+</code></pre></div>
+<p>逐项拆解这份伪代码里每个"从哪来"：</p>
+<ul>
+<li><strong>词频 word_freq（第 1 行）</strong>：不是必需品而是加速器——BPE 只关心"对"出现了多少
+  次，把同一词的重复压成一个权重，统计量从字符总数级降到词种数级；</li>
+<li><strong>词尾标记 <code>&lt;/w&gt;</code>（第 2 行）</strong>：区分同一子串出现在词尾还是词中（<code>est&lt;/w&gt;</code> vs
+  <code>est+ion</code>）。没有它，BPE 会把词中/词尾的同形子串混为一谈，产生语义劣质的切分；</li>
+<li><strong>加权频次（第 4 行）</strong>：权重必须是词频而非 1，否则一个只出现一次的词里的对与
+  出现一千次的词里的对同权，统计失效；</li>
+<li><strong>argmax 的确定性（第 5 行）</strong>：并列时必须定死打破规则（本章取"先被记录的对"）。
+  并列在真实语料里极常见，规则不定，训练结果不可复现。</li>
+</ul>
+<p>下面的示意图把"统计—合并—入表"的循环压缩成一屏，建议先看图建立动态过程的感觉，
+再对照 4.3.2 的手算表逐步核对。</p>
+<p><img alt="BPE 合并过程示意" src="../assets/ch04/bpe_merge.svg" /></p>
+<p><em>图 2：BPE 训练循环：每轮基于<strong>当前切分</strong>统计词内相邻对频次，把最高频对合并为新符号并写入词表（rank 递增），高频词逐步合并为整词。（图源：作者自绘）</em></p>
+<h3 id="432-7">4.3.2 手算示例：7 步合并全过程<a class="headerlink" href="#432-7" title="Permanent link">&para;</a></h3>
+<p>语料（故意含重复模式）：</p>
+<div class="highlight"><pre><span></span><code>low low low lower lower newest newest newest newest widest widest
+词频：low=3, lower=2, newest=4, widest=2
+</code></pre></div>
+<p>初始切分与初始相邻对频次（按词频加权）：<span class="arithmatex">\((l,o)=5\)</span>、<span class="arithmatex">\((o,w)=5\)</span>、<span class="arithmatex">\((w,e)=6\)</span>（lower 2 次 +
+newest 4 次）、<span class="arithmatex">\((e,s)=6\)</span>、<span class="arithmatex">\((s,t)=6\)</span>、<span class="arithmatex">\((t,\text{&lt;/w&gt;})=6\)</span>、<span class="arithmatex">\((e,w)=4\)</span>、<span class="arithmatex">\((n,e)=4\)</span>、其余 <span class="arithmatex">\(\le 3\)</span>。
+最高频 6 有四个并列，按"该轮统计中先被记录"规则取 <span class="arithmatex">\((w,e)\)</span>（扫描到 lower 时先加入统计）。</p>
+<p>逐步合并（每步只列出<strong>发生变化</strong>的词）：</p>
+<table>
+<thead>
+<tr>
+<th>步</th>
+<th>最高频对（频次）</th>
+<th>新符号</th>
+<th>变化后的切分</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><span class="arithmatex">\((w,e)=6\)</span></td>
+<td><code>we</code></td>
+<td>lower→<code>l o we r &lt;/w&gt;</code>；newest→<code>n e we s t &lt;/w&gt;</code></td>
+</tr>
+<tr>
+<td>1</td>
+<td><span class="arithmatex">\((s,t)=6\)</span></td>
+<td><code>st</code></td>
+<td>newest→<code>n e we st &lt;/w&gt;</code>；widest→<code>w i d e st &lt;/w&gt;</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><span class="arithmatex">\((st,\text{&lt;/w&gt;})=6\)</span></td>
+<td><code>st&lt;/w&gt;</code></td>
+<td>newest→<code>n e we st&lt;/w&gt;</code>；widest→<code>w i d e st&lt;/w&gt;</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><span class="arithmatex">\((l,o)=5\)</span></td>
+<td><code>lo</code></td>
+<td>low→<code>lo w &lt;/w&gt;</code>；lower→<code>lo we r &lt;/w&gt;</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td><span class="arithmatex">\((n,e)=4\)</span></td>
+<td><code>ne</code></td>
+<td>newest→<code>ne we st&lt;/w&gt;</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td><span class="arithmatex">\((ne,we)=4\)</span></td>
+<td><code>newe</code></td>
+<td>newest→<code>newe st&lt;/w&gt;</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td><span class="arithmatex">\((newe,st\text{&lt;/w&gt;})=4\)</span></td>
+<td><code>newest&lt;/w&gt;</code></td>
+<td>newest→<strong><code>newest&lt;/w&gt;</code></strong>（整词入表）</td>
+</tr>
+</tbody>
+</table>
+<p>7 步后的合并规则表（rank 越小越优先合并）：</p>
+<div class="arithmatex">\[R = \big[\,(w,e),\ (s,t),\ (st,\text{&lt;/w&gt;}),\ (l,o),\ (n,e),\ (ne,we),\ (newe,st\text{&lt;/w&gt;})\,\big]\]</div>
+<p>最终切分：<code>low → lo|w|&lt;/w&gt;</code>，<code>lower → lo|we|r|&lt;/w&gt;</code>，<code>newest → newest&lt;/w&gt;</code>，
+<code>widest → w|i|d|e|st&lt;/w&gt;</code>。词表 = 11 个初始符号（10 字母 + <code>&lt;/w&gt;</code>）+ 7 个合并符号 = 18。</p>
+<div class="admonition note">
+<p class="admonition-title">手算的两个关键点</p>
+<p>① 第 1 步后 newest 的 <span class="arithmatex">\((e,s)\)</span> 变成了 <span class="arithmatex">\((we,s)\)</span>——统计必须基于<strong>当前切分</strong>重算；
+② 第 2 步后 <span class="arithmatex">\((t,\text{&lt;/w&gt;})\)</span> 消失（被 <code>st&lt;/w&gt;</code> 吸收），高频对是动态变化的。
+建议先自己推一遍，再用 4.5 节代码逐行对照。</p>
+</div>
+<h3 id="433">4.3.3 编码（推理）算法<a class="headerlink" href="#433" title="Permanent link">&para;</a></h3>
+<p>训练得到的是<strong>规则表</strong>；对任意新词，按优先级贪心合并：</p>
+<div class="highlight"><pre><span></span><code>算法：BPE 编码（推理）
+1:  syms ← 新词拆成单字符 + &lt;/w&gt;
+2:  loop:
+3:      在 syms 的所有相邻对中，找出 rank 最小且存在于 R 的对 (a,b)
+4:      若不存在 → break
+5:      syms ← 合并 (a,b)
+6:  return syms
+</code></pre></div>
+<p>编码语料外的词 <code>lowest</code>：<code>l o w e s t &lt;/w&gt;</code> <span class="arithmatex">\(\xrightarrow{\text{rank0}}\)</span> <code>l o we s t &lt;/w&gt;</code>
+<span class="arithmatex">\(\xrightarrow{\text{rank1}}\)</span> <code>l o we st &lt;/w&gt;</code> <span class="arithmatex">\(\xrightarrow{\text{rank2}}\)</span> <code>l o we st&lt;/w&gt;</code>
+<span class="arithmatex">\(\xrightarrow{\text{rank3}}\)</span> <strong><code>lo | we | st&lt;/w&gt;</code></strong>（再无可应用规则）——语料外的词被已学
+子词"拼"了出来，这正是子词模型能泛化到新词的机制。同时注意合并出的 <code>newe</code>（第 5 步）
+是纯频率产物、与词源无关：<strong>BPE 只看统计不看语义</strong>，罕见词可能被切成语义无关的碎片
+（4.7 节 Unigram 的改进动机之一）。</p>
+<h3 id="434">4.3.4 编码复杂度与性能<a class="headerlink" href="#434" title="Permanent link">&para;</a></h3>
+<p>把账算清楚，选型时才知道自己买的是什么：</p>
+<p><strong>训练复杂度</strong>。朴素实现每步全量扫描当前切分（<span class="arithmatex">\(S\)</span> 为语料符号总数）重数所有对，<span class="arithmatex">\(k\)</span> 步
+共 <span class="arithmatex">\(\mathcal{O}(kS)\)</span>——GB 级语料上不可行。工程做法是<strong>增量更新</strong>：合并 <span class="arithmatex">\((a^*,b^*)\)</span> 只
+影响词表中 <span class="arithmatex">\(a^*\)</span> 或 <span class="arithmatex">\(b^*\)</span> 出现位置附近的对，维护"对 → 出现位置集合"的倒排索引，每步
+只重数受影响的少量对；HF tokenizers 的 Rust 训练器即此类实现，GB 级语料分钟级完成。</p>
+<p><strong>编码复杂度</strong>。对单词长 <span class="arithmatex">\(L\)</span>：每轮扫描找最小 rank 对是 <span class="arithmatex">\(\mathcal{O}(L)\)</span>，最多合并
+<span class="arithmatex">\(L-1\)</span> 次，朴素为 <span class="arithmatex">\(\mathcal{O}(L^2)\)</span>——但词很短（预切分后通常 <span class="arithmatex">\(L\le 20\)</span>），常数极小；
+工程实现用优先队列把"候选对"组织起来，近似 <span class="arithmatex">\(\mathcal{O}(L\log L)\)</span>。</p>
+<p><strong>并行性</strong>。预切分之后各词的编码互相独立——这是分词器能被 Rust/多核加速到极限的
+结构原因：tiktoken 按预切分单元切开后并行编码、HF fast tokenizer 同理。</p>
+<p><strong>实测吞吐</strong>（本机 Windows / Python 3.11，语料为莎剧全集前 50 万字符，完整脚本见
+4.5 节）：</p>
+<table>
+<thead>
+<tr>
+<th>实现</th>
+<th>路径</th>
+<th>吞吐（M token/s）</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tiktoken <code>gpt2</code></td>
+<td>Rust + 多核并行</td>
+<td>约 5.0</td>
+<td>50 万字符 30 ms 编码完毕</td>
+</tr>
+<tr>
+<td>HF tokenizers BPE-8k</td>
+<td>Rust，但逐行 Python 循环</td>
+<td>约 0.8</td>
+<td>含 Python 侧循环开销</td>
+</tr>
+<tr>
+<td>本章 90 行纯 Python 实现</td>
+<td>单线程标准库</td>
+<td>约 0.02 量级</td>
+<td>教学用，别用于生产</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">实战提示</p>
+<p>训练大语料前先做<strong>预切分一致性</strong>检查：训练与推理用同一套 pre-tokenizer，否则
+训练学到的合并规则在新切分上可能根本无法触发。生产编码用 tiktoken / HF fast
+tokenizer；纯 Python 实现的价值是让你看懂它们在做什么。</p>
+</div>
+<h2 id="44-bpe-90">4.4 从零实现 BPE（约 90 行，训练 + 编码 + 解码）<a class="headerlink" href="#44-bpe-90" title="Permanent link">&para;</a></h2>
+<p>把 4.2 的骨架补全成完整组件：训练产出规则表与词表，编码按 rank 贪心合并，解码把
+token 串拼回文本。<strong>这段代码可以原样跑通并复现 4.3.2 的手算结果</strong>：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># bpe_from_scratch.py —— 词级 BPE：训练 + 编码 + 解码（仅标准库）</span>
+<span class="c1"># 运行：python bpe_from_scratch.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+
+<span class="n">END</span> <span class="o">=</span> <span class="s2">"&lt;/w&gt;"</span>                       <span class="c1"># 词尾标记：区分词中/词尾的同形子串</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BPETokenizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""教科书式 BPE（Sennrich 2016 的词级版本）。"""</span>
+
+    <span class="c1"># ---------------- 训练 ----------------</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">word_freqs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">num_merges</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="c1"># 1. 初始符号集：每个词拆成单字符 + 词尾标记</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">splits</span> <span class="o">=</span> <span class="p">{</span><span class="n">w</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">END</span><span class="p">]</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">word_freqs</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">merges</span> <span class="o">=</span> <span class="p">{}</span>               <span class="c1"># (a, b) -&gt; rank（越小优先级越高）</span>
+        <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_merges</span><span class="p">):</span>
+            <span class="c1"># 2. 统计所有词内相邻符号对的加权频次</span>
+            <span class="n">pairs</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="n">word_freqs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">splits</span><span class="p">[</span><span class="n">w</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">splits</span><span class="p">[</span><span class="n">w</span><span class="p">][</span><span class="mi">1</span><span class="p">:]):</span>
+                    <span class="n">pairs</span><span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)]</span> <span class="o">+=</span> <span class="n">freq</span>
+            <span class="c1"># 3. 选最高频对（dict 保序：并列时取语料中先出现的对）</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">pairs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">pairs</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+            <span class="c1"># 4. 在全部词上执行合并</span>
+            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">splits</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">splits</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge_word</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">splits</span><span class="p">[</span><span class="n">w</span><span class="p">],</span> <span class="n">best</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">merges</span><span class="p">[</span><span class="n">best</span><span class="p">]</span> <span class="o">=</span> <span class="n">step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_build_vocab</span><span class="p">()</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_merge_word</span><span class="p">(</span><span class="n">syms</span><span class="p">,</span> <span class="n">pair</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""从左到右、不回溯地合并相邻的 pair。"""</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">pair</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="p">[],</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">syms</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">syms</span><span class="p">)</span> <span class="ow">and</span> <span class="n">syms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">a</span> <span class="ow">and</span> <span class="n">syms</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">b</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>      <span class="c1"># 合并成新符号</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">2</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">syms</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="c1"># ---------------- 编码（推理） ----------------</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""按合并优先级贪心切分：每轮找 rank 最小且在当前切分中出现的对。"""</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>         <span class="c1"># 极简预切分：按空格</span>
+            <span class="n">syms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">END</span><span class="p">]</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">syms</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">cand</span> <span class="o">=</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">merges</span><span class="p">[</span><span class="n">p</span><span class="p">],</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">syms</span><span class="p">,</span> <span class="n">syms</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+                        <span class="k">if</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">merges</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">cand</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">cand</span><span class="p">)</span>       <span class="c1"># rank 全局唯一，min 结果确定</span>
+                <span class="n">syms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge_word</span><span class="p">(</span><span class="n">syms</span><span class="p">,</span> <span class="p">(</span><span class="n">syms</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">syms</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">tokens</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">syms</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tokens</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">encode_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">stoi</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
+
+    <span class="c1"># ---------------- 解码 ----------------</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokens</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">END</span><span class="p">,</span> <span class="s2">" "</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_vocab</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">vocab</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span> <span class="k">for</span> <span class="n">ab</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">merges</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">(</span><span class="o">*</span><span class="n">ab</span><span class="p">,</span> <span class="n">ab</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">ab</span><span class="p">[</span><span class="mi">1</span><span class="p">])}</span> <span class="o">|</span> <span class="p">{</span><span class="n">END</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">itos</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">vocab</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stoi</span> <span class="o">=</span> <span class="p">{</span><span class="n">s</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">itos</span><span class="p">)}</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">corpus</span> <span class="o">=</span> <span class="s2">"low low low lower lower newest newest newest newest widest widest"</span>
+    <span class="n">tok</span> <span class="o">=</span> <span class="n">BPETokenizer</span><span class="p">()</span>
+    <span class="n">tok</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">Counter</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">split</span><span class="p">())),</span> <span class="n">num_merges</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">merges</span><span class="p">)</span>              <span class="c1"># 复现 4.3.2 节手算表：</span>
+    <span class="c1"># {('w','e'):0, ('s','t'):1, ('st','&lt;/w&gt;'):2, ('l','o'):3,</span>
+    <span class="c1">#  ('n','e'):4, ('ne','we'):5, ('newe','st&lt;/w&gt;'):6}</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">splits</span><span class="p">[</span><span class="s2">"newest"</span><span class="p">])</span>    <span class="c1"># ['newest&lt;/w&gt;'] —— 7 步后整词合并</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"lowest"</span><span class="p">))</span>    <span class="c1"># ['lo', 'we', 'st&lt;/w&gt;'] —— 语料外词由已学子词拼出</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">encode_ids</span><span class="p">(</span><span class="s2">"lowest"</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"low newest"</span><span class="p">)))</span>   <span class="c1"># 'low newest'</span>
+</code></pre></div>
+<p>实现要点逐条对应 4.3 的算法项：</p>
+<ul>
+<li><code>train</code> 第 3 步的 <code>max(pairs, key=pairs.get)</code> 依赖 <strong>dict/Counter 的插入序</strong>（Python
+  3.7+ 保证）：并列时取先被记录的对——伪代码第 5 行确定性规则的落地；</li>
+<li><code>encode</code> 的 <code>min(cand)</code> 利用 <strong>rank 全局唯一</strong>：不存在同 rank 的两对，结果确定；</li>
+<li><code>_build_vocab</code> 把"初始符号 + 合并符号"打包成词表——注意<strong>规则表与词表是两个状态</strong>，
+  保存 tokenizer 时都要存（GPT-2 用 <code>vocab.bpe</code> + <code>encoder.json</code> 两个文件分别存它们）。</li>
+</ul>
+<h2 id="45-bpe">4.5 实验与插图：训练真实 BPE，量化"中文为什么贵"<a class="headerlink" href="#45-bpe" title="Permanent link">&para;</a></h2>
+<p>现在用生产级实现（HF tokenizers，Rust）在<strong>真实语料</strong>上训练不同词表大小的 BPE，
+把本章开头"中文更贵"的断言变成可测量的两条曲线。</p>
+<p><strong>实验设置</strong>（完整脚本 <code>assets/ch04/gen_bpe_vocab_scaling.py</code>，可一键复现）：
+语料为公有领域文本——英文用莎剧全集（约 111 万字符），中文用《孟子》全文（约 4.8 万
+字符，繁体转简体）；各取前 80% 训练、后 20% 做 held-out 评测；用 byte-level BPE 分别
+以 <span class="arithmatex">\(V \in \{1000, 2000, 4000, 8000\}\)</span> 真实训练 8 个分词器，测两个指标：</p>
+<div class="arithmatex">\[\text{CR} \;=\; \frac{N_{\text{tok}}}{N_{\text{char}}},\qquad
+\text{fertility} \;=\; \frac{N_{\text{tok}}}{N_{\text{unit}}}\]</div>
+<p>压缩率（CR）的分母是<strong>字符数</strong>（回答"每字符多少钱"），fertility 的分母是<strong>语言单元数</strong>
+（英文按正则切出的词数、中文按汉字数）——后者才是跨语言可比的粒度（4.9 节详述）。</p>
+<p><img alt="词表大小 vs 压缩率" src="../assets/ch04/ch04_gen_vocab_compression.png" /></p>
+<p><em>图 3：词表大小 vs 中英文压缩率（token 数/字符数，由代码生成，脚本 assets/ch04/gen_bpe_vocab_scaling.py 同目录可复现；语料：英文莎剧全集、中文《孟子》全文，均为公有领域）。两条曲线同向下降但中文始终比英文高约 2.4–2.6 倍——中文的"每字符 token 溢价"不随词表消失。</em></p>
+<p><img alt="词素比 fertility 柱状图" src="../assets/ch04/ch04_gen_fertility.png" /></p>
+<p><em>图 4：词素比 fertility（平均每个语言单元的 token 数，由代码生成，脚本同目录可复现）。中文从 1.29 降到 1.00（一字一 token），英文从 2.27 降到 1.61；小词表下英文 fertility 反而更高——英文的"溢价"藏在词内碎片里，中文的溢价藏在多字节编码里。</em></p>
+<p>读图三个结论：</p>
+<ul>
+<li><strong>压缩率随词表单调改善，但边际递减</strong>：英文 0.417 → 0.296，中文 0.992 → 0.769，
+  从 4k 到 8k 的改善已明显小于 1k 到 2k；</li>
+<li><strong>中文压缩率约为英文的 2.4–2.6 倍且不消失</strong>：根因是信息密度差异——一个汉字约对应
+  英文 1.5–2 个字符的信息量，两语言按字符比较时中文注定"更贵"；</li>
+<li><strong>小词表的最大受害者是英文 fertility</strong>（2.27）：词被切碎成字符级碎片；中文因单字
+  即语素、常用字集小，1k 词表已接近一字一 token。</li>
+</ul>
+<h3 id="451-tiktoken-hf-tokenizers">4.5.1 tiktoken / HF tokenizers 实战<a class="headerlink" href="#451-tiktoken-hf-tokenizers" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># pip install tiktoken</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tiktoken</span>
+
+<span class="n">enc</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">get_encoding</span><span class="p">(</span><span class="s2">"gpt2"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">enc</span><span class="o">.</span><span class="n">decode</span><span class="p">([</span><span class="n">t</span><span class="p">])</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">enc</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"strawberry"</span><span class="p">)])</span>
+<span class="c1"># ['st', 'raw', 'berry'] —— 字母 r 从未独立出现（4.1 节翻车现象的根源）</span>
+
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"cl100k_base"</span><span class="p">,</span> <span class="s2">"o200k_base"</span><span class="p">]:</span>     <span class="c1"># GPT-4 系 / GPT-4o 系词表</span>
+    <span class="n">enc</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">get_encoding</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"Transformers changed NLP forever."</span><span class="p">,</span> <span class="s2">"大模型改变了自然语言处理。"</span><span class="p">]:</span>
+        <span class="n">ids</span> <span class="o">=</span> <span class="n">enc</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">12s</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2"> 字符 -&gt; </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2"> tokens "</span>
+              <span class="sa">f</span><span class="s2">"| </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> tok/字符"</span><span class="p">)</span>
+<span class="c1"># 典型量级：英文 ≈ 0.2-0.3 tok/字符；中文 ≈ 0.5-1.1，o200k 对中文明显更省</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># pip install tokenizers</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tokenizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tokenizer</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">trainers</span><span class="p">,</span> <span class="n">pre_tokenizers</span><span class="p">,</span> <span class="n">decoders</span>
+
+<span class="n">corpus</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"zh_corpus.txt"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>  <span class="c1"># 每行一句</span>
+
+<span class="n">tok</span> <span class="o">=</span> <span class="n">Tokenizer</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BPE</span><span class="p">(</span><span class="n">unk_token</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>     <span class="c1"># 字节级 BPE 天然无 OOV</span>
+<span class="n">tok</span><span class="o">.</span><span class="n">pre_tokenizer</span> <span class="o">=</span> <span class="n">pre_tokenizers</span><span class="o">.</span><span class="n">ByteLevel</span><span class="p">(</span><span class="n">add_prefix_space</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">tok</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">decoders</span><span class="o">.</span><span class="n">ByteLevel</span><span class="p">()</span>              <span class="c1"># 字节级解码：无损还原多字节汉字</span>
+
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">trainers</span><span class="o">.</span><span class="n">BpeTrainer</span><span class="p">(</span>
+    <span class="n">vocab_size</span><span class="o">=</span><span class="mi">20000</span><span class="p">,</span>
+    <span class="n">special_tokens</span><span class="o">=</span><span class="p">[</span><span class="s2">"&lt;|bos|&gt;"</span><span class="p">,</span> <span class="s2">"&lt;|eos|&gt;"</span><span class="p">,</span> <span class="s2">"&lt;|pad|&gt;"</span><span class="p">],</span>       <span class="c1"># 特殊 token 注册进词表</span>
+    <span class="n">initial_alphabet</span><span class="o">=</span><span class="n">pre_tokenizers</span><span class="o">.</span><span class="n">ByteLevel</span><span class="o">.</span><span class="n">alphabet</span><span class="p">(),</span>   <span class="c1"># 256 字节全部保留</span>
+<span class="p">)</span>
+<span class="n">tok</span><span class="o">.</span><span class="n">train_from_iterator</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">trainer</span><span class="p">)</span>
+<span class="n">tok</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">"zh_bpe.json"</span><span class="p">)</span>
+
+<span class="n">enc</span> <span class="o">=</span> <span class="n">tok</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"大模型从入门到精通。"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">enc</span><span class="o">.</span><span class="n">tokens</span><span class="p">)</span>                  <span class="c1"># 查看切分（字节可见字符形式）</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">enc</span><span class="o">.</span><span class="n">ids</span><span class="p">,</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</code></pre></div>
+<h2 id="46-tiktoken-gpt-2-encoderpy">4.6 官方源码对照：tiktoken 与 GPT-2 encoder.py<a class="headerlink" href="#46-tiktoken-gpt-2-encoderpy" title="Permanent link">&para;</a></h2>
+<p>对照上面 90 行手写版与 OpenAI 官方实现，你会发现<strong>算法一模一样，差别只在工程包装</strong>。</p>
+<p><strong>引用 1</strong>：openai/tiktoken 仓库，<code>tiktoken/_educational.py</code>（官方教学实现
+<code>bpe_encode</code>，本文节选核心循环，省略了可视化分支）：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ...（省略）仓库 openai/tiktoken，文件 tiktoken/_educational.py</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bpe_encode</span><span class="p">(</span>
+    <span class="n">mergeable_ranks</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">input</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">visualise</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">"colour"</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="nb">bytes</span><span class="p">([</span><span class="n">b</span><span class="p">])</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">input</span><span class="p">]</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="c1"># Iterate over all pairs and find the pair we want to merge the most</span>
+        <span class="n">min_idx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">min_rank</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pair</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">parts</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:])):</span>
+            <span class="n">rank</span> <span class="o">=</span> <span class="n">mergeable_ranks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">rank</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="n">min_rank</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">rank</span> <span class="o">&lt;</span> <span class="n">min_rank</span><span class="p">):</span>
+                <span class="n">min_idx</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="n">min_rank</span> <span class="o">=</span> <span class="n">rank</span>
+
+        <span class="c1"># If there were no pairs we could merge, we're done!</span>
+        <span class="k">if</span> <span class="n">min_rank</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="c1"># Otherwise, merge that pair and leave the rest unchanged. Then repeat.</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[:</span><span class="n">min_idx</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">parts</span><span class="p">[</span><span class="n">min_idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">parts</span><span class="p">[</span><span class="n">min_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">+</span> <span class="n">parts</span><span class="p">[</span><span class="n">min_idx</span> <span class="o">+</span> <span class="mi">2</span> <span class="p">:]</span>
+    <span class="c1"># ...（省略）最终 tokens = [mergeable_ranks[part] for part in parts]</span>
+</code></pre></div>
+<p>逐行对账：</p>
+<table>
+<thead>
+<tr>
+<th>手写版（4.4 节）</th>
+<th>tiktoken <code>bpe_encode</code></th>
+<th>同一概念</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>self.merges[(a,b)] = step</code>（rank 越小越优先）</td>
+<td><code>mergeable_ranks: bytes -&gt; int</code>（rank 即 id，越小越优先）</td>
+<td>合并优先级表</td>
+</tr>
+<tr>
+<td><code>cand = [...]; _, i = min(cand)</code></td>
+<td>内层 for 找 <code>min_rank</code></td>
+<td>"找当前可合并对中 rank 最小者"</td>
+</tr>
+<tr>
+<td><code>_merge_word</code> 从左到右合并</td>
+<td>列表切片拼接合并</td>
+<td>合并后<strong>不回溯</strong>、继续下一轮</td>
+</tr>
+<tr>
+<td><code>if not cand: break</code></td>
+<td><code>if min_rank is None: break</code></td>
+<td>终止条件</td>
+</tr>
+</tbody>
+</table>
+<p>两处刻意的实现差异值得注意：tiktoken 把<strong>最小单元定为字节</strong>（<code>bytes([b])</code>），整段
+文本一口气编码、不按词循环（它的 rank 表已由预训练好的 GPT-2/cl100k 词表给出）；
+手写版按词循环是 Sennrich 词级 BPE 的教学形式。<strong>共同的核心是"每轮贪心取最小
+rank"</strong>——这就是"同一 tokenizer 任何正确实现给出完全相同切分"的数学保证（rank 是全序）。</p>
+<p><strong>引用 2</strong>：openai/gpt-2 仓库，<code>src/encoder.py</code> 的 <code>bytes_to_unicode</code>（字节 → 可打印
+字符的双射，4.7.1 节 <code>Ġ</code> 的来历）：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ...（省略）仓库 openai/gpt-2，文件 src/encoder.py</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bytes_to_unicode</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""...（省略）docstring：为避免 vocab 里出现大量不可打印字符，建立</span>
+<span class="sd">    utf-8 字节与可打印 unicode 字符的查找表。"""</span>
+    <span class="n">bs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s2">"!"</span><span class="p">),</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">"~"</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s2">"¡"</span><span class="p">),</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">"¬"</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s2">"®"</span><span class="p">),</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">"ÿ"</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">cs</span> <span class="o">=</span> <span class="n">bs</span><span class="p">[:]</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">8</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">b</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bs</span><span class="p">:</span>
+            <span class="n">bs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+            <span class="n">cs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">8</span><span class="o">+</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">cs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">chr</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">cs</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">bs</span><span class="p">,</span> <span class="n">cs</span><span class="p">))</span>
+</code></pre></div>
+<p>读法：本来可打印的字符（<code>!</code>–<code>~</code>、拉丁扩展）映射到自身；不可见字节（空格 0x20、
+换行 0x0A 等）顺次映射到 256+ 的空闲码位——空格拿到 U+0120 即 <code>Ġ</code>，换行拿到 U+010A
+即 <code>Ċ</code>。双射保证解码时可无损还原。</p>
+<h2 id="47-byte-level-bpe">4.7 Byte-level BPE 与分词算法全景（现代改造）<a class="headerlink" href="#47-byte-level-bpe" title="Permanent link">&para;</a></h2>
+<h3 id="471-byte-level-bpegpt-2">4.7.1 Byte-level BPE：GPT-2 的选择<a class="headerlink" href="#471-byte-level-bpegpt-2" title="Permanent link">&para;</a></h3>
+<p>词级 BPE 有个尴尬：预切分没见过的 Unicode 字符无法表示，还是得留 <code>&lt;unk&gt;</code>。GPT-2 的
+解法釜底抽薪——<strong>把"最小单元"直接定为字节</strong>（上一节源码里 <code>bytes([b])</code> 的含义），
+任何文本都只是字节序列，OOV 在原理上就不存在了：</p>
+<ul>
+<li>任何 UTF-8 文本（中/英/emoji/代码）都只是字节序列 → <strong>天然零 OOV</strong>，不再需要 <code>&lt;unk&gt;</code>；</li>
+<li>基础词表固定为 256，之后照常跑 4.3 节的合并算法；</li>
+<li>代价来自 UTF-8 变长编码：英文常用字符 1 字节，常用汉字 3 字节。常见汉字的三字节组合
+  会被高频合并成单 token，罕见字则要 2–3 个 token（图 3/图 4 的中文溢价即来源于此）。</li>
+</ul>
+<p><code>bytes_to_unicode</code> 的可见字符映射（引用 2）让 token 能以字符串形式安全存储：</p>
+<table>
+<thead>
+<tr>
+<th>原字节</th>
+<th>含义</th>
+<th>映射后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x20</td>
+<td>空格</td>
+<td><code>Ġ</code>（U+0120）</td>
+</tr>
+<tr>
+<td>0x0A</td>
+<td>换行</td>
+<td><code>Ċ</code>（U+010A）</td>
+</tr>
+<tr>
+<td>0xE5 等</td>
+<td>汉字 UTF-8 首字节</td>
+<td>某拉丁扩展区可见字符</td>
+</tr>
+</tbody>
+</table>
+<p>于是在 GPT-2 的 token 流里 <code>hello world</code> 是 <code>hello</code> + <code>Ġworld</code>——<strong>空格跟着后面的词走</strong>，
+"词首"与"词中"的同形子串天然可分，替代了 <code>&lt;/w&gt;</code> 的部分职责。</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>在 HF tokenizer 的 <code>encode(...).tokens</code> 输出里看到 <code>Ġ</code>、<code>Ċ</code> 不是 bug，正是这个
+字节↔可见字符的双射；解码时反向映射即可无损还原文本。</p>
+</div>
+<h3 id="472-wordpiecebert">4.7.2 WordPiece（BERT 系）<a class="headerlink" href="#472-wordpiecebert" title="Permanent link">&para;</a></h3>
+<p>WordPiece 与 BPE 流程完全相同，<strong>只换了"选哪一对合并"的打分</strong>：</p>
+<div class="arithmatex">\[\text{score}(x,y) \;=\; \log p(xy) - \log p(x) - \log p(y) \;=\; \log\frac{p(xy)}{p(x)\,p(y)}\]</div>
+<p>推导直觉：把相邻的 <span class="arithmatex">\(x,y\)</span> 合并，语料对数似然在每个 <span class="arithmatex">\(xy\)</span> 相邻位置上由
+<span class="arithmatex">\(\log p(x)+\log p(y)\)</span> 变为 <span class="arithmatex">\(\log p(xy)\)</span>，故合并的似然增益正比于
+<span class="arithmatex">\(c(xy)\,[\log p(xy)-\log p(x)-\log p(y)]\)</span>（精确值还涉及合并后 <span class="arithmatex">\(x,y\)</span> 剩余计数的再分配，
+工程上用上式近似）。去掉频次权重后就是<strong>逐点互信息（PMI）</strong>：<span class="arithmatex">\(x,y\)</span> 各自高频却很少
+相邻 → 分数低（BPE 会合并，WordPiece 不会）；强绑定出现 → 分数高。BERT 用它，
+词中 token 写作 <code>##ing</code>；编码用贪心最长匹配，切不动就整词 <code>&lt;unk&gt;</code>（BERT 时代还没有
+字节级兜底）。</p>
+<h3 id="473-unigram">4.7.3 Unigram 语言模型（自顶向下剪枝）<a class="headerlink" href="#473-unigram" title="Permanent link">&para;</a></h3>
+<p>与 BPE"自底向上合并"相反，Unigram 先给一个超大候选词表，再逐步删：</p>
+<ol>
+<li>候选词表：全部单字符 + 高频子串（几十万）；每个 token 带概率 <span class="arithmatex">\(p(t)\)</span>；</li>
+<li>词 <span class="arithmatex">\(w\)</span> 的切分 <span class="arithmatex">\(s=(t_1,\dots,t_m)\)</span> 概率 <span class="arithmatex">\(p(s)=\prod_j p(t_j)\)</span>；词概率对所有切分求和
+   <span class="arithmatex">\(p(w)=\sum_{s\in\mathcal{S}(w)}p(s)\)</span>；语料似然 <span class="arithmatex">\(\mathcal{L}=\sum_w c(w)\log p(w)\)</span>；</li>
+<li><strong>EM 迭代</strong>：E 步用 Viterbi 找每个词的最优切分并统计 token 计数；M 步重归一化
+   <span class="arithmatex">\(p(t)=c(t)\big/\sum_{t'}c(t')\)</span>；</li>
+<li><strong>剪枝</strong>：计算"删掉 <span class="arithmatex">\(t\)</span> 使 <span class="arithmatex">\(\mathcal{L}\)</span> 下降多少"，每轮删去损失最小的 top-<span class="arithmatex">\(\eta\%\)</span>
+   （单字符永不删，保证任何词都可表示），重复直到达到目标词表大小。</li>
+</ol>
+<p>因为每个 token 带概率，Unigram 还支持<strong>子词正则化</strong>：训练时按概率采样不同切分作为
+数据增强（延伸阅读 Subword Regularization）。</p>
+<h3 id="474-sentencepiece">4.7.4 SentencePiece<a class="headerlink" href="#474-sentencepiece" title="Permanent link">&para;</a></h3>
+<p>SentencePiece 是"框架"而非算法：把输入视为原始字符/字节流，空格本身编码为 <code>▁</code>
+（U+2581），<code>hello world → hello▁world</code>。三点好处：<strong>语言无关</strong>（不假设空格分词，
+中日文直接可用）；<strong>无损可逆</strong>（<code>decode(encode(x)) = x</code> 严格成立）；内部可选 <strong>BPE
+或 Unigram</strong> 两种模型（LLaMA 1/2、T5 用它）。</p>
+<p>从原始 BPE 到现代 LLM 分词的改造全景：</p>
+<table>
+<thead>
+<tr>
+<th>原始做法</th>
+<th>现代做法</th>
+<th>解决什么问题</th>
+<th>代表模型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>词级 BPE（Sennrich 2016）</td>
+<td>字节级 BPE（256 字节起步）</td>
+<td>彻底消灭 OOV 与 <code>&lt;unk&gt;</code></td>
+<td>GPT 全系</td>
+</tr>
+<tr>
+<td>词级字符不可表示</td>
+<td>byte fallback（切不动退到字节 token）</td>
+<td>同上，保留子词可读性</td>
+<td>LLaMA 1/2</td>
+</tr>
+<tr>
+<td>频次打分（纯统计）</td>
+<td>PMI/似然打分（WordPiece）</td>
+<td>避免合并"高频但弱绑定"的对</td>
+<td>BERT</td>
+</tr>
+<tr>
+<td>确定性单一切分</td>
+<td>Unigram 概率切分 + 子词正则化</td>
+<td>切分可采样，增强鲁棒性</td>
+<td>T5 / ALBERT</td>
+</tr>
+<tr>
+<td>假设空格分词</td>
+<td>SentencePiece（<code>▁</code> 编码空格）</td>
+<td>中日文等无空格语言直接可用</td>
+<td>LLaMA / T5</td>
+</tr>
+<tr>
+<td>5 万级词表</td>
+<td>10 万–25 万大词表</td>
+<td>中文等多语言压缩率</td>
+<td>Qwen / GPT-4o</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>BPE</th>
+<th>WordPiece</th>
+<th>Unigram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>选对准则</td>
+<td>频次最高</td>
+<td><span class="arithmatex">\(\log\frac{p(xy)}{p(x)p(y)}\)</span> 最高</td>
+<td>似然损失最小地删</td>
+</tr>
+<tr>
+<td>方向</td>
+<td>自底向上</td>
+<td>自底向上</td>
+<td>自顶向下</td>
+</tr>
+<tr>
+<td>概率化切分</td>
+<td>无</td>
+<td>无</td>
+<td>有（可采样增强）</td>
+</tr>
+<tr>
+<td>代表</td>
+<td>GPT 系 / LLaMA</td>
+<td>BERT</td>
+<td>T5 / ALBERT</td>
+</tr>
+</tbody>
+</table>
+<h2 id="48-token-chat-template">4.8 特殊 token 与 chat template<a class="headerlink" href="#48-token-chat-template" title="Permanent link">&para;</a></h2>
+<p><strong>特殊 token</strong>：不参与子词切分、映射到固定 id 的保留符号。</p>
+<ul>
+<li><code>BOS</code> / <code>EOS</code>：序列起止。EOS 是训练目标的一部分——模型必须学会"在合适的地方输出
+  EOS"，否则生成永不停止；</li>
+<li><code>PAD</code>：批内把短序列补齐，必须配合 <code>attention_mask=0</code> 让注意力忽略填充位（第 6 章）；</li>
+<li><strong>控制符/角色符</strong>：<code>&lt;|im_start|&gt;</code>、<code>&lt;|user|&gt;</code>、<code>&lt;|tool|&gt;</code> 等，是对话与 Agent 功能的
+  载体。</li>
+</ul>
+<p>对话模型靠 <strong>chat template</strong>（一段 Jinja2 模板）把消息列表渲染成训练时见过的字节
+序列。以 ChatML/Qwen 风格为例：</p>
+<div class="highlight"><pre><span></span><code><span class="cp">{%</span>- <span class="k">for</span> <span class="nv">message</span> <span class="k">in</span> <span class="nv">messages</span> -<span class="cp">%}</span>
+<span class="cp">{{</span> <span class="s1">'&lt;|im_start|&gt;'</span> <span class="o">+</span> <span class="nv">message</span><span class="o">[</span><span class="s1">'role'</span><span class="o">]</span> <span class="o">+</span> <span class="s1">'\n'</span> <span class="o">+</span> <span class="nv">message</span><span class="o">[</span><span class="s1">'content'</span><span class="o">]</span> <span class="o">+</span> <span class="s1">'&lt;|im_end|&gt;\n'</span> <span class="cp">}}</span>
+<span class="cp">{%</span>- <span class="k">endfor</span> -<span class="cp">%}</span>
+<span class="cp">{%</span>- <span class="k">if</span> <span class="nv">add_generation_prompt</span> -<span class="cp">%}{{</span> <span class="s1">'&lt;|im_start|&gt;assistant\n'</span> <span class="cp">}}{%</span>- <span class="k">endif</span> -<span class="cp">%}</span>
+</code></pre></div>
+<p>渲染结果（推理时的输入应长这样）：</p>
+<div class="highlight"><pre><span></span><code>&lt;|im_start|&gt;system
+你是一个严谨的助手。&lt;|im_end|&gt;
+&lt;|im_start|&gt;user
+什么是 BPE？&lt;|im_end|&gt;
+&lt;|im_start|&gt;assistant
+</code></pre></div>
+<p><strong>模板用错的典型症状</strong>——原理：SFT 时模型见到的就是上面这些精确字节，差一个换行都是
+分布外输入：</p>
+<table>
+<thead>
+<tr>
+<th>症状</th>
+<th>常见根因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模型复述问题、续写问题而不是回答</td>
+<td>缺 <code>add_generation_prompt=True</code>，没给 <code>&lt;|im_start|&gt;assistant\n</code></td>
+</tr>
+<tr>
+<td>生成永不停止 / 无限重复</td>
+<td>训练样本没以 <code>&lt;|im_end|&gt;</code> 收尾，或推理时 <code>eos_token_id</code> 配错</td>
+</tr>
+<tr>
+<td>角色串台，assistant 自问自答</td>
+<td>角色名、换行符与训练模板不一致</td>
+</tr>
+<tr>
+<td>多轮对话能力消失</td>
+<td>历史没按模板拼接、丢了 system 段</td>
+</tr>
+<tr>
+<td>控制符被切成 <code>&lt; | im ...</code></td>
+<td>特殊 token 未注册进 tokenizer（added_tokens），被普通 BPE 切碎</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>验证模板最快的方法：<code>print(tok.apply_chat_template(msgs, tokenize=False,
+add_generation_prompt=True))</code>，与官方推理示例<strong>逐字符</strong>对比（包括换行与空格）。</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">实战提示（消费级 GPU）</p>
+<p>本地微调对话模型（<a href="../ch13_sft_peft/">第 13 章</a>）时，训练样本必须用
+<code>apply_chat_template</code> 渲染后再喂给 tokenizer，并确保 <code>pad_token</code> 存在
+（LLaMA 系常借用 <code>unk</code> 或新增 <code>&lt;|pad|&gt;</code>）。</p>
+</div>
+<h2 id="49-fertility">4.9 词素比（fertility）：跨语言成本的标准度量<a class="headerlink" href="#49-fertility" title="Permanent link">&para;</a></h2>
+<p>图 4 已经给出了 fertility 的实测曲线，这里把定义与用法钉死。"中文到底比英文贵多少"
+这个问题，用 tok/字符（压缩率）回答不了——中英文字符的信息密度不同。<strong>机器翻译
+文献的标准做法是比较 fertility</strong>：平均每个语言单元被切成几个 token，英文以"词"为
+单元、中文以"字"为单元，跨语言才可比。</p>
+<div class="arithmatex">\[f \;=\; \frac{N_{\text{tok}}}{N_{\text{unit}}}\]</div>
+<p>其中 <span class="arithmatex">\(N_{\text{tok}}\)</span> 为 token 数，<span class="arithmatex">\(N_{\text{unit}}\)</span> 为语言单元数（英文取正则切出的
+词数，中文取 CJK 汉字数）。<span class="arithmatex">\(f=1\)</span> 意味着"一词/一字一个 token"，是最省钱的状态；
+<span class="arithmatex">\(f&gt;1\)</span> 的部分就是切碎带来的"溢价"。</p>
+<p>测量代码（图 4 与之同源，仅多除以语言单元数）：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># pip install tiktoken</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span><span class="o">,</span><span class="w"> </span><span class="nn">tiktoken</span>
+
+<span class="n">EN</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"en_sample.txt"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>   <span class="c1"># 任选一段代表性英文</span>
+<span class="n">ZH</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"zh_sample.txt"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>   <span class="c1"># 等量的中文</span>
+
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"gpt2"</span><span class="p">,</span> <span class="s2">"cl100k_base"</span><span class="p">,</span> <span class="s2">"o200k_base"</span><span class="p">]:</span>
+    <span class="n">enc</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">get_encoding</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">words</span>    <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">"[A-Za-z']+"</span><span class="p">,</span> <span class="n">EN</span><span class="p">)</span>                 <span class="c1"># 英文单元 = 词</span>
+    <span class="n">han</span>      <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ZH</span> <span class="k">if</span> <span class="s2">"</span><span class="se">\u4e00</span><span class="s2">"</span> <span class="o">&lt;=</span> <span class="n">c</span> <span class="o">&lt;=</span> <span class="s2">"</span><span class="se">\u9fff</span><span class="s2">"</span><span class="p">]</span>  <span class="c1"># 中文单元 = 汉字</span>
+    <span class="n">n_tok_en</span><span class="p">,</span> <span class="n">n_tok_zh</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">enc</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">EN</span><span class="p">)),</span> <span class="nb">len</span><span class="p">(</span><span class="n">enc</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">ZH</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">12s</span><span class="si">}</span><span class="s2"> EN fertility=</span><span class="si">{</span><span class="n">n_tok_en</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> tok/词 | "</span>
+          <span class="sa">f</span><span class="s2">"ZH fertility=</span><span class="si">{</span><span class="n">n_tok_zh</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">han</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> tok/字"</span><span class="p">)</span>
+</code></pre></div>
+<p>对一段约 150 词的英文与约 250 字的中文科技文本，用现成大词表实测的结果：</p>
+<table>
+<thead>
+<tr>
+<th>词表</th>
+<th><span class="arithmatex">\(V\)</span></th>
+<th>英文 fertility（tok/词）</th>
+<th>中文 fertility（tok/字）</th>
+<th>同段落中文/英文 token 比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gpt2</td>
+<td>50,257</td>
+<td>1.25</td>
+<td>2.37</td>
+<td>约 3.2 倍</td>
+</tr>
+<tr>
+<td>cl100k（GPT-4 系）</td>
+<td>100,277</td>
+<td>1.23</td>
+<td>1.20</td>
+<td>约 1.7 倍</td>
+</tr>
+<tr>
+<td>o200k（GPT-4o 系）</td>
+<td>200,019</td>
+<td>1.23</td>
+<td>0.81</td>
+<td>约 1.1 倍</td>
+</tr>
+</tbody>
+</table>
+<p>把表与图 3/图 4 放在一起读，三个结论值得带走：</p>
+<ul>
+<li><strong>英文 fertility 对词表大小几乎不敏感</strong>（1.23–1.25）：5 万词表已把英文常用词收编，
+  再扩词表主要是在为其他语言"还债"；</li>
+<li><strong>中文 fertility 是词表大小的敏感函数</strong>：现成大词表从 2.37 降到 0.81，图 4 里自训
+  小词表从 1.29 降到 1.00——全靠把高频汉字组合（三字节）合并进词表。这就是"中文
+  友好词表"的价值；</li>
+<li><strong>fertility 与压缩率互为补充</strong>：压缩率（tok/字符）回答"每字符多少 token"，
+  fertility 回答"每词/字多少 token"——做成本估算用前者，做多语言公平性对比用后者。</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">实战提示（消费级 GPU）</p>
+<p>估算微调/推理成本时，用 fertility 乘以你的文本统计即可：中文任务按
+"tokens ≈ 字数 × <span class="arithmatex">\(f\)</span>"，<span class="arithmatex">\(f\)</span> 用目标模型词表实测（一行 tiktoken 即可），不要沿用
+"中文 1 字 = 2 token"这类过时经验值。</p>
+</div>
+<h2 id="410-v">4.10 工程权衡：词表大小 <span class="arithmatex">\(V\)</span><a class="headerlink" href="#410-v" title="Permanent link">&para;</a></h2>
+<p>词表大小是<strong>架构级超参数</strong>：训练开始前定死，之后换不动。它同时牵动参数量、计算量与
+多语言公平性，值得把账算细。</p>
+<p><strong>参数代价</strong>：输入嵌入矩阵为 <span class="arithmatex">\(V\times d\)</span>；若输出层不共享权重（weight tying 见
+<a href="../ch05_embedding_pos/">第 5 章</a> 5.1 节），softmax 投影再花一个 <span class="arithmatex">\(V\times d\)</span>。以
+<span class="arithmatex">\(d=4096\)</span> 的 7B 级模型为例：</p>
+<table>
+<thead>
+<tr>
+<th>词表 <span class="arithmatex">\(V\)</span></th>
+<th>输入嵌入</th>
+<th>输入+输出（<span class="arithmatex">\(2Vd\)</span>）</th>
+<th>占 7B 比例</th>
+<th>代表词表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>32k</td>
+<td>131M</td>
+<td>262M</td>
+<td>3.7%</td>
+<td>LLaMA-2</td>
+</tr>
+<tr>
+<td>64k</td>
+<td>262M</td>
+<td>524M</td>
+<td>7.5%</td>
+<td>—</td>
+</tr>
+<tr>
+<td>100k</td>
+<td>410M</td>
+<td>819M</td>
+<td>11.7%</td>
+<td>cl100k（GPT-4 系）</td>
+</tr>
+<tr>
+<td>150k</td>
+<td>614M</td>
+<td>1.23B</td>
+<td>17.6%</td>
+<td>Qwen2.5（151k）/ o200k≈20 万</td>
+</tr>
+</tbody>
+</table>
+<p><span class="arithmatex">\(V\)</span> 还决定每 token 输出层计算量 <span class="arithmatex">\(\mathcal{O}(Vd)\)</span> 与 softmax/采样开销。</p>
+<p><strong>怎么选</strong>：语料以英文为主 → 32k–50k 足够（GPT-2 为 50257）；多语言/中文为主 →
+10 万–20 万，否则中文压缩率太差。词表翻倍 ≈ 多花数百 MB–数 GB 嵌入参数，换来中文
+序列缩短 20–40%——注意力与 KV 缓存（<a href="../ch15_inference/">第 15 章</a>）同步省，本质是
+"以参数换上下文效率"的交换。</p>
+<p><strong>OOV 的两种现代解法</strong>：字节级 BPE（GPT-2 起，基础词表即 256 字节，无需 fallback）；
+SentencePiece 字节回退（byte fallback，LLaMA 采用：子词切不动时退到字节 token）。
+二者效果相近，前者更简单，后者让"正常情况"的词表更可读。</p>
+<h2 id="411">4.11 常见误区与坑<a class="headerlink" href="#411" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>把 <code>Ġ</code>/<code>▁</code> 当乱码"修"掉</strong>。有人在日志里看到 <code>Ġworld</code> 以为是编码错误，做
+   <code>strip()</code>/正则清洗后再 decode，结果把空格删了、句子粘连。正确姿势：<code>Ġ</code>（GPT 系）、
+   <code>▁</code>（SentencePiece 系）都是"带前导空格"的可视化记号，decode 时由配套 decoder
+   还原，不要手工清洗中间表示。</li>
+<li><strong>特殊 token 没注册，被普通 BPE 切碎</strong>。自定义 <code>&lt;|工具调用|&gt;</code> 这类控制符时若忘了
+   加进 <code>added_tokens</code>/<code>special_tokens</code>，它会被当成普通文本切成 <code>&lt; | 工具 | 调用|</code>
+   之类的碎片——模型从未在训练中见过这些 id，对话/Agent 功能<strong>静默失效且不报错</strong>。
+   上线前用 <code>encode</code> 检查控制符是否产出自定义 id。</li>
+<li><strong>用字符数估 token 成本</strong>。"中文 1 字 = 2 token"是 GPT-2 时代（fertility 2.37）
+   的经验值；o200k 上中文 fertility 已到 0.81——差 3 倍。任何成本估算都应先在目标
+   模型词表上实测 fertility（一行 tiktoken），再乘业务文本量。</li>
+<li><strong>跨实现比对中间合并表</strong>。频次并列时的打破规则是各实现自由裁量处（本章取
+   "先记录者"，HF/GPT-2 各有细节）：同一份语料，手写版与 HF 训练出的<strong>合并表顺序
+   可能不同，但最终切分高度一致</strong>。复现性核对应比最终切分与 token id 流，不要比
+   中间过程。</li>
+<li><strong>训练与推理的 pre-tokenizer 不一致</strong>。训练时用 SentencePiece（<code>▁</code> 空格）训练的
+   权重，推理时若用 ByteLevel 预切分的 tokenizer 加载，切分粒度全变、效果崩坏且无
+   报错。<strong>tokenizer 与权重必须同源下载</strong>（同一 model card 的配套文件）。</li>
+</ol>
+<h2 id="_1">本章小结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<ul>
+<li>分词器是训练前学出、之后冻结的确定性映射；换它等于换输入分布，必须重训模型。</li>
+<li>"strawberry 数不清 r"是感知粒度问题：字母 <code>r</code> 从未作为独立 token 存在，数字母是
+  逆分词任务。</li>
+<li>BPE 用"反复合并最高频相邻对"这一条统计规则构造词表：训练产出规则表，推理按 rank
+  贪心合并；rank 是全序，保证任何正确实现切分一致。</li>
+<li>字节级 BPE（GPT-2）以 256 字节为初始词表，从原理上消灭 OOV；代价是罕见汉字要先付
+  3 字节学费；tiktoken 官方教学实现与本章 90 行手写版逐行同构。</li>
+<li>训练复杂度的工程命门是增量更新（<span class="arithmatex">\(\mathcal{O}(kS)\)</span> → 只重数受影响的对）；编码吞吐
+  靠预切分后的词间并行（实测 tiktoken 约 5M token/s）。</li>
+<li>WordPiece 改打分函数（PMI），Unigram 反转方向（自顶向下剪枝），SentencePiece 统一
+  二者并提供语言无关的无损封装。</li>
+<li>特殊 token 与 chat template 是对话能力的载体；模板差一个换行都是分布外输入，务必
+  逐字符验证。</li>
+<li>词表大小是架构级超参数：<span class="arithmatex">\(2Vd\)</span> 个嵌入参数换多语言压缩率，中文场景建议 10 万–20 万。</li>
+<li>度量分词成本：压缩率（tok/字符）管成本估算，fertility（tok/词、tok/字）管跨语言
+  公平性——真实训练实验显示中文压缩率约为英文 2.4–2.6 倍，且不随词表增大消失。</li>
+</ul>
+<h2 id="_2">本章术语详解<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h4 id="tokenizer">分词器（Tokenizer）<a class="headerlink" href="#tokenizer" title="Permanent link">&para;</a></h4>
+<p>从文本到整数 id 序列的确定性映射，在预训练开始前于语料上学习，之后冻结。它不可微、
+不随梯度更新，是模型与世界之间的"汇率制度"。工程上每次加载模型都要同时加载配套的
+tokenizer——同一个模型喂不同 tokenizer 的输出，结果完全不可预期。与"文本预处理"的
+区别在于：分词器是有参数、有训练算法的模型组件，而不只是正则替换。</p>
+<h4 id="subword">子词（Subword）<a class="headerlink" href="#subword" title="Permanent link">&para;</a></h4>
+<p>介于词与字符之间的单位，如 <code>unbelievably → un + believ + ably</code>。它同时解决词级的两个
+死结：词表爆炸与 OOV——用有限词表组合出无限词形。子词不是语言学词素：BPE 切出的
+<code>newe</code> 这种碎片与词源无关，只是统计产物。判断一个 tokenizer 是否"语言学友好"，
+可以看子词与词素的对齐程度，但主流模型并不为此优化。</p>
+<h4 id="vocabulary">词表（Vocabulary）<a class="headerlink" href="#vocabulary" title="Permanent link">&para;</a></h4>
+<p>全部合法 token 的集合 <span class="arithmatex">\(V\)</span>，典型规模 3 万–25 万，决定嵌入矩阵大小与每 token 输出层
+计算量。词表在训练开始前固定，之后新增 token 需要扩容嵌入矩阵并"补训"（工程上叫
+resizing 并继续训练），代价不小。与"合并规则表"的区别：词表是"有哪些符号"，
+合并规则是"怎么把新词拆成这些符号"，二者一起构成完整 tokenizer。</p>
+<h4 id="oovout-of-vocabulary">OOV（Out-of-Vocabulary）<a class="headerlink" href="#oovout-of-vocabulary" title="Permanent link">&para;</a></h4>
+<p>未登录词：测试时出现词表外的单元。词级模型的 OOV 只能映射到 <code>&lt;unk&gt;</code>，语义信息全部
+丢失（BERT 时代切不动的整词就是 <code>&lt;unk&gt;</code>）。字节级 BPE 与 byte fallback 从结构上根治了
+它，因此现代 LLM 论文里几乎不再讨论 OOV。遇到"模型输出乱码/生僻字错乱"时，第一反应
+应是检查该字符被切成了几个字节级 token，而不是怀疑模型能力。</p>
+<h4 id="byte-pair-encoding-bpe">字节对编码（Byte Pair Encoding, BPE）<a class="headerlink" href="#byte-pair-encoding-bpe" title="Permanent link">&para;</a></h4>
+<p>1994 年的数据压缩算法，2016 年被 Sennrich 等人引入 NMT，现为 GPT/LLaMA/Qwen 全系的
+分词基础：反复合并语料中最高频的相邻符号对，直到达到目标词表大小。它只看频率不看
+语义，因此合并结果可能有反直觉的碎片。与 WordPiece 的区别仅在"选哪一对合并"的
+打分函数；与 Unigram 的区别是方向相反（自底向上合并 vs 自顶向下剪枝）。</p>
+<h4 id="merge-rule">合并规则（Merge Rule）<a class="headerlink" href="#merge-rule" title="Permanent link">&para;</a></h4>
+<p>形如 <span class="arithmatex">\((a,b)\to ab\)</span> 的规则加上优先级 rank（越早学出优先级越高）。训练的产出就是这张
+有序表；编码（推理）时对任意新词反复执行"找 rank 最小且当前存在的对并合并"。rank
+是全序的，这保证了同一 tokenizer 在任何实现里给出<strong>完全相同</strong>的切分——可复现性来自
+这里。保存 tokenizer 时，规则表 + 词表就是全部状态（如 GPT-2 的 <code>encoder.json</code> +
+<code>vocab.bpe</code> 两个文件）。</p>
+<h4 id="end-of-word-marker">词尾标记（End-of-Word Marker）<a class="headerlink" href="#end-of-word-marker" title="Permanent link">&para;</a></h4>
+<p>Sennrich 版 BPE 在每个词末尾附加 <code>&lt;/w&gt;</code>，让 <code>est&lt;/w&gt;</code>（词尾）与 <code>est</code>（词中）成为
+不同符号，避免混出劣质切分。这是词级 BPE 的关键技巧；GPT-2 字节级方案用"空格跟随
+后词"（<code>Ġworld</code>）实现了同样的词边界区分，SentencePiece 用 <code>▁</code>。三种记号目的相同，
+看到任何一个都应立即反应"这是词首/词尾标记"。</p>
+<h4 id="pre-tokenization">预切分（Pre-Tokenization）<a class="headerlink" href="#pre-tokenization" title="Permanent link">&para;</a></h4>
+<p>训练与编码前把文本粗切成"词"（英文按空格/正则，GPT-2 用正则
+<code>'s|'t|...| ?\p{L}+| ?\p{N}+...</code>），合并只允许发生在预切分单元内部。它限制了词表
+内容（不会出现跨空格的 token），也带来"英文按词计费"的计价结构。预切分策略变化会
+彻底改变切分结果——对比不同模型的 tokenizer 时，先看 pre-tokenizer 是否一致；
+它还是分词器可并行的结构基础（4.3.4 节）。</p>
+<h4 id="bpebyte-level-bpe">字节级 BPE（Byte-Level BPE）<a class="headerlink" href="#bpebyte-level-bpe" title="Permanent link">&para;</a></h4>
+<p>以 256 个字节作为初始符号的 BPE 变体：任何 UTF-8 输入（中/英/emoji/代码）都可表示，
+零 OOV。代价是 UTF-8 变长编码让非拉丁文本起点更高（常用汉字 3 字节）。与 byte
+fallback 的区别：字节级方案的正常路径就是字节合并；fallback 方案正常路径是更可读的
+子词，切不动才退到字节。两者对生僻内容的兜底能力等价。</p>
+<h4 id="bytes_to_unicode">字节可见映射（bytes_to_unicode）<a class="headerlink" href="#bytes_to_unicode" title="Permanent link">&para;</a></h4>
+<p>GPT-2 的 <code>encoder.py</code> 中把 256 个字节双射到 256 个可打印 Unicode 字符的函数：空格
+0x20 映射为 <code>Ġ</code>（U+0120），换行 0x0A 映射为 <code>Ċ</code>（U+010A）。目的纯粹是工程性的：让
+token 能用字符串安全存储、打印、拼 JSON。在 HF tokenizer 输出里看到 <code>Ġworld</code> 不是
+乱码，解码时反向映射即可无损还原。排查切分问题时，建议先在脑内把 <code>Ġ</code> 翻译回空格。</p>
+<h4 id="compression-ratio">压缩率（Compression Ratio）<a class="headerlink" href="#compression-ratio" title="Permanent link">&para;</a></h4>
+<p>token 数除以字符数，衡量编码效率；英文常见 0.18–0.35，中文高度依赖词表（0.5–2.0，
+见 4.5 节实测曲线）。它直接决定推理成本与有效上下文长度：压缩率翻倍等于上下文免费
+翻倍。与 fertility 的分工见 4.9 节——压缩率适合算钱，fertility 适合跨语言对比。
+同一模型内比较不同领域文本（代码 vs 散文）的压缩率，还能快速发现"哪个领域更贵"。</p>
+<h4 id="fertility">词素比（Fertility）<a class="headerlink" href="#fertility" title="Permanent link">&para;</a></h4>
+<p>平均每个语言单元（英文的词、中文的字）被切成的 token 数，机器翻译文献的标准粒度
+度量。英文对词表大小不敏感（约 1.2），中文则从 2.4（GPT-2 词表）到 0.8（20 万词表）
+剧烈变化——它是"多语言公平性"的第一指标（4.5 节图 4 与 4.9 节实测表）。翻译质量
+评估中的同名术语指"每个源词产生的目标词数"，含义相近，都在度量"一个单元膨胀成
+多少个单元"。</p>
+<h4 id="wordpiece">WordPiece<a class="headerlink" href="#wordpiece" title="Permanent link">&para;</a></h4>
+<p>BERT 系分词算法：流程与 BPE 完全相同，只把"选哪一对合并"的准则换成对数似然增益
+（近似为 PMI 打分）。它偏向合并"强绑定"的片段，而不是单纯高频的片段。编码时用贪心
+最长匹配，切不动的整词变 <code>&lt;unk&gt;</code>——BERT 时代没有字节兜底，这是其生僻词能力弱的结构
+原因。词中片段写作 <code>##ing</code> 是它的可视化标志。</p>
+<h4 id="unigram-unigram-lm">Unigram 语言模型（Unigram LM）<a class="headerlink" href="#unigram-unigram-lm" title="Permanent link">&para;</a></h4>
+<p>与 BPE 相反的自顶向下算法：先给一个含几十万候选的超大词表，每个 token 带概率
+<span class="arithmatex">\(p(t)\)</span>，用 EM 迭代拟合后，反复删除"对语料似然伤害最小"的 token 直到目标规模。
+因为切分有概率定义，它天然支持子词正则化（按概率采样不同切分做数据增强）。
+ALBERT、T5、LLaMA（SentencePiece-Unigram 模式）采用。与 BPE 相比切分质量更平滑，
+但训练更慢、实现更复杂。</p>
+<h4 id="sentencepiece">SentencePiece<a class="headerlink" href="#sentencepiece" title="Permanent link">&para;</a></h4>
+<p>语言无关的分词"框架"而非算法：把输入视为原始字符/字节流，空格编码为 <code>▁</code>（U+2581），
+保证 <code>decode(encode(x)) = x</code> 严格无损。内部可选 BPE 或 Unigram 两种模型，LLaMA 1/2
+与 T5 用它。与 HF tokenizers 的区别：SentencePiece 不依赖"空格分词"的预设，对中日文
+直接可用；<code>▁</code> 与 GPT-2 的 <code>Ġ</code> 地位相同，都是"带前导空格"的记号。</p>
+<h4 id="tokenspecial-token">特殊 token（Special Token）<a class="headerlink" href="#tokenspecial-token" title="Permanent link">&para;</a></h4>
+<p>不参与子词切分、映射到固定 id 的保留符号：<code>BOS</code>/<code>EOS</code>/<code>PAD</code> 与角色控制符
+（<code>&lt;|im_start|&gt;</code> 等）。EOS 是训练目标的一部分——模型必须学会在合适位置输出它，否则
+生成永不停止。若控制符没注册进 tokenizer 的 added_tokens，会被普通 BPE 切碎，对话
+功能随之静默失效。与普通 token 的区别：特殊 token 是"协议"，不是"内容"。</p>
+<h4 id="chat-template">对话模板（Chat Template）<a class="headerlink" href="#chat-template" title="Permanent link">&para;</a></h4>
+<p>一段 Jinja2 模板，把消息列表（system/user/assistant）渲染成训练时见过的精确字节
+序列，如 ChatML 的 <code>&lt;|im_start|&gt;user\n...&lt;|im_end|&gt;\n</code>。推理时差一个换行都是分布外
+输入，典型症状是模型复述问题、角色串台或永不停止。快速验证：
+<code>tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True)</code> 与官方
+示例逐字符对比。它是 tokenizer 的一部分，换模型必换模板。</p>
+<h4 id="byte-fallback">字节回退（Byte Fallback）<a class="headerlink" href="#byte-fallback" title="Permanent link">&para;</a></h4>
+<p>SentencePiece 的兜底机制：子词切不动某字符时，把它退成 UTF-8 字节 token 序列
+（<code>&lt;0xE5&gt;&lt;0xA4&gt;&lt;0xA7&gt;</code> 形式），LLaMA 采用。它让词表不必为了生僻字保留大量低频 token，
+正常路径的词表因此更紧凑可读。与字节级 BPE 的差别只在"默认路径"：一个平时用字节
+合并，一个平时用子词、走投无路才用字节。效果上两者都能表示任意输入。</p>
+<h2 id="_3">动手环节<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>手算 BPE</strong>：对语料 <code>aaabdaaabac</code> 手工执行 3 步合并（提示：第一步合并 <code>(a,a)</code>），
+   写出每步的切分与规则表；再用 4.4 节代码（<code>num_merges=3</code>）验证。（难度★ / 15 分钟 /
+   无需 GPU）</li>
+<li><strong>测量你自己的文本</strong>：找一段 500 字中文 + 一段等长英文，分别用 4.5 节代码的
+   cl100k 与 o200k 统计 token 数与 fertility，回答"中文比英文贵多少"；再运行
+   <code>assets/ch04/gen_bpe_vocab_scaling.py</code>，对比自训小词表与现成大词表的曲线形状。
+   （难度★ / 20 分钟 / CPU）</li>
+<li><strong>词表实验</strong>：把 gen 脚本的 <code>VOCAB_SIZES</code> 改成 <code>[2000, 4000, 8000, 16000]</code> 并换
+   你自己的语料，回答：词表从 8k 提到 16k，中文压缩率改善百分之多少？若你的语料
+   70% 是中文，词表建议设多大？写 200 字结论并给出参数代价估算（用 4.10 节公式）。
+   （难度★★ / 40 分钟 / CPU）</li>
+</ol>
+<h2 id="_4">延伸阅读<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://arxiv.org/abs/1508.07909">Neural Machine Translation of Rare Words with Subword Units（BPE 原论文）</a> —— Sennrich et al., ACL 2016，把 BPE 从压缩领域带进 NMT；先读它建立"合并=学词表"的直觉。</li>
+<li><a href="https://arxiv.org/abs/1808.06226">SentencePiece: A simple and language independent subword tokenizer and detokenizer</a> —— 讲清 <code>▁</code>、无损可逆与 BPE/Unigram 双模式；实现 LLaMA 系分词前必读。</li>
+<li><a href="https://arxiv.org/abs/1804.10959">Subword Regularization: Improving Neural Network Translation Models with Multiple Subword Candidates</a> —— Unigram 语言模型与按概率采样切分的数据增强，理解"切分可以不止一种"。</li>
+<li><a href="https://github.com/karpathy/minbpe">karpathy/minbpe</a> —— Karpathy 的极简字节级 BPE，代码不到 200 行；读完本章后对照它是最好的复习。</li>
+<li><a href="https://www.youtube.com/watch?v=zduSFxRajkE">Let's build the GPT Tokenizer（视频）</a> —— Karpathy 两小时从零写 GPT-2 分词器，涵盖字节映射、特殊 token 与训练词表的全过程。</li>
+<li><a href="https://github.com/openai/tiktoken">openai/tiktoken</a> —— OpenAI 官方高性能分词库，加载 cl100k/o200k 查看 GPT-4 系的真实切分；<code>tiktoken/_educational.py</code> 是官方教学实现（4.6 节引用 1 的出处）。</li>
+<li><a href="https://huggingface.co/docs/tokenizers">Hugging Face tokenizers 文档</a> —— BPE/WordPiece/Unigram 的统一实现与训练器参数说明，工程落地的权威参考。</li>
+<li><a href="https://github.com/openai/gpt-2/blob/master/src/encoder.py">GPT-2 encoder.py</a> —— 字节↔可见 Unicode 双射（<code>bytes_to_unicode</code>）与正则预切分的原始实现，100 行读懂 GPT-2 分词。</li>
+<li>Schuster &amp; Nakajima, "Japanese and Korean Voice Search"（ICASSP 2012）—— WordPiece 原始出处（无稳定 arXiv 号，按标题搜索），了解 PMI 打分的最早形态。</li>
+</ul>
+<p>至此，任意文本都已被确定性地编码成 token id 序列。但 id 只是"目录行号"，语义与顺序
+从哪里来？这是下一章的主题。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      &copy; 2026 jiejin93 · 内容采用 CC BY-NC-SA 4.0 · 引用请注明出处
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../assets/katex/katex.min.js"></script>
+      
+        <script src="../assets/katex/contrib/auto-render.min.js"></script>
+      
+        <script src="../javascripts/katex-init.js"></script>
+      
+    
+  </body>
+</html>

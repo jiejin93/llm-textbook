@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="360" viewBox="0 0 880 360" font-family="'Microsoft YaHei', 'PingFang SC', sans-serif">
+  <rect x="0" y="0" width="880" height="360" fill="#ffffff"/>
+  <text x="440" y="34" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a1a1a">BPE 训练 = 反复合并语料中最高频的相邻符号对</text>
+
+  <!-- row 0: initial split -->
+  <text x="60" y="92" font-size="14" fill="#444">初始切分</text>
+  <g font-size="16" text-anchor="middle">
+    <rect x="150" y="72" width="36" height="32" rx="5" fill="#eef4fb" stroke="#5b8db8"/><text x="168" y="94" fill="#1a1a1a">n</text>
+    <rect x="190" y="72" width="36" height="32" rx="5" fill="#eef4fb" stroke="#5b8db8"/><text x="208" y="94" fill="#1a1a1a">e</text>
+    <rect x="230" y="72" width="36" height="32" rx="5" fill="#eef4fb" stroke="#5b8db8"/><text x="248" y="94" fill="#1a1a1a">w</text>
+    <rect x="270" y="72" width="36" height="32" rx="5" fill="#eef4fb" stroke="#5b8db8"/><text x="288" y="94" fill="#1a1a1a">e</text>
+    <rect x="310" y="72" width="36" height="32" rx="5" fill="#eef4fb" stroke="#5b8db8"/><text x="328" y="94" fill="#1a1a1a">s</text>
+    <rect x="350" y="72" width="36" height="32" rx="5" fill="#eef4fb" stroke="#5b8db8"/><text x="368" y="94" fill="#1a1a1a">t</text>
+    <rect x="390" y="72" width="52" height="32" rx="5" fill="#f5f0fa" stroke="#8a6db8"/><text x="416" y="94" fill="#1a1a1a">&lt;/w&gt;</text>
+  </g>
+  <text x="470" y="94" font-size="13" fill="#777">（以词 newest 为例；&lt;/w&gt; 为词尾标记）</text>
+
+  <!-- arrow 0 -->
+  <line x1="300" y1="112" x2="300" y2="146" stroke="#c0392b" stroke-width="2" marker-end="url(#arw)"/>
+  <text x="316" y="136" font-size="14" fill="#c0392b">统计所有词的相邻对频次 → 合并最高频对 (w,e)</text>
+
+  <!-- row 1 -->
+  <g font-size="16" text-anchor="middle">
+    <rect x="150" y="152" width="36" height="32" rx="5" fill="#eef4fb" stroke="#5b8db8"/><text x="168" y="174" fill="#1a1a1a">n</text>
+    <rect x="190" y="152" width="36" height="32" rx="5" fill="#eef4fb" stroke="#5b8db8"/><text x="208" y="174" fill="#1a1a1a">e</text>
+    <rect x="230" y="152" width="52" height="32" rx="5" fill="#fdf3d7" stroke="#c9a227"/><text x="256" y="174" fill="#1a1a1a">we</text>
+    <rect x="286" y="152" width="36" height="32" rx="5" fill="#eef4fb" stroke="#5b8db8"/><text x="304" y="174" fill="#1a1a1a">s</text>
+    <rect x="326" y="152" width="36" height="32" rx="5" fill="#eef4fb" stroke="#5b8db8"/><text x="344" y="174" fill="#1a1a1a">t</text>
+    <rect x="366" y="152" width="52" height="32" rx="5" fill="#f5f0fa" stroke="#8a6db8"/><text x="392" y="174" fill="#1a1a1a">&lt;/w&gt;</text>
+  </g>
+  <text x="470" y="174" font-size="13" fill="#777">← 新符号 we 进入词表，rank 0</text>
+
+  <!-- arrow 1 -->
+  <line x1="300" y1="192" x2="300" y2="226" stroke="#c0392b" stroke-width="2" marker-end="url(#arw)"/>
+  <text x="316" y="216" font-size="14" fill="#c0392b">基于当前切分重新统计 → 合并 (s,t)</text>
+
+  <!-- row 2 -->
+  <g font-size="16" text-anchor="middle">
+    <rect x="150" y="232" width="36" height="32" rx="5" fill="#eef4fb" stroke="#5b8db8"/><text x="168" y="254" fill="#1a1a1a">n</text>
+    <rect x="190" y="232" width="36" height="32" rx="5" fill="#eef4fb" stroke="#5b8db8"/><text x="208" y="254" fill="#1a1a1a">e</text>
+    <rect x="230" y="232" width="52" height="32" rx="5" fill="#fdf3d7" stroke="#c9a227"/><text x="256" y="254" fill="#1a1a1a">we</text>
+    <rect x="286" y="232" width="48" height="32" rx="5" fill="#fdf3d7" stroke="#c9a227"/><text x="310" y="254" fill="#1a1a1a">st</text>
+    <rect x="338" y="232" width="52" height="32" rx="5" fill="#f5f0fa" stroke="#8a6db8"/><text x="364" y="254" fill="#1a1a1a">&lt;/w&gt;</text>
+  </g>
+  <text x="470" y="254" font-size="13" fill="#777">← 新符号 st 进入词表，rank 1</text>
+
+  <!-- arrow 2 -->
+  <line x1="300" y1="272" x2="300" y2="306" stroke="#c0392b" stroke-width="2" marker-end="url(#arw)"/>
+  <text x="316" y="296" font-size="14" fill="#c0392b">继续：合并 (st,&lt;/w&gt;)，直到达到目标词表大小</text>
+
+  <!-- row 3 -->
+  <g font-size="16" text-anchor="middle">
+    <rect x="150" y="312" width="36" height="32" rx="5" fill="#eef4fb" stroke="#5b8db8"/><text x="168" y="334" fill="#1a1a1a">n</text>
+    <rect x="190" y="312" width="36" height="32" rx="5" fill="#eef4fb" stroke="#5b8db8"/><text x="208" y="334" fill="#1a1a1a">e</text>
+    <rect x="230" y="312" width="52" height="32" rx="5" fill="#fdf3d7" stroke="#c9a227"/><text x="256" y="334" fill="#1a1a1a">we</text>
+    <rect x="286" y="312" width="84" height="32" rx="5" fill="#e8f6ec" stroke="#3e9d63"/><text x="328" y="334" fill="#1a1a1a">st&lt;/w&gt;</text>
+  </g>
+  <text x="470" y="334" font-size="13" fill="#777">← 高频词逐步合并为整词，全程只依赖统计频次</text>
+
+  <defs>
+    <marker id="arw" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#c0392b"/>
+    </marker>
+  </defs>
+</svg>

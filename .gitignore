@@ -1,0 +1,8 @@
+node_modules/
+__pycache__/
+_site/
+*.pyc
+.DS_Store
+branding/
+secret_code.txt
+book/

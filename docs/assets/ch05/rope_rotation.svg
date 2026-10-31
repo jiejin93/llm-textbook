@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="400" viewBox="0 0 880 400" font-family="'Microsoft YaHei', 'PingFang SC', sans-serif">
+  <rect x="0" y="0" width="880" height="400" fill="#ffffff"/>
+  <text x="440" y="32" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a1a1a">RoPE：把位置编码成二维子空间上的旋转，内积只依赖相对距离</text>
+
+  <!-- left: complex plane -->
+  <g>
+    <!-- axes -->
+    <line x1="60" y1="230" x2="400" y2="230" stroke="#999" stroke-width="1.5"/>
+    <line x1="110" y1="330" x2="110" y2="60" stroke="#999" stroke-width="1.5"/>
+    <text x="408" y="234" font-size="13" fill="#777">Re</text>
+    <text x="104" y="52" font-size="13" fill="#777">Im</text>
+    <circle cx="110" cy="230" r="3.5" fill="#333"/>
+
+    <!-- unit circle -->
+    <circle cx="110" cy="230" r="130" fill="none" stroke="#ddd" stroke-width="1.2" stroke-dasharray="4 4"/>
+
+    <!-- q vector at angle m theta (about 55 deg above x axis) -->
+    <!-- endpoint: x=110+130*cos(-55deg)=110+74.6=184.6? use angle 55: cos55=0.574, sin55=0.819 -->
+    <line x1="110" y1="230" x2="185" y2="90" stroke="#7d4fb2" stroke-width="3" marker-end="url(#arq)"/>
+    <text x="192" y="84" font-size="17" font-weight="bold" fill="#7d4fb2">R(mθ)·q</text>
+
+    <!-- k vector at angle n theta (about 20 deg) cos20=0.94 sin20=0.342 -->
+    <line x1="110" y1="230" x2="232" y2="186" stroke="#d97b1c" stroke-width="3" marker-end="url(#ark)"/>
+    <text x="240" y="196" font-size="17" font-weight="bold" fill="#d97b1c">R(nθ)·k</text>
+
+    <!-- arc between the two vectors, radius 62 -->
+    <path d="M 145.6 179.2 A 62 62 0 0 1 168.3 208.8" fill="none" stroke="#3e9d63" stroke-width="2"/>
+    <text x="146" y="172" font-size="15" font-weight="bold" fill="#3e9d63">(n−m)θ</text>
+
+    <text x="230" y="318" font-size="14" fill="#555">两个向量各自旋转，</text>
+    <text x="230" y="340" font-size="14" fill="#555">夹角只由位置差 n−m 决定</text>
+  </g>
+
+  <!-- right: takeaway -->
+  <g>
+    <rect x="470" y="70" width="380" height="120" rx="10" fill="#f6f8fa" stroke="#d0d7de"/>
+    <text x="490" y="102" font-size="16" fill="#1a1a1a">⟨R(mθ)q, R(nθ)k⟩ = qᵀR((n−m)θ)k</text>
+    <text x="490" y="134" font-size="14" fill="#444">旋转矩阵正交且同平面可交换：</text>
+    <text x="490" y="158" font-size="14" fill="#444">R(−mθ)R(nθ) = R((n−m)θ)</text>
+    <text x="490" y="182" font-size="14" font-weight="bold" fill="#1a1a1a">→ 注意力分数自动获得相对位置语义</text>
+
+    <rect x="470" y="210" width="380" height="130" rx="10" fill="#f6f8fa" stroke="#d0d7de"/>
+    <text x="490" y="242" font-size="15" font-weight="bold" fill="#1a1a1a">d 维做法：</text>
+    <text x="490" y="268" font-size="14" fill="#444">切成 d/2 个二维子空间，每个子空间</text>
+    <text x="490" y="292" font-size="14" fill="#444">用自己的频率 θᵢ = 10000^(−2i/d) 旋转</text>
+    <text x="490" y="316" font-size="14" fill="#444">高频维管局部顺序，低频维管长程结构</text>
+    <text x="490" y="340" font-size="14" fill="#444">实现上等价于 x·cosφ + rotate_half(x)·sinφ</text>
+  </g>
+
+  <defs>
+    <marker id="arq" markerWidth="11" markerHeight="9" refX="9" refY="4.5" orient="auto">
+      <path d="M0,0 L11,4.5 L0,9 z" fill="#7d4fb2"/>
+    </marker>
+    <marker id="ark" markerWidth="11" markerHeight="9" refX="9" refY="4.5" orient="auto">
+      <path d="M0,0 L11,4.5 L0,9 z" fill="#d97b1c"/>
+    </marker>
+  </defs>
+</svg>

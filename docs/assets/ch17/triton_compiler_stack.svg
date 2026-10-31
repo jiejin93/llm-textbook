@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="900" height="672" viewBox="0 0 900 672" font-family="'Segoe UI','Microsoft YaHei','Noto Sans SC',sans-serif">
+  <rect x="0" y="0" width="900" height="672" fill="#ffffff"/>
+  <text x="450" y="26" text-anchor="middle" font-size="19" font-weight="bold" fill="#222">Triton 编译管线：从 Python 函数到机器码</text>
+
+  <!-- stage boxes -->
+  <g font-size="16" font-weight="bold">
+    <rect x="60" y="44"  width="400" height="66" rx="9" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1.6"/>
+    <rect x="60" y="150" width="400" height="66" rx="9" fill="#dde9fb" stroke="#4a86d6" stroke-width="1.6"/>
+    <rect x="60" y="256" width="400" height="66" rx="9" fill="#d0e0f7" stroke="#4a86d6" stroke-width="1.6"/>
+    <rect x="60" y="362" width="400" height="66" rx="9" fill="#c2d6f3" stroke="#3a6fb5" stroke-width="1.6"/>
+    <rect x="60" y="468" width="400" height="66" rx="9" fill="#b3cbef" stroke="#3a6fb5" stroke-width="1.6"/>
+    <rect x="60" y="574" width="400" height="66" rx="9" fill="#a3bfca" stroke="#2f5d80" stroke-width="1.6"/>
+  </g>
+  <g fill="#173a63" text-anchor="middle">
+    <text x="260" y="72"  font-size="17" font-weight="bold">@triton.jit 的 Python 函数</text>
+    <text x="260" y="94"  font-size="13" font-weight="normal" fill="#33526e">你写的块级程序，与硬件无关</text>
+    <text x="260" y="178" font-size="17" font-weight="bold">Triton IR</text>
+    <text x="260" y="200" font-size="13" font-weight="normal" fill="#33526e">块级张量语义：[BM, D] 是"一个值"</text>
+    <text x="260" y="284" font-size="17" font-weight="bold">TTGIR（GPU IR，MLIR dialect）</text>
+    <text x="260" y="306" font-size="13" font-weight="normal" fill="#33526e">硬件相关：为每个张量选定 layout</text>
+    <text x="260" y="390" font-size="17" font-weight="bold">LLVM IR</text>
+    <text x="260" y="412" font-size="13" font-weight="normal" fill="#33526e">标量/向量指令 + NVVM intrinsic</text>
+    <text x="260" y="496" font-size="17" font-weight="bold">PTX（NVIDIA 虚拟 ISA）</text>
+    <text x="260" y="518" font-size="13" font-weight="normal" fill="#33526e">跨代兼容层</text>
+    <text x="260" y="602" font-size="17" font-weight="bold">SASS</text>
+    <text x="260" y="624" font-size="13" font-weight="normal" fill="#22394a">具体芯片的真实机器码（AD102 / GH100）</text>
+  </g>
+
+  <!-- arrows -->
+  <g stroke="#555" stroke-width="2" fill="#555">
+    <line x1="260" y1="110" x2="260" y2="144"/>
+    <line x1="260" y1="216" x2="260" y2="250"/>
+    <line x1="260" y1="322" x2="260" y2="356"/>
+    <line x1="260" y1="428" x2="260" y2="462"/>
+    <line x1="260" y1="534" x2="260" y2="568"/>
+  </g>
+  <g fill="#555">
+    <polygon points="260,150 254,140 266,140"/>
+    <polygon points="260,256 254,246 266,246"/>
+    <polygon points="260,362 254,352 266,352"/>
+    <polygon points="260,468 254,458 266,458"/>
+    <polygon points="260,574 254,564 266,564"/>
+  </g>
+
+  <!-- step badges -->
+  <g font-size="13" font-weight="bold" fill="#ffffff">
+    <circle cx="478" cy="127" r="12" fill="#1a73e8"/><text x="478" y="131.5" text-anchor="middle">①</text>
+    <circle cx="478" cy="233" r="12" fill="#4a86d6"/><text x="478" y="237.5" text-anchor="middle">②</text>
+    <circle cx="478" cy="339" r="12" fill="#c0392b"/><text x="478" y="343.5" text-anchor="middle">③</text>
+    <circle cx="478" cy="445" r="12" fill="#3a6fb5"/><text x="478" y="449.5" text-anchor="middle">④</text>
+    <circle cx="478" cy="551" r="12" fill="#2f5d80"/><text x="478" y="555.5" text-anchor="middle">⑤</text>
+  </g>
+
+  <!-- annotations -->
+  <g font-size="13.5" fill="#333">
+    <text x="510" y="118">前端：AST 解析、符号/类型分析、</text>
+    <text x="510" y="137">constexpr 固化、指针类型推断</text>
+    <text x="510" y="224">降入 MLIR：以 dialect 组织的多层 IR</text>
+    <text x="510" y="243">（Triton 3.x 起的中间表示地基）</text>
+    <text x="510" y="322" font-weight="bold" fill="#8a1f14">关键优化层：convert_layout、归约→shuffle、</text>
+    <text x="510" y="341" font-weight="bold" fill="#8a1f14">tl.dot→mma/wgmma、软件流水、SMEM 分配</text>
+    <text x="510" y="436">LLVM 优化 pass（死代码消除、向量化…）</text>
+    <text x="510" y="455">→ NVPTX 后端生成 PTX</text>
+    <text x="510" y="542">ptxas：寄存器分配、指令调度，</text>
+    <text x="510" y="561">产出可直接执行的 SASS</text>
+  </g>
+
+  <text x="450" y="664" text-anchor="middle" font-size="13.5" fill="#666">调试入口：kernel.asm["ttgir" | "llir" | "ptx"] 可直接翻阅各层 IR</text>
+</svg>

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="900" height="330" viewBox="0 0 900 330" font-family="'Segoe UI','Microsoft YaHei','Noto Sans SC',sans-serif">
+  <rect x="0" y="0" width="900" height="330" fill="#ffffff"/>
+  <text x="450" y="26" text-anchor="middle" font-size="19" font-weight="bold" fill="#222">FP8 的两种格式：E4M3 与 E5M2（OCP 规范）</text>
+
+  <!-- E4M3 row -->
+  <text x="60" y="103" font-size="20" font-weight="bold" fill="#222">E4M3</text>
+  <g stroke="#555" stroke-width="1.4">
+    <rect x="140" y="70" width="46" height="46" fill="#c5cae9"/>
+    <rect x="186" y="70" width="46" height="46" fill="#ffcc80"/>
+    <rect x="232" y="70" width="46" height="46" fill="#ffcc80"/>
+    <rect x="278" y="70" width="46" height="46" fill="#ffcc80"/>
+    <rect x="324" y="70" width="46" height="46" fill="#ffcc80"/>
+    <rect x="370" y="70" width="46" height="46" fill="#a5d6a7"/>
+    <rect x="416" y="70" width="46" height="46" fill="#a5d6a7"/>
+    <rect x="462" y="70" width="46" height="46" fill="#a5d6a7"/>
+  </g>
+  <g font-size="15" text-anchor="middle" fill="#222">
+    <text x="163" y="98" font-weight="bold">S</text>
+    <text x="209" y="98">2³</text>
+    <text x="255" y="98">2²</text>
+    <text x="301" y="98">2¹</text>
+    <text x="347" y="98">2⁰</text>
+    <text x="393" y="98">½</text>
+    <text x="439" y="98">¼</text>
+    <text x="485" y="98">⅛</text>
+  </g>
+  <g font-size="12" text-anchor="middle" fill="#666">
+    <text x="163" y="132">符号</text>
+    <text x="278" y="132">指数（4 位）</text>
+    <text x="416" y="132">尾数（3 位）</text>
+  </g>
+  <text x="540" y="90" font-size="14" fill="#333">前向：激活 / 权重 · 幅度上限 ±448</text>
+  <text x="540" y="112" font-size="13" fill="#666">范围小、精度高 → 默认推理格式</text>
+
+  <!-- E5M2 row -->
+  <text x="60" y="213" font-size="20" font-weight="bold" fill="#222">E5M2</text>
+  <g stroke="#555" stroke-width="1.4">
+    <rect x="140" y="180" width="46" height="46" fill="#c5cae9"/>
+    <rect x="186" y="180" width="46" height="46" fill="#ffb74d"/>
+    <rect x="232" y="180" width="46" height="46" fill="#ffb74d"/>
+    <rect x="278" y="180" width="46" height="46" fill="#ffb74d"/>
+    <rect x="324" y="180" width="46" height="46" fill="#ffb74d"/>
+    <rect x="370" y="180" width="46" height="46" fill="#ffb74d"/>
+    <rect x="416" y="180" width="46" height="46" fill="#a5d6a7"/>
+    <rect x="462" y="180" width="46" height="46" fill="#a5d6a7"/>
+  </g>
+  <g font-size="15" text-anchor="middle" fill="#222">
+    <text x="163" y="208" font-weight="bold">S</text>
+    <text x="209" y="208">2⁴</text>
+    <text x="255" y="208">2³</text>
+    <text x="301" y="208">2²</text>
+    <text x="347" y="208">2¹</text>
+    <text x="393" y="208">2⁰</text>
+    <text x="439" y="208">½</text>
+    <text x="485" y="208">¼</text>
+  </g>
+  <g font-size="12" text-anchor="middle" fill="#666">
+    <text x="163" y="242">符号</text>
+    <text x="278" y="242">指数（5 位）</text>
+    <text x="439" y="242">尾数（2 位）</text>
+  </g>
+  <text x="540" y="200" font-size="14" fill="#333">反向：梯度 · 幅度上限 ±57344</text>
+  <text x="540" y="222" font-size="13" fill="#666">范围大、精度低 → 容忍梯度的大动态范围</text>
+
+  <!-- notes -->
+  <text x="60" y="285" font-size="13.5" fill="#555">指数位多 → 动态范围大（不易上/下溢）；尾数位多 → 相对精度高。FP8 GEMM 必须用 FP32 累加。</text>
+  <text x="60" y="310" font-size="13.5" fill="#555">H100 上 FP8 Tensor Core 峰值约为 BF16 的 2 倍（约 1979 TFLOP/s，dense）。</text>
+</svg>

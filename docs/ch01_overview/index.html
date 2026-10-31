@@ -1,0 +1,3298 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="理论、公式、代码与生态的全景中文教程">
+      
+      
+      
+        <link rel="canonical" href="https://jiejin93.github.io/llm-textbook/ch01_overview/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../ch02_math_optim/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>第1章 大模型全景 - 大模型：从入门到精通</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../assets/katex/katex.min.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="大模型：从入门到精通" class="md-header__button md-logo" aria-label="大模型：从入门到精通" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            大模型：从入门到精通
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第1章 大模型全景
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="blue"  aria-label="切换深色"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换深色" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="light-blue"  aria-label="切换浅色"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换浅色" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  Part A 基础篇
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../ch07_architectures/" class="md-tabs__link">
+          
+  
+  
+  Part B 架构篇
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../ch10_pretrain/" class="md-tabs__link">
+          
+  
+  
+  Part C 训练篇
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../ch15_inference/" class="md-tabs__link">
+          
+  
+  
+  Part D 系统篇
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../ch19_prompt_rag/" class="md-tabs__link">
+          
+  
+  
+  Part E 应用篇
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../appendix_a_glossary/" class="md-tabs__link">
+          
+  
+  
+  附录
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../buy/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  获取完整版
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="大模型：从入门到精通" class="md-nav__button md-logo" aria-label="大模型：从入门到精通" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    大模型：从入门到精通
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part A 基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Part A 基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 大模型全景
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 大模型全景
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#11-chatgpt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 问题先行：输入法联想与 ChatGPT 是同一台机器
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-30" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 最小可运行例子：30 行亲眼看一次"下一词预测"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 公式逐项拆解：语言模型到底在算什么
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.3 公式逐项拆解：语言模型到底在算什么">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#130-logits-softmax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.0 从打分到概率：logits 与 softmax
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#131" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.1 链式法则分解：联合概率的精确恒等式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.2 训练目标：负对数似然
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#133-nat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.3 困惑度：把 nat 翻译成人话
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 训练一个 LLM 的完整流水线：三阶段、数据规模与算力
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.4 训练一个 LLM 的完整流水线：三阶段、数据规模与算力">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#141" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.1 规模定律：算力可预测地兑换损失下降
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#142" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.2 涌现能力及其争议：一次测量学上的正面对账
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#143" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.3 训练只是花钱的开始：部署侧的账
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-nanogpt-30-bigram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 官方源码对照：nanoGPT 与你的 30 行 bigram
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-llm-bigram-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 LLM 里的改造：从 bigram 到现代 LLM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.6 LLM 里的改造：从 bigram 到现代 LLM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.1 开源生态地图：只记真正重要的
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 能力矩阵与岗位映射：你该吃透哪几章
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.7 能力矩阵与岗位映射：你该吃透哪几章">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#171" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7.1 本书章节地图
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.8 常见误区与坑
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章术语详解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="本章术语详解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        词元（token）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#language-modeling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        语言建模（language modeling）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autoregressive-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        自回归生成（autoregressive generation）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generative-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        生成模型（generative model）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decoder-only-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        解码器架构（decoder-only architecture）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#causal-attention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        因果注意力（causal attention）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#perplexity-ppl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        困惑度（perplexity, PPL）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#self-supervised-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        自监督学习（self-supervised learning）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#base-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        基座模型（base model）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supervised-fine-tuning-sft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        监督微调（supervised fine-tuning, SFT）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rlhf-reinforcement-learning-from-human-feedback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        人类反馈强化学习（RLHF, reinforcement learning from human feedback）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对齐（alignment）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scaling-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        规模定律（scaling law）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-context-learning-icl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        上下文学习（in-context learning, ICL）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#context-window" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        上下文窗口（context window）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emergent-ability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        涌现能力（emergent ability）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mixture-of-experts-moe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        混合专家（Mixture-of-Experts, MoE）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reasoning-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        推理模型（reasoning model）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#open-weights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        开源权重（open weights）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        模型卡（model card）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        动手环节
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        延伸阅读
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02_math_optim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2章 数学与优化基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03_nn_backprop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 神经网络与反向传播
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04_tokenizer_bpe/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 分词器与BPE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05_embedding_pos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5章 词嵌入与位置编码
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06_transformer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6章 Transformer全解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part B 架构篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Part B 架构篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07_architectures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7章 主流模型架构剖析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08_attention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8章 注意力机制演进
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09_moe/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 混合专家MoE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part C 训练篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Part C 训练篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10_pretrain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10章 预训练与Scaling Law
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11_data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11章 数据工程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12_distributed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12章 分布式训练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13_sft_peft/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13章 SFT与参数高效微调
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14_alignment_rl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 对齐：RLHF / DPO / GRPO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part D 系统篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Part D 系统篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15_inference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15章 推理优化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch16_serving/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 推理引擎实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch17_gpu_kernel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 GPU/Triton与编译器栈
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch18_quantization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18章 量化与压缩
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part E 应用篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Part E 应用篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch19_prompt_rag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19章 Prompt/RAG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch20_agent_mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 Agent与MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch21_multimodal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 多模态与扩散模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch22_eval_safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 评测与安全
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    附录
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    附录
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appendix_a_glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    附录A 术语表
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appendix_b_papers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    附录B 论文书单
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appendix_c_env/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    附录C 环境与硬件指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../buy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    获取完整版
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#11-chatgpt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 问题先行：输入法联想与 ChatGPT 是同一台机器
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-30" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 最小可运行例子：30 行亲眼看一次"下一词预测"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 公式逐项拆解：语言模型到底在算什么
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.3 公式逐项拆解：语言模型到底在算什么">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#130-logits-softmax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.0 从打分到概率：logits 与 softmax
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#131" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.1 链式法则分解：联合概率的精确恒等式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.2 训练目标：负对数似然
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#133-nat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.3 困惑度：把 nat 翻译成人话
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 训练一个 LLM 的完整流水线：三阶段、数据规模与算力
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.4 训练一个 LLM 的完整流水线：三阶段、数据规模与算力">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#141" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.1 规模定律：算力可预测地兑换损失下降
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#142" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.2 涌现能力及其争议：一次测量学上的正面对账
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#143" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.3 训练只是花钱的开始：部署侧的账
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-nanogpt-30-bigram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 官方源码对照：nanoGPT 与你的 30 行 bigram
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-llm-bigram-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 LLM 里的改造：从 bigram 到现代 LLM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.6 LLM 里的改造：从 bigram 到现代 LLM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.1 开源生态地图：只记真正重要的
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 能力矩阵与岗位映射：你该吃透哪几章
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.7 能力矩阵与岗位映射：你该吃透哪几章">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#171" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7.1 本书章节地图
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.8 常见误区与坑
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章术语详解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="本章术语详解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        词元（token）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#language-modeling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        语言建模（language modeling）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autoregressive-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        自回归生成（autoregressive generation）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generative-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        生成模型（generative model）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decoder-only-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        解码器架构（decoder-only architecture）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#causal-attention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        因果注意力（causal attention）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#perplexity-ppl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        困惑度（perplexity, PPL）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#self-supervised-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        自监督学习（self-supervised learning）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#base-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        基座模型（base model）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supervised-fine-tuning-sft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        监督微调（supervised fine-tuning, SFT）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rlhf-reinforcement-learning-from-human-feedback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        人类反馈强化学习（RLHF, reinforcement learning from human feedback）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对齐（alignment）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scaling-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        规模定律（scaling law）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-context-learning-icl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        上下文学习（in-context learning, ICL）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#context-window" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        上下文窗口（context window）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emergent-ability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        涌现能力（emergent ability）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mixture-of-experts-moe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        混合专家（Mixture-of-Experts, MoE）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reasoning-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        推理模型（reasoning model）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#open-weights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        开源权重（open weights）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        模型卡（model card）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        动手环节
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        延伸阅读
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="1">第 1 章 大模型全景：从"猜下一个词"到训练流水线<a class="headerlink" href="#1" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>本章导读</strong>：大语言模型的全部魔法压缩成一句话就是"给定前文，预测下一个词"。本章不从历史讲起，而是先让你在 30 行代码里亲眼看一次"猜下一个词"的机器如何从胡话进化成半通顺的句子，再把这背后的公式、三阶段训练流水线、规模定律与涌现争议、开源生态逐个讲透，最后给出"能力矩阵与岗位映射"，告诉你作为算法/应用/推理优化工程师分别该把哪些章吃透。本章无前置章节，是全书地图；读完你将能看懂模型发布说明里的绝大部分术语。
+<strong>预计阅读时间</strong>：75 分钟（含动手环节 20 分钟）。</p>
+</blockquote>
+<h2 id="11-chatgpt">1.1 问题先行：输入法联想与 ChatGPT 是同一台机器<a class="headerlink" href="#11-chatgpt" title="Permanent link">&para;</a></h2>
+<p>在输入法里打出"今天天气"，候选栏会浮现"真不错""怎么样"；把"为什么天空是蓝色的"发给 ChatGPT，它吐出一段瑞利散射的解释。表面上一个在猜字、一个在答问题，底层是同一件事：<strong>根据已有文字，计算下一个词出现的概率，然后选出（或采样出）一个</strong>。区别只有两个——候选栏只猜一步，ChatGPT 把"猜一步"循环了几百步；输入法的概率表来自你手机里的词频统计，ChatGPT 的概率表来自上万亿 token 文本上训练出的上千亿参数。</p>
+<p>这个"循环猜一步"的机制叫<strong>自回归（autoregressive）生成</strong>：</p>
+<div class="highlight"><pre><span></span><code>step 0:  输入 &lt;s&gt;               → 采出 "今天"
+step 1:  输入 &lt;s&gt; 今天           → 采出 "天气"
+step 2:  输入 &lt;s&gt; 今天 天气       → 采出 "很"
+step 3:  输入 &lt;s&gt; 今天 天气 很    → 采出 "好"   ……直到采出结束符
+</code></pre></div>
+<p>机器学习里另一大类是判别模型，它建模 <span class="arithmatex">\(P(y \mid x)\)</span>（给定输入预测标签）；语言模型建模 <span class="arithmatex">\(P(x)\)</span> 本身（数据分布），因此被称为<strong>生成模型</strong>——学出了数据分布，自然能采样出新文本。同属"预训练语言模型"，BERT 式编码器与 GPT 式解码器的差别如下：</p>
+<table>
+<thead>
+<tr>
+<th>范式</th>
+<th>代表</th>
+<th>预训练目标</th>
+<th>注意力方向</th>
+<th>擅长任务</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>判别模型</td>
+<td>TextCNN、BiLSTM 分类器</td>
+<td><span class="arithmatex">\(P(y \mid x)\)</span>，交叉熵分类损失</td>
+<td>不限</td>
+<td>分类、回归等有标签任务</td>
+</tr>
+<tr>
+<td>编码器（BERT 式）</td>
+<td>BERT、RoBERTa</td>
+<td>掩码重建：随机遮词再还原</td>
+<td>双向</td>
+<td>理解类：检索、匹配、抽取</td>
+</tr>
+<tr>
+<td>解码器（GPT 式）</td>
+<td>GPT、LLaMA、Qwen</td>
+<td>下一词预测 <span class="arithmatex">\(P(x_t \mid x_{&lt;t})\)</span></td>
+<td>单向（因果）</td>
+<td>生成 + 理解通吃</td>
+</tr>
+</tbody>
+</table>
+<p>原始 Transformer 论文（2017）解决的是机器翻译，采用"编码器读入源句 → 解码器逐词生成目标句"的双塔结构，整体数据流如图 1：</p>
+<p><img alt="Transformer 编码器-解码器数据流" src="../assets/ch01/transformer_data_flow.png" /></p>
+<p><em>图 1：Transformer 的整体数据流——输入序列（法语）经编码器组映射为连续表示，解码器以自回归方式逐词产出输出序列（英语）。（图源：Jay Alammar，jalammar.github.io/illustrated-transformer；仅作教学用途，版权归原作者）</em></p>
+<p>decoder-only 架构最终胜出的工程原因有三：训练目标与最终用途（生成）统一；序列中<strong>每个位置都提供监督信号</strong>，数据效率高；结构简单、易并行扩展。注意力机制的细节见 <a href="../ch08_attention/">第 8 章</a>。</p>
+<p>顺带把"提示工程"也定位清楚：一段 prompt 不是什么神秘咒语，它只是<strong>条件分布的条件</strong>。写提示 = 挑选 <span class="arithmatex">\(P(x_t \mid \cdot)\)</span> 里那个"<span class="arithmatex">\(\cdot\)</span>"的内容与格式，让模型更容易从你想要的那个区域采样。理解了这一点，"为什么 few-shot 示例有效""为什么角色设定能改变语气"都变成概率问题（术语上叫上下文学习，见 1.6 节改造表）。</p>
+<p><strong>"大"体现在哪</strong>：参数量 <span class="arithmatex">\(N \approx 10^9 \sim 10^{12}\)</span>；训练数据 <span class="arithmatex">\(D \approx 10^{12} \sim 10^{15}\)</span> token；训练算力 <span class="arithmatex">\(C \approx 10^{23} \sim 10^{26}\)</span> FLOPs。规模如何兑换能力，见 1.4 节。</p>
+<h2 id="12-30">1.2 最小可运行例子：30 行亲眼看一次"下一词预测"<a class="headerlink" href="#12-30" title="Permanent link">&para;</a></h2>
+<p>依赖：仅 <code>torch</code>（<code>pip install torch</code>）；硬件：CPU 即可。下面这个<strong>字符级 bigram 语言模型</strong>是整章乃至整本书的种子：模型只有一张 <span class="arithmatex">\(V \times V\)</span> 打分表，"输入上一个字符，给词表里每个字符打分"。它小到 5 分钟能读完，却完整包含了 LM 的三要素——查表取特征、对词表打分、交叉熵对账。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">corpus</span> <span class="o">=</span> <span class="s2">"语言模型预测下一个词。输入法联想的也是下一个词。训练就是把猜错的程度一点点压低。"</span> <span class="o">*</span> <span class="mi">50</span>
+<span class="n">chars</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">corpus</span><span class="p">));</span> <span class="n">V</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chars</span><span class="p">)</span>          <span class="c1"># 字符级词表</span>
+<span class="n">stoi</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chars</span><span class="p">)}</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">stoi</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">corpus</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>     <span class="c1"># 每个位置的输入字符</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">stoi</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">corpus</span><span class="p">[</span><span class="mi">1</span><span class="p">:]])</span>      <span class="c1"># 标签 = 下一个字符</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>            <span class="c1"># bigram 打分表：W[i,j]=给定 i 时 j 的打分</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">([</span><span class="n">W</span><span class="p">],</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"V=</span><span class="si">{</span><span class="n">V</span><span class="si">}</span><span class="s2">, 瞎猜 loss=ln(V)=</span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">V</span><span class="p">)))</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">):</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">cross_entropy</span><span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span>                  <span class="c1"># 每个位置预测下一个字符</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">();</span> <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">();</span> <span class="n">opt</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"训练 300 步后 loss=</span><span class="si">{</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+    <span class="n">out</span><span class="p">,</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span> <span class="n">stoi</span><span class="p">[</span><span class="n">start</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">multinomial</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">cur</span><span class="p">],</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="n">out</span> <span class="o">+=</span> <span class="n">chars</span><span class="p">[</span><span class="n">cur</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="n">W0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">V</span><span class="p">)</span>                               <span class="c1"># 未训练的表：均匀分布</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"训练前:"</span><span class="p">,</span> <span class="n">generate</span><span class="p">(</span><span class="n">W0</span><span class="p">,</span> <span class="s2">"预"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"训练后:"</span><span class="p">,</span> <span class="n">generate</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="s2">"预"</span><span class="p">))</span>
+</code></pre></div>
+<p>真实运行输出（CPU，约 10 秒）：</p>
+<div class="highlight"><pre><span></span><code>V=30, 瞎猜 loss=ln(V)=3.401
+训练 300 步后 loss=0.238
+训练前: 预联错模个型猜是程想一型训测把测模个模预的
+训练后: 预测下一点压低。输入法联想的也是下一个词。
+</code></pre></div>
+<p>三个关键观察，每一个都是日后的重要对账点：</p>
+<ol>
+<li><strong>未训练模型 loss 精确等于 <span class="arithmatex">\(\ln V\)</span></strong>——均匀瞎猜的交叉熵。任何 LM 实现（无论多大）写完第一件事就是确认"随机初始化 loss ≈ <span class="arithmatex">\(\ln V\)</span>"，对不上说明实现有 bug。</li>
+<li><strong>训练的全部目标就是把 loss 从 <span class="arithmatex">\(\ln V\)</span> 往下压</strong>。压下来的量衡量"模型对这段文本预测得有多准"，其指数即困惑度（1.3 节）。</li>
+<li><strong>生成质量的变化与局限同样真实</strong>：训练前是完全乱码；训练后局部很通顺，但整体只是在复述训练句——bigram 只看得到前一个字符，没有长程记忆。让模型"看得更远"正是后续 Transformer 与注意力的任务。</li>
+</ol>
+<p>四个有意为之的设计决策，值得逐个想清楚：</p>
+<ul>
+<li><strong>字符级词表</strong>：为了把篇幅留给机制而非分词器；真实 LLM 用 BPE 子词（<a href="../ch04_tokenizer_bpe/">第 4 章</a>），机制完全相同，只是 <span class="arithmatex">\(V\)</span> 从几十变成几万到几十万。</li>
+<li><strong>全量语料做一步梯度</strong>：两千字符一次前向就能算完，于是"一个 batch = 全部数据"；真实预训练每步只取一小批（如 4M token），但损失形式一模一样。</li>
+<li><strong>W 初始化为全零</strong>：softmax(0) = 均匀分布，起点精确落在"瞎猜"上——这就是观察 1 能严格成立的技巧。</li>
+<li><strong>标签 = 输入左移一位</strong>（<code>x = corpus[:-1]</code>，<code>y = corpus[1:]</code>）：一句话里每个位置都同时是别处的"条件"和别处的"标签"，监督信号一个都不浪费；nanoGPT 与所有 LLM 的损失对齐都是这一行。</li>
+</ul>
+<p>还有一个值得知道的彩蛋：这张表的老前辈是 1980 年代的 <strong>n-gram 统计语言模型</strong>——直接数语料里"上一字符→下一字符"的出现次数再归一化。可以证明：在全体语料上用梯度下降训练这张表直到收敛，得到的正是计数极大似然解。换句话说，1.2 节的 30 行代码用神经网络的方法"重新发明"了 n-gram，而神经化的收益在下一步就显现：把表换成神经网络参数，未见过的搭配开始有了平滑的概率——泛化，从这里开始。</p>
+<p>把同样的训练循环跑久一点、换大语料，loss 曲线与生成样本如何演变？下图是训练 6000 步的真实记录（脚本 <code>gen_bigram_demo.py</code>，语料为 16 句各不相同的短文）：</p>
+<p><img alt="字符级 bigram 训练演示" src="../assets/ch01/bigram_demo.png" /></p>
+<p><em>图 2：字符级 bigram 语言模型训练演示（由代码生成，脚本 assets/ch01/gen_bigram_demo.py 同目录可复现）。左：损失从瞎猜水平 <span class="arithmatex">\(\ln V = 4.95\)</span> 一路压到 0.76 后持平——所有常见二字搭配学完后无处可学；右：同一模型在不同训练程度下的续写，从纯乱码变成局部通顺但整体漂移的句子。</em></p>
+<h2 id="13">1.3 公式逐项拆解：语言模型到底在算什么<a class="headerlink" href="#13" title="Permanent link">&para;</a></h2>
+<h3 id="130-logits-softmax">1.3.0 从打分到概率：logits 与 softmax<a class="headerlink" href="#130-logits-softmax" title="Permanent link">&para;</a></h3>
+<p>1.2 节的 <code>W[cur]</code> 是一串任意实数，叫 <strong>logits</strong>（打分）。神经网络的所有输出都是 logits——它可正可负、不归一，还不是概率。把它变成概率分布的是 softmax：</p>
+<div class="arithmatex">\[
+P_\theta(x_{t+1} = j \mid x_{\le t}) = \frac{e^{z_j}}{\sum_{k \in V} e^{z_k}}
+\]</div>
+<p>逐项拆解：</p>
+<ul>
+<li><span class="arithmatex">\(z_j\)</span>：词表中第 <span class="arithmatex">\(j\)</span> 个词元的 logit，来自模型的最后一层线性头。它从哪来：上文 <span class="arithmatex">\(x_{\le t}\)</span> 经过整个网络算出的"对候选 <span class="arithmatex">\(j\)</span> 的青睐程度"。</li>
+<li><span class="arithmatex">\(e^{z_j}\)</span>：为什么用指数——(1) 保证非负（概率不能为负）；(2) 保序（打分越高概率越高）；(3) 可微（能求梯度）。去掉指数换成恒等映射再除以总和，负打分会变成负概率，分布直接非法。</li>
+<li>分母 <span class="arithmatex">\(\sum_{k \in V} e^{z_k}\)</span>：归一化，让所有概率加起来恰好为 1。去掉它会怎样：输出只是"未归一的权重"，无法与交叉熵（一个真正的分布对分布的量）对接。</li>
+<li><span class="arithmatex">\(P_\theta(x_{t+1} = j \mid x_{\le t})\)</span>：完整读法——"模型 <span class="arithmatex">\(\theta\)</span> 认为下一个词是 <span class="arithmatex">\(j\)</span> 的概率，条件是见过全部上文"。符号 <span class="arithmatex">\(\theta\)</span> 强调这些概率是参数的函数：参数一变，每个条件分布都变，这正是"训练"在改的东西。</li>
+</ul>
+<p>softmax 与交叉熵搭配时还有一个关键性质（softmax + 交叉熵的联合梯度坍缩成一个减法），是全书最重要的梯度公式，<a href="../ch02_math_optim/">第 2 章</a> 2.3 节完整推导。</p>
+<h3 id="131">1.3.1 链式法则分解：联合概率的精确恒等式<a class="headerlink" href="#131" title="Permanent link">&para;</a></h3>
+<p>把文本切成词元（token，文本的最小离散单位，如何切分见 <a href="../ch04_tokenizer_bpe/">第 4 章</a>）。给定词元序列 <span class="arithmatex">\(x_1, x_2, \dots, x_T\)</span>（<span class="arithmatex">\(T\)</span> 为序列长度），语言建模的目标是建模联合概率。由概率链式法则：</p>
+<div class="arithmatex">\[
+P(x_1, x_2, \dots, x_T) = \prod_{t=1}^{T} P\left(x_t \mid x_{&lt;t}\right) = \prod_{t=1}^{T} P\left(x_t \mid x_1, \dots, x_{t-1}\right)
+\]</div>
+<p>逐项交代来龙去脉：</p>
+<ul>
+<li><span class="arithmatex">\(x_t\)</span>：序列中第 <span class="arithmatex">\(t\)</span> 个词元，取值是词表 <span class="arithmatex">\(V\)</span> 中某个编号。它从哪来：分词器切分文本的输出。</li>
+<li><span class="arithmatex">\(x_{&lt;t}\)</span>：前缀 <span class="arithmatex">\((x_1, \dots, x_{t-1})\)</span>，即"已知条件"。去掉它会怎样：<span class="arithmatex">\(P(x_t)\)</span> 变成无条件概率，模型只能学全局词频，等于回到"输入法只会推荐常用字"。</li>
+<li><span class="arithmatex">\(t = 1 \dots T\)</span>：连乘号 <span class="arithmatex">\(\prod\)</span> 表示整句概率是每一步条件概率的乘积。依据：条件概率定义 <span class="arithmatex">\(P(a, b) = P(b \mid a) P(a)\)</span> 反复展开，没有任何近似。</li>
+<li>近似发生在哪：我们用参数为 <span class="arithmatex">\(\theta\)</span> 的神经网络 <span class="arithmatex">\(P_\theta(x_t \mid x_{&lt;t})\)</span> 去拟合每个条件分布——<strong>分解是精确的，近似只在神经网络拟合处发生</strong>。这句话的含义：只要每个条件分布拟合得好，整句联合概率就准，因此"下一词预测"这个看似简单的任务足以逼模型学会语言。</li>
+</ul>
+<h3 id="132">1.3.2 训练目标：负对数似然<a class="headerlink" href="#132" title="Permanent link">&para;</a></h3>
+<p>训练目标是最小化负对数似然：</p>
+<div class="arithmatex">\[
+\mathcal{L}(\theta) = -\frac{1}{T}\sum_{t=1}^{T} \log P_\theta\left(x_t \mid x_{&lt;t}\right)
+\]</div>
+<ul>
+<li><span class="arithmatex">\(P_\theta(x_t \mid x_{&lt;t})\)</span>：模型对"真实下一个词"赋予的概率。取 <span class="arithmatex">\(\log\)</span> 的原因：连乘概率会数值下溢，取对数后变成连加；且 <span class="arithmatex">\(\log\)</span> 让"罚分"对概率呈线性——把正确词的概率从 0.01 提到 0.02 与从 0.4 提到 0.8，改善量相同。</li>
+<li>负号与 <span class="arithmatex">\(\frac{1}{T}\)</span>：损失习惯上"越小越好"，故取负；除以 <span class="arithmatex">\(T\)</span> 得到每词平均，使不同长度文本的损失可比。</li>
+<li>去掉求和会怎样：只优化句中某一个位置，其余位置的监督信号全部浪费——这正是 BERT 之外每个位置都有信号、GPT 数据效率高的来源。</li>
+<li><a href="../ch02_math_optim/">第 2 章</a>将证明：这个损失恰好是模型分布与数据分布之间的<strong>交叉熵</strong>，最小化它 ⇔ 最小化 KL 散度 ⇔ 最大似然，三者一位一体。</li>
+</ul>
+<p>动手算一次（数字要过手才长在身上）。设语料只有一句"今天 天气 很 好"，模型对"今天→天气""今天 天气→很""今天 天气 很→好"三个位置给出的概率分别为 0.3、0.05、0.02，则</p>
+<div class="arithmatex">\[
+\mathcal{L} = -\tfrac{1}{3}(\ln 0.3 + \ln 0.05 + \ln 0.02) = \tfrac{1}{3}(1.204 + 2.996 + 3.912) \approx 2.70
+\]</div>
+<p>对应的 <span class="arithmatex">\(\mathrm{PPL} = e^{2.70} \approx 15\)</span>：模型每一步像在约 15 个词里犹豫。若把三个概率都提到 0.8，<span class="arithmatex">\(\mathcal{L}\)</span> 降到约 0.22、PPL 约 1.3——"loss 数字的含义"从此不再是黑话。</p>
+<h3 id="133-nat">1.3.3 困惑度：把 nat 翻译成人话<a class="headerlink" href="#133-nat" title="Permanent link">&para;</a></h3>
+<div class="arithmatex">\[
+\mathrm{PPL} = \exp(\overline{\mathrm{CE}})
+\]</div>
+<p><span class="arithmatex">\(\overline{\mathrm{CE}}\)</span> 即 1.3.2 的平均负对数似然（单位 nat）。PPL 的直观含义是<strong>等效均匀候选数</strong>：模型每一步像在多少个词里犹豫。用 1.2 节的模型做一次对账：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">3.401</span><span class="p">)))</span>   <span class="c1"># 1.2 节训练前的 loss=ln(30)</span>
+<span class="c1"># tensor(29.9941)：未训练模型 PPL ≈ 词表大小——第二个对账点</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th><span class="arithmatex">\(\overline{\mathrm{CE}}\)</span> (nat)</th>
+<th>PPL</th>
+<th>直观含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>在 <span class="arithmatex">\(V = 30\)</span> 字符上均匀乱猜（1.2 节模型初始态）</td>
+<td><span class="arithmatex">\(\ln 30 \approx 3.40\)</span></td>
+<td>30</td>
+<td>每步 30 个字符等概率瞎选</td>
+</tr>
+<tr>
+<td>较强的通用基线</td>
+<td><span class="arithmatex">\(\approx 2.0\)</span></td>
+<td><span class="arithmatex">\(\approx 7.4\)</span></td>
+<td>平均像只在约 7 个词之间犹豫</td>
+</tr>
+<tr>
+<td>近乎记忆/复制</td>
+<td><span class="arithmatex">\(\approx 0\)</span></td>
+<td><span class="arithmatex">\(\approx 1\)</span></td>
+<td>几乎完全确定下一个词</td>
+</tr>
+</tbody>
+</table>
+<h2 id="14-llm">1.4 训练一个 LLM 的完整流水线：三阶段、数据规模与算力<a class="headerlink" href="#14-llm" title="Permanent link">&para;</a></h2>
+<p>有了损失函数，"训练一个 LLM"仍是三场性质完全不同的马拉松。开源生态里你会反复看到 base、instruct、chat 三种后缀的模型——分界线正是训练的三个阶段。图 3 用一张代码生成的对数坐标图把它们讲清（数据量级依据：GPT-3 预训练约 <span class="arithmatex">\(3.1 \times 10^{23}\)</span> FLOPs、3000 亿 token，见 arXiv:2005.14165；InstructGPT 的 SFT 仅约 1.3 万条示范、后训练算力不足预训练 3%，见 arXiv:2203.02155）：</p>
+<p><img alt="训练一个 LLM 的完整流水线" src="../assets/ch01/pipeline_scale.png" /></p>
+<p><em>图 3：训练一个 LLM 的完整流水线（由代码生成，脚本 assets/ch01/gen_pipeline_scale.py 同目录可复现）。上：三阶段流程框图，共用同一模型骨架；左下：各阶段数据规模（对数坐标）——预训练比后训练多 6~10 个数量级；右下：各阶段算力（对数坐标）——能力几乎全部产生于预训练。</em></p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>数据</th>
+<th>数据规模</th>
+<th>算力占比</th>
+<th>目标函数</th>
+<th>产出物</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 预训练</td>
+<td>网页、代码、书籍、论文</td>
+<td><span class="arithmatex">\(10^{12} \sim 10^{15}\)</span> token</td>
+<td>&gt;95%</td>
+<td>全序列下一词交叉熵</td>
+<td>基座模型</td>
+</tr>
+<tr>
+<td>② SFT</td>
+<td>人工书写的"指令→回答"示范</td>
+<td><span class="arithmatex">\(10^4 \sim 10^6\)</span> 条</td>
+<td>&lt;1%</td>
+<td>同样的交叉熵，但只在回答部分计算</td>
+<td>指令模型</td>
+</tr>
+<tr>
+<td>③ 偏好优化</td>
+<td>人类/模型标注的偏好对、可验证奖励</td>
+<td><span class="arithmatex">\(10^4 \sim 10^6\)</span> 对</td>
+<td>约 1–3%</td>
+<td>强化学习目标或 DPO 类损失</td>
+<td>对齐/对话模型</td>
+</tr>
+</tbody>
+</table>
+<p><strong>怎么把图 3 用到你自己的项目</strong>（以单卡玩家为例）。假设一张 RTX 4090：bf16 稠密算力约 <span class="arithmatex">\(1.65 \times 10^{14}\)</span> FLOPs/s，实际利用率按 30% 计即 <span class="arithmatex">\(5 \times 10^{13}\)</span> FLOPs/s；连续训 7 天 ≈ <span class="arithmatex">\(3 \times 10^{19}\)</span> FLOPs。按 <span class="arithmatex">\(C \approx 6ND\)</span> 与 Chinchilla 配比 <span class="arithmatex">\(D = 20N\)</span> 反推：<span class="arithmatex">\(N \approx 5 \times 10^8\)</span>、<span class="arithmatex">\(D \approx 10^{10}\)</span> token——大约是 GPT-2 中量级、10B token 语料。这就是"为什么单卡玩家从 GPT-2 级别起步而不是从 7B 起步"的算术答案；也是本书动手环节都围绕小模型设计的理由。后训练阶段（SFT/偏好优化）则按预训练算力的百分之几预留即可（图 3 右下）。</p>
+<p>三个阶段<strong>共用同一个模型骨架</strong>，区别只在数据与目标函数——这是"一次预训练、多次后训练"的工程基础，也是同一基座能衍生出 instruct/chat/代码/数学一大家子变体的原因。②③合称<strong>后训练（post-training）</strong>，经典 RLHF 流程如图 4：</p>
+<p><img alt="RLHF 三阶段训练流程" src="../assets/ch01/rlhf_pipeline.png" /></p>
+<p><em>图 4：RLHF 三阶段流程——先用示范数据做监督微调；再让标注员对同一提示的多个回答排序、训练奖励模型；最后以奖励模型打分为信号，用强化学习（如 PPO）优化策略模型。（图源：本书自绘，流程参考 InstructGPT，arXiv:2203.02155；仅作教学用途）</em></p>
+<p><strong>为什么说"预训练学到能力，后训练塑造行为"</strong>。看图 3 右下角的数量级：SFT 只用约 1.3 万条示范，而 GPT-3 预训练用了约 3000 亿 token——相差 7 个数量级。世界知识、语法、代码、推理模式这些"能力"几乎全部来自预训练的压缩；SFT 与偏好优化改变的主要是条件分布的<strong>格式、风格与取向</strong>——把基座中已存在的能力"对齐"到对话界面上。旁证：GPT-3 时代的基座靠 few-shot 提示就已经很强。更严谨的表述是：<strong>预训练决定上限，后训练决定下限与可用性</strong>。且边界在松动——o1/DeepSeek-R1 表明，后训练的强化学习也能"激励"出新的推理行为，而不只是改格式（见 <a href="../ch14_alignment_rl/">第 14 章</a>）。</p>
+<h3 id="141">1.4.1 规模定律：算力可预测地兑换损失下降<a class="headerlink" href="#141" title="Permanent link">&para;</a></h3>
+<p>买多少算力、训多大模型、配多少数据？Kaplan et al. (2020) 给出经验答案：测试损失随参数量 <span class="arithmatex">\(N\)</span>、数据量 <span class="arithmatex">\(D\)</span>、算力 <span class="arithmatex">\(C\)</span> 呈<strong>幂律</strong>平滑下降，且近似满足</p>
+<div class="arithmatex">\[
+C \approx 6 N D
+\]</div>
+<p>依据：每个参数在每个 token 上前向约 2 FLOPs、反向约 4 FLOPs，合计 6（第 2 章会从矩阵乘 FLOPs 计数推导；前向：反向 ≈ 1:2 也是"训练比推理贵 3 倍"的出处）。用 GPT-3 做一次实算校验：<span class="arithmatex">\(N = 175 \times 10^9\)</span>，<span class="arithmatex">\(D = 300 \times 10^9\)</span>，则 <span class="arithmatex">\(C \approx 6ND \approx 3.15 \times 10^{23}\)</span> FLOPs，与其技术报告一致——一道乘法就能估算任何训练预算。Chinchilla (2022) 进一步修正：给定算力预算，<span class="arithmatex">\(D\)</span> 应与 <span class="arithmatex">\(N\)</span> <strong>同步</strong>扩展（约 20 token/参数），"盲目堆参数"不是最优。这两条是把训练预算从玄学变成工程决策的全部数学，深入讨论见 <a href="../ch10_pretrain/">第 10 章</a>。</p>
+<h3 id="142">1.4.2 涌现能力及其争议：一次测量学上的正面对账<a class="headerlink" href="#142" title="Permanent link">&para;</a></h3>
+<p>给模型加显卡，能力是"均匀变好"还是"突然开窍"？Wei et al. (2022) 定义<strong>涌现能力（emergent ability）</strong>为"在小模型中不存在、但在大模型中突然出现的能力"，典型例子：多步算术（小模型 few-shot 准确率接近随机，越过某规模后陡增）、思维链增益（提示中加"一步一步想"只在足够大的模型上生效）、指令泛化。</p>
+<p><strong>争议（务必搞清的测量学论点）</strong>：Schaeffer et al. (2023) 指出，涌现可能只是<strong>指标的产物</strong>——能力本身在平滑进步，但不连续的指标把它显示成了跳变。机制：多选题/Exact Match 这类指标把"部分正确"记为零分；小模型每一步都在变好（困惑度平滑下降，符合规模定律），但只有当"每题都接近全对"的累积效果越过"全对才得分"的阈值时，分数才从随机水平跳起——曲线形状由<strong>指标的非线性</strong>决定，而非能力突变。换连续指标（token 编辑距离、对数概率），同一批实验的"跳变"消失、变成平滑改善。</p>
+<table>
+<thead>
+<tr>
+<th>指标类型</th>
+<th>例子</th>
+<th>随规模的行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>不连续/分段指标</td>
+<td>Exact Match、多选题准确率</td>
+<td>小模型近似随机猜测，越过阈值后"跳变"——涌现假象高发区</td>
+</tr>
+<tr>
+<td>连续指标</td>
+<td>困惑度、token 编辑距离</td>
+<td>平滑、可预测地改善，与规模定律一致</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>两篇连读的公允结论：<strong>涌现部分是指标的假象，但"大模型解锁了小模型做不到的应用"这一工程事实并不因此改变</strong>。做评测选指标时，应同时报告连续指标（见 <a href="../ch22_eval_safety/">第 22 章</a>）。</p>
+</div>
+<h3 id="143">1.4.3 训练只是花钱的开始：部署侧的账<a class="headerlink" href="#143" title="Permanent link">&para;</a></h3>
+<p><span class="arithmatex">\(C \approx 6ND\)</span> 只覆盖训练。模型上线后每次生成一个 token 都要做一次前向，而自回归生成是逐 token 串行的（1.1 节），部署侧的成本结构完全不同：batch=1 解码时矩阵乘退化为矩阵-向量乘，瓶颈从算力转移到<strong>显存带宽</strong>——每生成一个词都要把全部权重和缓存读一遍。这解释了三件你早晚会碰到的事：为什么推理服务按"吞吐/时延/显存"三个指标分别优化、为什么量化（把权重压到 8/4 bit）对部署如此重要、为什么 KV 缓存是推理引擎的核心数据结构。这些是 <a href="../ch15_inference/">第 15–18 章</a>的主题，此处只需建立"训练一次、推理亿万次"的成本直觉。</p>
+<h2 id="15-nanogpt-30-bigram">1.5 官方源码对照：nanoGPT 与你的 30 行 bigram<a class="headerlink" href="#15-nanogpt-30-bigram" title="Permanent link">&para;</a></h2>
+<p>1.2 节的三要素——查表取特征、对词表打分、交叉熵对账、采样循环——在公认的最好教材仓库 nanoGPT（karpathy/nanoGPT，约 300 行训练 GPT-2）里逐行都有对应。以下节选自该仓库 <code>model.py</code> 的 <code>GPT.forward</code>（仓库：<a href="https://github.com/karpathy/nanoGPT">karpathy/nanoGPT</a>，文件 <code>model.py</code>）：</p>
+<div class="highlight"><pre><span></span><code><span class="n">tok_emb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformer</span><span class="o">.</span><span class="n">wte</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="c1"># token embeddings of shape (b, t, n_embd)</span>
+<span class="n">pos_emb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformer</span><span class="o">.</span><span class="n">wpe</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="c1"># position embeddings of shape (t, n_embd)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformer</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">tok_emb</span> <span class="o">+</span> <span class="n">pos_emb</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformer</span><span class="o">.</span><span class="n">h</span><span class="p">:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">block</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformer</span><span class="o">.</span><span class="n">ln_f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># if we are given some desired targets also calculate the loss</span>
+    <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lm_head</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">cross_entropy</span><span class="p">(</span><span class="n">logits</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">logits</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span> <span class="n">targets</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ignore_index</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># inference-time mini-optimization: only forward the lm_head on the very last position</span>
+    <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lm_head</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">:])</span> <span class="c1"># note: using list [-1] to preserve the time dim</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="c1"># ...（省略 return）</span>
+</code></pre></div>
+<p>以及 <code>GPT.generate</code> 的采样循环（同一文件）：</p>
+<div class="highlight"><pre><span></span><code><span class="n">logits</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">idx_cond</span><span class="p">)</span>
+<span class="n">logits</span> <span class="o">=</span> <span class="n">logits</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="n">temperature</span>
+<span class="k">if</span> <span class="n">top_k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">v</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">topk</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">top_k</span><span class="p">,</span> <span class="n">logits</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+    <span class="n">logits</span><span class="p">[</span><span class="n">logits</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">[:,</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]]</span> <span class="o">=</span> <span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="s1">'Inf'</span><span class="p">)</span>
+<span class="n">probs</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">idx_next</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">multinomial</span><span class="p">(</span><span class="n">probs</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">idx</span><span class="p">,</span> <span class="n">idx_next</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># ...（省略循环头与截断逻辑）</span>
+</code></pre></div>
+<p>与 1.2 节手写版逐行对账："官方就是这么写的，原因如下"：</p>
+<table>
+<thead>
+<tr>
+<th>你的 bigram</th>
+<th>nanoGPT</th>
+<th>官方为什么这么写</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>W[x]</code>：一张表查所有位置的打分</td>
+<td><code>wte(idx)</code> + 12 层 Transformer block</td>
+<td>表只有"上一字符→下一字符"的容量；Transformer 让每个位置的打分依赖全部上文</td>
+</tr>
+<tr>
+<td><code>W</code> 本身就是 logits</td>
+<td><code>lm_head(x)</code>：向量→词表打分</td>
+<td>现代模型把"特征"与"打分头"分开，输出头可与输入 embedding 共享权重（weight tying，<a href="../ch03_nn_backprop/">第 3 章</a>）</td>
+</tr>
+<tr>
+<td><code>F.cross_entropy(W[x], y)</code></td>
+<td><code>F.cross_entropy(logits.view(-1, V), targets.view(-1))</code></td>
+<td>完全相同——展开 batch 维后都是"每位置对词表的交叉熵"</td>
+</tr>
+<tr>
+<td>无</td>
+<td><code>logits[:, -1, :]</code> 只算最后位置</td>
+<td>自回归一次只新增一个词，算整个序列是浪费——推理优化的第一课（<a href="../ch15_inference/">第 15 章</a>）</td>
+</tr>
+<tr>
+<td>无</td>
+<td><code>idx[:, -self.config.block_size:]</code> 截断上下文</td>
+<td>模型训练时最长只见过 <code>block_size</code> 个 token（GPT-2 为 1024），超长部分必须裁掉——上下文窗口的来源（见本章术语详解）</td>
+</tr>
+</tbody>
+</table>
+<p>还有一个值得注意的"没写的"：nanoGPT 的生成循环每一步都把<strong>整个序列</strong>重新前向一遍（<code>self(idx_cond)</code>），没有任何缓存——教材为了简单牺牲了效率；真实推理引擎会把每层的中间结果缓存下来只算新 token（KV 缓存，<a href="../ch15_inference/">第 15 章</a>），速度差几个数量级。读教材代码时要分清"机制"与"工程优化"，两者混为一谈是新手最常见的误读。</p>
+<p><strong>改一改</strong>：把 <code>generate</code> 里的 <code>F.softmax(W[cur], dim=-1)</code> 换成 <code>F.softmax(W[cur] / 0.5, dim=-1)</code> 与 <code>F.softmax(W[cur] / 5.0, dim=-1)</code> 各跑几次。低温下输出很快退化成对训练句的逐字复读，高温下又退回乱码——温度是控制"确定性与多样性"的连续旋钮，<a href="../ch02_math_optim/">第 2 章</a> 2.3 节会用一张分布曲线图把它讲透。</p>
+<h2 id="16-llm-bigram-llm">1.6 LLM 里的改造：从 bigram 到现代 LLM<a class="headerlink" href="#16-llm-bigram-llm" title="Permanent link">&para;</a></h2>
+<p>把 1.2 节的种子模型逐步"改造"一遍，改造路径就是八十年语言模型史，也是本书的目录：</p>
+<table>
+<thead>
+<tr>
+<th>原始做法（bigram/早期）</th>
+<th>现代做法（LLM）</th>
+<th>动机</th>
+<th>出处/章节</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>计数统计或查表估计 <span class="arithmatex">\(P(x_t \mid x_{t-1})\)</span></td>
+<td>神经网络拟合条件分布</td>
+<td>泛化到未见搭配，参数共享</td>
+<td>NNLM, Bengio 2003；<a href="../ch02_math_optim/">第 2 章</a></td>
+</tr>
+<tr>
+<td>只看前 1（或 <span class="arithmatex">\(n\)</span>）个词</td>
+<td>注意力看全部上文</td>
+<td>长程依赖：上文越远信息越不丢</td>
+<td>Transformer, arXiv:1706.03762；<a href="../ch08_attention/">第 8 章</a></td>
+</tr>
+<tr>
+<td>词表 = 字符/词</td>
+<td>BPE 子词切分</td>
+<td>兼顾词表大小与序列长度</td>
+<td><a href="../ch04_tokenizer_bpe/">第 4 章</a></td>
+</tr>
+<tr>
+<td>无位置概念</td>
+<td>位置编码/旋转位置编码 RoPE</td>
+<td>注意力本身对顺序不敏感</td>
+<td><a href="../ch05_embedding_pos/">第 5 章</a></td>
+</tr>
+<tr>
+<td>编码器-解码器双塔</td>
+<td>decoder-only 单塔</td>
+<td>训练目标与用途统一、每个位置都有监督</td>
+<td>GPT 系列；1.1 节</td>
+</tr>
+<tr>
+<td>只做下一词预测</td>
+<td>预训练 + SFT + 偏好优化</td>
+<td>能力≠可用：补格式、对齐人类偏好</td>
+<td>InstructGPT, arXiv:2203.02155；<a href="../ch13_sft_peft/">第 13–14 章</a></td>
+</tr>
+<tr>
+<td>单任务单模型</td>
+<td>一个基座 + 提示/微调衍生多任务</td>
+<td>上下文学习与参数高效微调</td>
+<td>GPT-3, arXiv:2005.14165；<a href="../ch13_sft_peft/">第 13 章</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="161">1.6.1 开源生态地图：只记真正重要的<a class="headerlink" href="#161" title="Permanent link">&para;</a></h3>
+<p>Star 数与 API 会过时，但目录结构多年稳定。先按"你现在要干什么"选类别，再在类内挑 1–2 个深入；不在表内的项目几乎都是这几类的变体或下游。</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>项目</th>
+<th>仓库</th>
+<th>一句话定位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>训练地基</td>
+<td>PyTorch</td>
+<td><a href="https://github.com/pytorch/pytorch">pytorch/pytorch</a></td>
+<td>一切的地基</td>
+</tr>
+<tr>
+<td>训练地基</td>
+<td>nanoGPT</td>
+<td><a href="https://github.com/karpathy/nanoGPT">karpathy/nanoGPT</a></td>
+<td>约 300 行训练 GPT-2，公认最佳教材</td>
+</tr>
+<tr>
+<td>模型与权重</td>
+<td>transformers</td>
+<td><a href="https://github.com/huggingface/transformers">huggingface/transformers</a></td>
+<td>事实标准模型库，加载/训练/推理几乎所有主流架构</td>
+</tr>
+<tr>
+<td>模型与权重</td>
+<td>LLaMA / Qwen / DeepSeek</td>
+<td><a href="https://github.com/meta-llama/llama3">meta-llama</a> / <a href="https://github.com/QwenLM/Qwen2.5">QwenLM</a> / <a href="https://github.com/deepseek-ai/DeepSeek-V3">deepseek-ai</a></td>
+<td>开源权重三大代表：美/中/MoE 旗舰</td>
+</tr>
+<tr>
+<td>微调工具</td>
+<td>LLaMA-Factory</td>
+<td><a href="https://github.com/hiyouga/LLaMA-Factory">hiyouga/LLaMA-Factory</a></td>
+<td>一站式微调：WebUI + 主流模型 + LoRA</td>
+</tr>
+<tr>
+<td>微调工具</td>
+<td>TRL / PEFT</td>
+<td><a href="https://github.com/huggingface/trl">huggingface/trl</a> / <a href="https://github.com/huggingface/peft">huggingface/peft</a></td>
+<td>SFT/DPO/GRPO 训练器与参数高效微调官方库</td>
+</tr>
+<tr>
+<td>推理引擎</td>
+<td>vLLM</td>
+<td><a href="https://github.com/vllm-project/vllm">vllm-project/vllm</a></td>
+<td>PagedAttention 高吞吐服务的事实标准</td>
+</tr>
+<tr>
+<td>推理引擎</td>
+<td>llama.cpp / Ollama</td>
+<td><a href="https://github.com/ggml-org/llama.cpp">ggml-org/llama.cpp</a> / <a href="https://github.com/ollama/ollama">ollama/ollama</a></td>
+<td>CPU/边缘量化推理，一行命令本地跑模型</td>
+</tr>
+<tr>
+<td>数据工具</td>
+<td>datatrove / dolma</td>
+<td><a href="https://github.com/huggingface/datatrove">huggingface/datatrove</a> / <a href="https://github.com/allenai/dolma">allenai/dolma</a></td>
+<td>预训练语料清洗流水线（<a href="../ch11_data/">第 11 章</a>）</td>
+</tr>
+<tr>
+<td>评测</td>
+<td>lm-evaluation-harness</td>
+<td><a href="https://github.com/EleutherAI/lm-evaluation-harness">EleutherAI/lm-evaluation-harness</a></td>
+<td>学术评测标准库（<a href="../ch22_eval_safety/">第 22 章</a>）</td>
+</tr>
+<tr>
+<td>应用框架</td>
+<td>LangChain / LlamaIndex</td>
+<td><a href="https://github.com/langchain-ai/langchain">langchain-ai/langchain</a> / <a href="https://github.com/run-llama/llama_index">run-llama/llama_index</a></td>
+<td>LLM 应用编排与 RAG 数据接入</td>
+</tr>
+<tr>
+<td>多卡训练</td>
+<td>Megatron-LM / DeepSpeed</td>
+<td><a href="https://github.com/NVIDIA/Megatron-LM">NVIDIA/Megatron-LM</a> / <a href="https://github.com/microsoft/DeepSpeed">microsoft/DeepSpeed</a></td>
+<td>大规模并行与 ZeRO 显存优化工业标准（<a href="../ch12_distributed/">第 12 章</a>）</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">实战提示（消费级 GPU）</p>
+<p>8–12GB 显存的推荐组合：<strong>LLaMA-Factory（微调）+ vLLM 或 Ollama（推理）+ lm-evaluation-harness（评测）</strong>。Megatron/DeepSpeed 的技术思想值得学，本书涉及处均给出单卡替代方案。</p>
+</div>
+<h2 id="17">1.7 能力矩阵与岗位映射：你该吃透哪几章<a class="headerlink" href="#17" title="Permanent link">&para;</a></h2>
+<p>不同岗位对这本书的"必读密度"不同。下表给出三条典型路线；"吃透"的标准是本章 1.5 节那样能对账：公式能推导、代码能复写、坑能说出口。</p>
+<table>
+<thead>
+<tr>
+<th>岗位</th>
+<th>日常主战场</th>
+<th>必须吃透</th>
+<th>选修/链接即可</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>算法工程师（训练/后训练）</td>
+<td>数据配比、训练稳定性、对齐效果</td>
+<td>第 2、3、8 章（数学/网络/注意力）+ 第 10–14 章（预训练、数据、分布式、SFT、对齐）</td>
+<td>第 15–18 章了解推理侧约束即可</td>
+</tr>
+<tr>
+<td>应用工程师（RAG/Agent/产品）</td>
+<td>提示、检索、工具调用、评测</td>
+<td>第 1、4、15 章 + 第 19–22 章（提示 RAG、Agent、多模态、评测安全）</td>
+<td>第 6、8 章读懂架构即可，推导可跳</td>
+</tr>
+<tr>
+<td>推理优化工程师（serving / kernel）</td>
+<td>吞吐、时延、显存、算子</td>
+<td>第 2、3、8 章 + 第 15–18 章（推理、服务、GPU kernel、量化）</td>
+<td>第 13–14 章了解训练产物形态即可</td>
+</tr>
+</tbody>
+</table>
+<p>三条路线共用同一块承重墙：<strong>第 2、3、8 章</strong>（数学、网络与反向传播、注意力）。给自己安排进度时可参照"四周路线"：第 1 周第 1–2 章（全景 + 数学工具箱），第 2 周第 3–5 章（组件层），第 3 周第 6–9 章（模型层），第 4 周按岗位选修训练层或部署层——每一步都有独立可用的产出，停在任何一周都不亏。</p>
+<h3 id="171">1.7.1 本书章节地图<a class="headerlink" href="#171" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>板块</th>
+<th>章节</th>
+<th>回答的主线问题</th>
+<th>板块内依赖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>地基</td>
+<td>第 1–3 章</td>
+<td>语言模型在算什么？梯度怎么回传？</td>
+<td>顺序读</td>
+</tr>
+<tr>
+<td>组件层</td>
+<td>第 4–5 章</td>
+<td>文本怎么变成 token？位置信息怎么注入？</td>
+<td>依赖第 2–3 章</td>
+</tr>
+<tr>
+<td>模型层</td>
+<td>第 6–9 章</td>
+<td>Transformer 逐行长什么样？注意力/MoE/架构取舍</td>
+<td>依赖组件层；第 8 章是承重墙</td>
+</tr>
+<tr>
+<td>训练层</td>
+<td>第 10–14 章</td>
+<td>预训练怎么跑？数据怎么洗？怎么微调对齐？</td>
+<td>依赖模型层</td>
+</tr>
+<tr>
+<td>部署层</td>
+<td>第 15–18 章</td>
+<td>怎么又快又省地服务与压模型？</td>
+<td>依赖模型层，与训练层可并行</td>
+</tr>
+<tr>
+<td>应用层</td>
+<td>第 19–22 章</td>
+<td>提示/RAG/Agent/多模态/评测安全</td>
+<td>最独立，可随时切入</td>
+</tr>
+</tbody>
+</table>
+<p>自检清单（三条路线通用，每学完一章合上书问自己）：(1) 这一章的核心公式我能在白纸上从假设推到结论吗？(2) 我能写出 ≤30 行的最小实现并与官方 API 数值对账吗？(3) 我能说出这条公式的三个工程坑吗？三问全"是"才算吃透；任何一问卡住，回到对应小节重做双向对账。第 2 章我们从承重墙的第一块砖开始：梯度下降与交叉熵。</p>
+<h2 id="18">1.8 常见误区与坑<a class="headerlink" href="#18" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>拿 base 模型当 chat 模型用，然后得出"模型很笨"的结论</strong>。base 只有预训练，你问它问题，它更可能续写出更多问题。三种后缀的分界线见 1.4 节；选型第一件事是确认训练阶段。</li>
+<li><strong>显存估算只算权重</strong>。"7B 模型 14GB 显存就能跑"只对推理的权重成立；训练还要加优化器状态（AdamW 约 <span class="arithmatex">\(8N\)</span> 字节）与激活值，实际是权重的 4–6 倍（<a href="../ch12_distributed/">第 12 章</a> 给完整账本）。MoE 模型还要区分"总参数"（管显存）与"激活参数"（管算力）。</li>
+<li><strong>把涌现当必然，把"再大就会好"当技术方案</strong>。1.4.2 节的结论：换连续指标后许多"涌现"是平滑进步；在自己的任务上，小模型 + 好数据 + 好评测往往比等规模更划算。</li>
+<li><strong>忽视分词器的中文压缩率</strong>。同样 8k 上下文窗口，对中文不友好的分词器实际能装的内容可能只有一半，API 成本按 token 计费时差距直接体现在账单上（<a href="../ch04_tokenizer_bpe/">第 4 章</a>）。</li>
+<li><strong>把榜单分数当承诺</strong>。分数高度依赖评测集且可能与训练数据重合；模型卡的"局限性声明"往往比分数更值得逐字读（延伸阅读有模型卡官方文档链接）。</li>
+</ol>
+<h2 id="_1">本章小结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>带走这八条：</p>
+<ul>
+<li>语言模型 = 对"下一词条件分布 <span class="arithmatex">\(P(x_t \mid x_{&lt;t})\)</span>"建模的自回归机器；链式分解是精确恒等式，近似只发生在神经网络拟合处。</li>
+<li>未训练模型 loss ≈ <span class="arithmatex">\(\ln V\)</span> 是你实现任何 LM 后的第一个对账点；训练的全部目标是把 loss 从 <span class="arithmatex">\(\ln V\)</span> 往下压。</li>
+<li>bigram 实验（图 2）同时展示了能力（局部通顺）与天花板（无长程记忆）——看得更远是 Transformer/注意力的任务。</li>
+<li>训练三阶段共用同一骨架：预训练给能力（&gt;95% 算力）、SFT 教格式、偏好优化塑行为；<strong>预训练决定上限，后训练决定下限与可用性</strong>。</li>
+<li><span class="arithmatex">\(C \approx 6ND\)</span> 与"约 20 token/参数"是规模定律最常用的两条；涌现部分是不连续指标的测量假象，评测应同时报告连续指标。</li>
+<li>nanoGPT 与 30 行 bigram 在"查表取特征、词表打分、交叉熵、采样循环"四处逐行同构——大模型不是另一种东西，是同一件事的放大。</li>
+<li>开源生态记住 7 个类别（地基/权重/微调/推理/数据/评测/应用），每类先深入 1–2 个。</li>
+<li>岗位路线可三分（算法/应用/推理优化），但第 2、3、8 章是所有路线共用的承重墙——下一章就从第 2 章的梯度下降与交叉熵开始。</li>
+</ul>
+<h2 id="_2">本章术语详解<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h4 id="token">词元（token）<a class="headerlink" href="#token" title="Permanent link">&para;</a></h4>
+<p>文本的最小离散单位，是模型实际"看到"和"产出"的对象：模型从不直接处理字符或单词，而是先由分词器把文本切成 token 序列，每个 token 再映射为一个向量。它解决"把任意连续文本变成定长词表内的离散编号"的问题，从而可以套用神经网络。工程中在 tokenizer 输出、按 token 计费、显存估算等所有场合都会碰到它。与"词"的区别：一个英文长词或一个汉字片段都可能被拆成多个 token，中文平均压缩率是评估分词器的实用指标。</p>
+<h4 id="language-modeling">语言建模（language modeling）<a class="headerlink" href="#language-modeling" title="Permanent link">&para;</a></h4>
+<p>对"给定前文，下一个词元是什么"的条件分布 <span class="arithmatex">\(P(x_t \mid x_{&lt;t})\)</span> 建模的任务，1.3 节全部数学的出发点。它把"理解语言"这个模糊目标转化为可计算、可优化的监督学习问题——互联网上的任意文本都自动成为训练信号，无需人工标注。工程里预训练目标、<code>F.cross_entropy</code> 的左移对齐、"未训练 loss 应等于 <span class="arithmatex">\(\ln V\)</span>"的对账检查都是它的影子。与分类任务的区别：标签空间是整个词表且每个位置都有标签。</p>
+<h4 id="autoregressive-generation">自回归生成（autoregressive generation）<a class="headerlink" href="#autoregressive-generation" title="Permanent link">&para;</a></h4>
+<p>把模型的一次"下一词预测"循环起来：输出拼回输入、再预测下一个，直到产出结束符（1.1 节示意）。它解决"如何用单步预测器生成任意长文本"，代价是生成只能逐 token 串行——这是后续推理章节 KV 缓存、连续批处理等技术的根本动机。工程中 <code>generate()</code> 循环、流式输出接口直接面对它。与一次前向出整句的非自回归方法（常见于语音）相对，文本 LLM 几乎清一色自回归。</p>
+<h4 id="generative-model">生成模型（generative model）<a class="headerlink" href="#generative-model" title="Permanent link">&para;</a></h4>
+<p>建模数据本身分布 <span class="arithmatex">\(P(x)\)</span>（因此能采样生成新数据）的模型，与只建模 <span class="arithmatex">\(P(y \mid x)\)</span> 的判别模型相对。这个区别决定训练信号来源：生成模型用无标注数据自监督，判别模型必须有标签——所以语言模型能吃下整个互联网。工程中选型注意：同一个 Transformer 骨架配不同训练目标就分属两类（GPT 式生成、BERT 式判别式理解）。</p>
+<h4 id="decoder-only-architecture">解码器架构（decoder-only architecture）<a class="headerlink" href="#decoder-only-architecture" title="Permanent link">&para;</a></h4>
+<p>只保留 Transformer 解码器一侧、以因果注意力遮蔽未来的架构，是 GPT 之后几乎所有主流 LLM 的选择。胜出的工程原因在 1.1 节末尾：目标与用途统一、每个位置有监督信号、结构简单易扩展。与编码器架构（BERT：双向注意力、掩码重建）对照理解：编码器输出"每个位置的上下文表示"，适合理解类任务；解码器输出分布，天然适合生成。第 8 章逐行拆解其核心组件。</p>
+<h4 id="causal-attention">因果注意力（causal attention）<a class="headerlink" href="#causal-attention" title="Permanent link">&para;</a></h4>
+<p>只允许每个位置 attend 到它自己及之前的token、用上三角掩码遮蔽"未来"的注意力形式，1.1 节表中"单向"二字的实现。它解决"训练时不能偷看答案"的问题：既然任务是预测下一个词，第 <span class="arithmatex">\(t\)</span> 个位置的计算就绝不能包含 <span class="arithmatex">\(t\)</span> 之后的信息，否则训练就是在自欺。工程中训练与推理都要维护这个掩码（推理中表现为"只能增量地看到新 token"）。与双向注意力的区别：BERT 类编码器可以看全文，因此只能做"填空"类目标而不能做自回归生成。</p>
+<h4 id="perplexity-ppl">困惑度（perplexity, PPL）<a class="headerlink" href="#perplexity-ppl" title="Permanent link">&para;</a></h4>
+<p>平均交叉熵的指数 <span class="arithmatex">\(\exp(\overline{\mathrm{CE}})\)</span>，含义是"模型每一步像在多少个词里犹豫"（等效均匀候选数）。它把抽象的 nat 翻译成直觉：PPL 7.4 ≈ 每步只在约 7 个候选中挑选；未训练模型 PPL ≈ 词表大小。工程中论文与模型卡用它报告基座质量，它是任务无关的模型固有指标。与准确率的区别：PPL 对"错得多离谱"敏感，对具体任务不敏感。</p>
+<h4 id="self-supervised-learning">自监督学习（self-supervised learning）<a class="headerlink" href="#self-supervised-learning" title="Permanent link">&para;</a></h4>
+<p>不需要人工标注、从数据自身构造监督信号的训练方式；下一词预测是其最成功实例——文本的下一个词就是免费标签。它解决了"标注数据昂贵、互联网文本免费"的规模矛盾，是预训练范式的引擎。工程中你在预训练损失、续训/领域适配中直接使用它。与监督微调的区别：自监督的标签由数据自动生成，SFT 的标签（示范回答）由人写。</p>
+<h4 id="base-model">基座模型（base model）<a class="headerlink" href="#base-model" title="Permanent link">&para;</a></h4>
+<p>仅完成预训练的模型：续写能力极强，但你问它问题，它更可能"续写出更多问题"。理解这点至关重要——能力本体在基座里已经就位，base 与 instruct 的行为差异是后训练塑造的（1.4 节）。工程中做预训练续训、领域适配或研究实验从 base 出发；做应用几乎总是选 instruct/chat。与指令模型的区别不在"会什么"，而在"以什么格式响应"。</p>
+<h4 id="supervised-fine-tuning-sft">监督微调（supervised fine-tuning, SFT）<a class="headerlink" href="#supervised-fine-tuning-sft" title="Permanent link">&para;</a></h4>
+<p>在人工书写的"指令 → 回答"示范数据上，用与预训练相同的交叉熵损失继续训练（通常只在回答部分计算损失）。它解决"把基座能力接入对话界面"的问题——1.3 万条高质量示范就能显著改变行为（InstructGPT）。工程中在 LLaMA-Factory/TRL 里跑的最常见任务就是它，数据质量远比数量重要。指令微调（instruction tuning）是同义说法。</p>
+<h4 id="rlhf-reinforcement-learning-from-human-feedback">人类反馈强化学习（RLHF, reinforcement learning from human feedback）<a class="headerlink" href="#rlhf-reinforcement-learning-from-human-feedback" title="Permanent link">&para;</a></h4>
+<p>用人类偏好数据训练一个奖励模型，再以奖励模型打分为信号用强化学习优化语言模型（流程见图 4），标准出处是 InstructGPT。它解决"好回答难以用交叉熵定义、但两两比较好判"的问题——标注员只需说哪个更好。工程中 TRL 的 PPO/DPO/GRPO 训练器都是其变体。与 SFT 的区别：SFT 模仿示范（学"什么是好的"），RLHF 优化偏好（学"哪个更好"）。</p>
+<h4 id="alignment">对齐（alignment）<a class="headerlink" href="#alignment" title="Permanent link">&para;</a></h4>
+<p>让模型行为符合人类意图、偏好与价值观的后训练总称，涵盖 SFT、RLHF、DPO 及其变体。它解决"能力≠可用"的落差：基座什么都知道，但不知道该以什么姿态回应人类。工程中的直接体现是"有用、诚实、无害"三目标的权衡与安全拒答边界等产品决策。与后训练（post-training）的关系：后者是流程名词（预训练之后的一切训练），对齐强调其目的。</p>
+<h4 id="scaling-law">规模定律（scaling law）<a class="headerlink" href="#scaling-law" title="Permanent link">&para;</a></h4>
+<p>测试损失随参数量、数据量、算力按幂律平滑下降的经验规律，Kaplan et al. (2020) 系统化、Chinchilla (2022) 修正。它把"买多少算力、训多大模型、配多少数据"变成可预算的工程决策，<span class="arithmatex">\(C \approx 6ND\)</span> 与"约 20 token/参数"是最常用的两条。工程中立项估算成本、判断"堆参数还是加数据"都靠它。与涌现能力的关系：同一现象的两种测量视角（1.4.2 节）。</p>
+<h4 id="in-context-learning-icl">上下文学习（in-context learning, ICL）<a class="headerlink" href="#in-context-learning-icl" title="Permanent link">&para;</a></h4>
+<p>不改权重、只在提示中放几个任务示例，模型就能"现场学会"该任务的能力，由 GPT-3 大规模展示。它解决了"每个任务都微调一遍"的昂贵流程——部署一个模型服务大量任务。工程中 few-shot 示例、RAG 模板的本质都是 ICL。与微调的区别：ICL 只改条件（输入），微调改条件分布本身（权重）；ICL 能力从何而来至今是研究热点。</p>
+<h4 id="context-window">上下文窗口（context window）<a class="headerlink" href="#context-window" title="Permanent link">&para;</a></h4>
+<p>模型一次前向能处理的最大 token 数 <span class="arithmatex">\(T_{\max}\)</span>，由训练时的序列长度（nanoGPT 里的 <code>block_size</code>）与位置编码方案决定。它是最常被查询的规格参数：RAG 要塞检索结果、Agent 要塞工具返回、长文档摘要直接受它约束。工程中超过窗口的常见症状是输出突然失控或被截断；不同模型对"窗口内有效长度"的利用也不同（中间内容易被忽略，即"lost in the middle"现象）。与"训练长度"和"外推长度"要区分开：很多模型支持超训练长度两倍以上的推理外推，但质量会衰减。</p>
+<h4 id="emergent-ability">涌现能力（emergent ability）<a class="headerlink" href="#emergent-ability" title="Permanent link">&para;</a></h4>
+<p>在小模型上不存在、在足够大的模型上突然出现的能力，典型如多步算术与思维链增益。它提醒人们规模可能解锁质变；但其测量方式受到严肃质疑——换连续指标后"跳变"变平滑（1.4.2 节）。工程中的实际影响：小模型上的失败实验先怀疑规模不足，再怀疑方法；但不要把"再大就会涌现"当技术方案。与规模定律的关系：损失平滑下降与应用指标跳变可以同时成立。</p>
+<h4 id="mixture-of-experts-moe">混合专家（Mixture-of-Experts, MoE）<a class="headerlink" href="#mixture-of-experts-moe" title="Permanent link">&para;</a></h4>
+<p>把每层 FFN 换成多个"专家"子网络、由路由器为每个 token 只激活少数几个的稀疏架构。它解决"想加大容量又不想等比例加大计算量"的矛盾——总参数很大、每次前向只用一小部分。工程中读 DeepSeek-V3、Mixtral 模型卡会看到"总参数/激活参数"两个数字，那就是 MoE 特征。与稠密模型的取舍：同样算力下容量更大，代价是负载均衡与专家并行的新难题（<a href="../ch09_moe/">第 9 章</a>）。</p>
+<h4 id="reasoning-model">推理模型（reasoning model）<a class="headerlink" href="#reasoning-model" title="Permanent link">&para;</a></h4>
+<p>通过生成长思维链（测试时计算）提升难任务表现的模型，代表是 o1 与 DeepSeek-R1。它改变了默认假设：模型质量不只取决于训练时的参数与数据，还取决于推理时"想多久"——多花算力生成中间推理步骤可以兑换准确率。工程影响：简单问题用它是浪费（慢且贵），数学/代码/规划类难题收益显著；思维链 token 显著增加输出成本。与普通对话模型的区别主要在后训练方式而非架构。</p>
+<h4 id="open-weights">开源权重（open weights）<a class="headerlink" href="#open-weights" title="Permanent link">&para;</a></h4>
+<p>公开可下载的模型权重（通常连同架构代码与模型卡），但训练数据与训练代码未必公开——LLaMA、Qwen 都是典型。它解决"本地可跑、可微调、可审计"的需求，催生了 1.6 节的整个开源生态。工程中注意许可证差异（商用限制、改名要求）与"开源权重 ≠ 开源"的差别。与完全开放（连数据开放）和闭源 API（只给接口）构成一个谱系。</p>
+<h4 id="model-card">模型卡（model card）<a class="headerlink" href="#model-card" title="Permanent link">&para;</a></h4>
+<p>随模型权重发布的标准化说明文档：训练阶段、规模、上下文、数据边界、许可证、局限性都有固定位置可查（官方说明见延伸阅读）。它解决"只用几句宣传语无法判断一个模型是否适合你的场景"的信息不对称。工程中选型、写技术方案引用模型规格时，它是最正规的出处。与技术报告的关系：模型卡是摘要与承诺，技术报告是证据与细节。</p>
+<h2 id="_3">动手环节<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>跑通 1.2 节并改坏它</strong>（难度 ★，20 分钟，CPU）：跑通 30 行 bigram；然后把 <code>W</code> 换成 <code>torch.randn(V, V, requires_grad=True)</code>（随机初始化而非全零）再跑一次，观察初始 loss 是否仍约等于 <span class="arithmatex">\(\ln V\)</span>（为什么？），并把 <code>lr=0.1</code> 改成 <code>lr=10</code>，观察 loss 震荡不降——这是你第一次亲眼见到学习率过大。</li>
+<li><strong>语料实验</strong>（难度 ★★，40 分钟，CPU）：把 1.2 节的 <code>corpus</code> 换成你任意一段 2000 字以上的中文文本（小说/新闻均可），训练后用 <code>generate</code> 续写 100 字符。判断：生成内容里有多少比例是语料中真实出现过的片段？以此体会"大模型是压缩器还是复读机"的直觉，并与图 2 的现象对照。</li>
+<li><strong>生态地图作业</strong>（难度 ★，30 分钟，无 GPU）：从 1.6.1 表中挑 3 个仓库，clone 或在线阅读其 README，各用 3 行话总结"它解决什么问题、和谁互补、你会在什么任务用到它"。</li>
+<li><strong>模型卡速读</strong>（难度 ★，15 分钟，无 GPU）：任选一个你用过的开源模型，按"训练阶段 / 参数量与架构 / 上下文长度 / 分词器 / 许可证 / 一条局限性声明"六项逐项填写（模板即此清单），检查它是否如实声明了局限性。</li>
+<li><strong>算你自己的训练预算</strong>（难度 ★★，20 分钟，纸笔即可）：查到你手头 GPU 的 bf16 算力峰值与显存，假设利用率 30%、训练 14 天，按 <span class="arithmatex">\(C \approx 6ND\)</span> 与 <span class="arithmatex">\(D = 20N\)</span> 估算你能训多大的模型；再对照 1.4 节的 GPT-3 实算，检查你的乘法没算错量级。</li>
+</ol>
+<h2 id="_4">延伸阅读<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>只放已验证链接，每条一句话导读；模型卡细节、论文读法等次要话题不在本章展开，可从下列材料进入。</p>
+<ul>
+<li><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a> —— Transformer 原论文；先读它建立全局图景，再进入第 8 章逐行拆解。</li>
+<li><a href="https://arxiv.org/abs/2005.14165">Language Models are Few-Shot Learners (GPT-3)</a> —— "规模 + 上下文学习"的奠基之作，1.4 节数据量级的出处。</li>
+<li><a href="https://arxiv.org/abs/2203.02155">Training language models to follow instructions (InstructGPT)</a> —— RLHF 三阶段对齐流程的原始出处，对应本章 1.4 与图 4。</li>
+<li><a href="https://arxiv.org/abs/1810.04805">BERT: Pre-training of Deep Bidirectional Transformers</a> —— 编码器路线代表，读它以理解掩码语言建模与 GPT 路线的分岔。</li>
+<li><a href="https://arxiv.org/abs/2001.08361">Scaling Laws for Neural Language Models</a> —— 1.4.1 幂律规律的原始出处，读第 3 节的图即可建立直觉。</li>
+<li><a href="https://arxiv.org/abs/2203.15556">Training Compute-Optimal Large Language Models (Chinchilla)</a> —— "数据应与参数同步扩展"的修正实验，与上一篇连读。</li>
+<li><a href="https://arxiv.org/abs/2206.07682">Emergent Abilities of Large Language Models</a> —— 涌现能力的定义与实验证据。</li>
+<li><a href="https://arxiv.org/abs/2304.15004">Are Emergent Abilities of Large Language Models a Mirage?</a> —— 对涌现最著名的测量学质疑：换连续指标后"涌现"变平滑，与上一篇连读效果最佳。</li>
+<li><a href="https://jalammar.github.io/illustrated-transformer/">The Illustrated Transformer</a> —— 本章图 1 的出处，逐图讲解 Transformer 的最佳入门材料。</li>
+<li><a href="https://huggingface.co/blog/rlhf">Hugging Face: Recipes for training with RLHF</a> —— RLHF 流程的官方博客讲解，与图 4 对照阅读。</li>
+<li><a href="https://huggingface.co/docs/hub/model-cards">Hugging Face 文档：Model Cards</a> —— 模型卡的标准结构与写法，配合动手环节第 4 项使用。</li>
+<li><a href="https://www.youtube.com/watch?v=zjkBMFhNj_g">Karpathy: Intro to Large Language Models（1 小时视频）</a> —— 本章内容的视频版地图，适合作为热身材料。</li>
+<li><a href="https://huggingface.co/learn">Hugging Face LLM Course</a> —— 免费、可动手的 transformers 生态课程，读完本章即可开始学。</li>
+<li><a href="https://stanford-cs336.github.io">Stanford CS336: Language Modeling from Scratch</a> —— 与本书定位最接近的大学课程，讲义与作业质量极高。</li>
+<li><a href="https://github.com/datawhalechina/diy-llm">Datawhale diy-llm</a> —— 中文社区"自己动手做 LLM"项目，与本书代码实践互为补充。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      &copy; 2026 jiejin93 · 内容采用 CC BY-NC-SA 4.0 · 引用请注明出处
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../assets/katex/katex.min.js"></script>
+      
+        <script src="../assets/katex/contrib/auto-render.min.js"></script>
+      
+        <script src="../javascripts/katex-init.js"></script>
+      
+    
+  </body>
+</html>

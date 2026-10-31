@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="900" height="560" viewBox="0 0 900 560" font-family="'Segoe UI','Microsoft YaHei','Noto Sans SC',sans-serif">
+  <rect x="0" y="0" width="900" height="560" fill="#ffffff"/>
+  <text x="470" y="24" text-anchor="middle" font-size="19" font-weight="bold" fill="#222">RTX 4090 roofline 示意（FP16，双对数坐标）</text>
+
+  <!-- decade gridlines -->
+  <g stroke="#e2e2e2" stroke-width="1">
+    <line x1="280" y1="40" x2="280" y2="480"/>
+    <line x1="470" y1="40" x2="470" y2="480"/>
+    <line x1="660" y1="40" x2="660" y2="480"/>
+    <line x1="90" y1="150" x2="850" y2="150"/>
+    <line x1="90" y1="260" x2="850" y2="260"/>
+    <line x1="90" y1="370" x2="850" y2="370"/>
+  </g>
+
+  <!-- FP32 roof (dashed) -->
+  <polyline points="90,480 644.6,158.9 850,158.9" fill="none" stroke="#9e9e9e" stroke-width="1.6" stroke-dasharray="7,5"/>
+  <!-- FP16 Tensor roofline -->
+  <polyline points="90,480 758.5,93 850,93" fill="none" stroke="#d62728" stroke-width="2.8"/>
+
+  <!-- ridge drop line -->
+  <line x1="758.5" y1="93" x2="758.5" y2="480" stroke="#d62728" stroke-width="1" stroke-dasharray="4,4" opacity="0.6"/>
+  <circle cx="758.5" cy="93" r="5" fill="#222"/>
+
+  <!-- axes -->
+  <line x1="90" y1="480" x2="858" y2="480" stroke="#333" stroke-width="1.6"/>
+  <line x1="90" y1="480" x2="90" y2="34" stroke="#333" stroke-width="1.6"/>
+  <polygon points="858,480 848,475 848,485" fill="#333"/>
+  <polygon points="90,34 85,44 95,44" fill="#333"/>
+
+  <!-- tick labels -->
+  <g font-size="13" fill="#444">
+    <text x="90" y="498" text-anchor="middle">0.1</text>
+    <text x="280" y="498" text-anchor="middle">1</text>
+    <text x="470" y="498" text-anchor="middle">10</text>
+    <text x="660" y="498" text-anchor="middle">100</text>
+    <text x="850" y="498" text-anchor="middle">1000</text>
+    <text x="82" y="485" text-anchor="end">0.1</text>
+    <text x="82" y="375" text-anchor="end">1</text>
+    <text x="82" y="265" text-anchor="end">10</text>
+    <text x="82" y="155" text-anchor="end">100</text>
+    <text x="82" y="45" text-anchor="end">1000</text>
+  </g>
+  <text x="470" y="528" text-anchor="middle" font-size="15" fill="#222">算术强度 AI = FLOPs / Bytes（FLOP/Byte，对数刻度）</text>
+  <text x="34" y="260" text-anchor="middle" font-size="15" fill="#222" transform="rotate(-90 34 260)">可达性能 P（TFLOP/s，对数刻度）</text>
+
+  <!-- line labels -->
+  <text x="845" y="112" text-anchor="end" font-size="14" fill="#d62728" font-weight="bold">算力屋顶：FP16 Tensor Core ≈ 330 TFLOP/s</text>
+  <text x="845" y="178" text-anchor="end" font-size="13" fill="#8a8a8a">FP32 CUDA 核屋顶 ≈ 83 TFLOP/s（对比）</text>
+  <text x="336" y="243" text-anchor="middle" font-size="14" fill="#c0392b" transform="rotate(-30.1 336 243)">带宽斜坡：P = 带宽 × AI（≈1 TB/s）</text>
+  <text x="742" y="500" text-anchor="middle" font-size="13" fill="#222" font-weight="bold">脊点 I* ≈ 330</text>
+
+  <!-- region hints -->
+  <text x="300" y="455" font-size="13" fill="#666">访存受限区（AI &lt; I*）</text>
+  <text x="768" y="140" font-size="13" fill="#666">算力受限区（AI &gt; I*）</text>
+
+  <!-- data points -->
+  <g fill="#1f77b4" stroke="#ffffff" stroke-width="1.5">
+    <circle cx="250.5" cy="387" r="5.5"/>
+    <circle cx="280" cy="370" r="5.5"/>
+    <circle cx="370.6" cy="317.5" r="5.5"/>
+    <circle cx="660" cy="150" r="5.5"/>
+    <circle cx="807.8" cy="93" r="5.5"/>
+  </g>
+  <g font-size="13.5" fill="#1a4f80">
+    <text x="242" y="412" text-anchor="middle">elementwise / RoPE</text>
+    <text x="293" y="364" text-anchor="start">decode 矩阵乘（B=1）</text>
+    <text x="383" y="312" text-anchor="start">softmax（未融合）</text>
+    <text x="648" y="136" text-anchor="end">prefill attention（T=4k）</text>
+    <text x="800" y="76" text-anchor="end">大 GEMM（吃满屋顶）</text>
+  </g>
+</svg>

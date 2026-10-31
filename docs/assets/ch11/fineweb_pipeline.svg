@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 392" font-family="Segoe UI, PingFang SC, Microsoft YaHei, sans-serif">
+<rect width="980" height="392" fill="white"/>
+<text x="490.0" y="34" text-anchor="middle" font-size="19" font-weight="bold" fill="#222">FineWeb 式预训练数据管线（自绘示意）</text>
+<defs><marker id="ah" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 z" fill="#888"/></marker></defs>
+<rect x="55" y="64" width="192" height="66" rx="10" fill="#EAF2FF" stroke="#1d4ed8" stroke-width="1.6"/><text x="151.0" y="91" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1f2937">Common Crawl</text><text x="151.0" y="114" text-anchor="middle" font-size="12" fill="#555">WARC 原始网页抓取</text>
+<rect x="281" y="64" width="192" height="66" rx="10" fill="#EAF2FF" stroke="#1d4ed8" stroke-width="1.6"/><text x="377.0" y="91" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1f2937">① URL 过滤</text><text x="377.0" y="114" text-anchor="middle" font-size="12" fill="#555">黑名单 + 域名投票</text>
+<line x1="247" y1="97" x2="273" y2="97" stroke="#888" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="507" y="64" width="192" height="66" rx="10" fill="#EAF2FF" stroke="#1d4ed8" stroke-width="1.6"/><text x="603.0" y="91" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1f2937">② 正文抽取</text><text x="603.0" y="114" text-anchor="middle" font-size="12" fill="#555">trafilatura 定制版</text>
+<line x1="473" y1="97" x2="499" y2="97" stroke="#888" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="733" y="64" width="192" height="66" rx="10" fill="#EAF2FF" stroke="#1d4ed8" stroke-width="1.6"/><text x="829.0" y="91" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1f2937">③ 语言识别</text><text x="829.0" y="114" text-anchor="middle" font-size="12" fill="#555">fastText 语言阈值</text>
+<line x1="699" y1="97" x2="725" y2="97" stroke="#888" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="55" y="200" width="192" height="66" rx="10" fill="#FFF4E5" stroke="#b45309" stroke-width="1.6"/><text x="151.0" y="227" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1f2937">④ 规则过滤</text><text x="151.0" y="250" text-anchor="middle" font-size="12" fill="#555">Gopher 启发式清单</text>
+<rect x="281" y="200" width="192" height="66" rx="10" fill="#FFF4E5" stroke="#b45309" stroke-width="1.6"/><text x="377.0" y="227" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1f2937">⑤ 模糊去重</text><text x="377.0" y="250" text-anchor="middle" font-size="12" fill="#555">MinHash + LSH 分桶</text>
+<line x1="247" y1="233" x2="273" y2="233" stroke="#888" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="507" y="200" width="192" height="66" rx="10" fill="#FFF4E5" stroke="#b45309" stroke-width="1.6"/><text x="603.0" y="227" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1f2937">⑥ 质量过滤</text><text x="603.0" y="250" text-anchor="middle" font-size="12" fill="#555">教育性打分（模型）</text>
+<line x1="473" y1="233" x2="499" y2="233" stroke="#888" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="733" y="200" width="192" height="66" rx="10" fill="#FFF4E5" stroke="#b45309" stroke-width="1.6"/><text x="829.0" y="227" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1f2937">⑦ PII 脱敏</text><text x="829.0" y="250" text-anchor="middle" font-size="12" fill="#555">正则 + NER + 占位符</text>
+<line x1="699" y1="233" x2="725" y2="233" stroke="#888" stroke-width="1.6" marker-end="url(#ah)"/>
+<path d="M 829 130 L 829 165 L 163 165 L 163 192" fill="none" stroke="#888" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="360" y="308" width="192" height="66" rx="10" fill="#EDF7ED" stroke="#15803d" stroke-width="1.6"/><text x="456.0" y="335" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1f2937">预训练语料</text><text x="456.0" y="358" text-anchor="middle" font-size="12" fill="#555">分词打包后送入训练（第 4/10 章）</text>
+<path d="M 490.0 266 L 490.0 300" fill="none" stroke="#888" stroke-width="1.6" marker-end="url(#ah)"/>
+</svg>

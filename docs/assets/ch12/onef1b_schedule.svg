@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1150 344" font-family="Segoe UI, PingFang SC, Microsoft YaHei, sans-serif">
+<rect width="1150" height="344" fill="white"/>
+<text x="575" y="28" text-anchor="middle" font-size="21" font-weight="bold" fill="#222">1F1B 调度时间线（p=4 级、m=8 个 micro-batch，前向 1 拍 / 反向 2 拍）</text>
+<line x1="120" y1="72" x2="1110" y2="72" stroke="#999" stroke-width="1"/>
+<line x1="120.0" y1="68.0" x2="120.0" y2="72.0" stroke="#999"/>
+<text x="120.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">0</text>
+<line x1="180.0" y1="68.0" x2="180.0" y2="72.0" stroke="#999"/>
+<text x="180.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">2</text>
+<line x1="240.0" y1="68.0" x2="240.0" y2="72.0" stroke="#999"/>
+<text x="240.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">4</text>
+<line x1="300.0" y1="68.0" x2="300.0" y2="72.0" stroke="#999"/>
+<text x="300.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">6</text>
+<line x1="360.0" y1="68.0" x2="360.0" y2="72.0" stroke="#999"/>
+<text x="360.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">8</text>
+<line x1="420.0" y1="68.0" x2="420.0" y2="72.0" stroke="#999"/>
+<text x="420.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">10</text>
+<line x1="480.0" y1="68.0" x2="480.0" y2="72.0" stroke="#999"/>
+<text x="480.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">12</text>
+<line x1="540.0" y1="68.0" x2="540.0" y2="72.0" stroke="#999"/>
+<text x="540.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">14</text>
+<line x1="600.0" y1="68.0" x2="600.0" y2="72.0" stroke="#999"/>
+<text x="600.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">16</text>
+<line x1="660.0" y1="68.0" x2="660.0" y2="72.0" stroke="#999"/>
+<text x="660.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">18</text>
+<line x1="720.0" y1="68.0" x2="720.0" y2="72.0" stroke="#999"/>
+<text x="720.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">20</text>
+<line x1="780.0" y1="68.0" x2="780.0" y2="72.0" stroke="#999"/>
+<text x="780.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">22</text>
+<line x1="840.0" y1="68.0" x2="840.0" y2="72.0" stroke="#999"/>
+<text x="840.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">24</text>
+<line x1="900.0" y1="68.0" x2="900.0" y2="72.0" stroke="#999"/>
+<text x="900.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">26</text>
+<line x1="960.0" y1="68.0" x2="960.0" y2="72.0" stroke="#999"/>
+<text x="960.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">28</text>
+<line x1="1020.0" y1="68.0" x2="1020.0" y2="72.0" stroke="#999"/>
+<text x="1020.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">30</text>
+<line x1="1080.0" y1="68.0" x2="1080.0" y2="72.0" stroke="#999"/>
+<text x="1080.0" y="64.0" text-anchor="middle" font-size="11" fill="#666">32</text>
+<text x="615.0" y="50.0" text-anchor="middle" font-size="13" fill="#444">时间（拍；1 拍 = 一个前向的计算时长）；总时长 (m+p−1)(τf+τb) = 33 拍</text>
+<text x="108" y="105.0" text-anchor="end" font-size="14" fill="#222" font-weight="bold">GPU 0</text>
+<text x="108" y="123.0" text-anchor="end" font-size="11" fill="#888">第 1 段</text>
+<rect x="120" y="90" width="990" height="36" fill="#FAFAFA" stroke="#E3E3E3"/>
+<rect x="120.0" y="91.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="134.0" y="111.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F1</text>
+<rect x="150.0" y="91.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="164.0" y="111.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F2</text>
+<rect x="180.0" y="91.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="194.0" y="111.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F3</text>
+<rect x="210.0" y="91.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="224.0" y="111.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F4</text>
+<rect x="420.0" y="91.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="449.0" y="111.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B1</text>
+<rect x="480.0" y="91.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="494.0" y="111.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F5</text>
+<rect x="510.0" y="91.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="539.0" y="111.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B2</text>
+<rect x="570.0" y="91.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="584.0" y="111.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F6</text>
+<rect x="600.0" y="91.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="629.0" y="111.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B3</text>
+<rect x="660.0" y="91.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="674.0" y="111.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F7</text>
+<rect x="690.0" y="91.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="719.0" y="111.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B4</text>
+<rect x="750.0" y="91.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="764.0" y="111.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F8</text>
+<rect x="780.0" y="91.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="809.0" y="111.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B5</text>
+<rect x="870.0" y="91.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="899.0" y="111.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B6</text>
+<rect x="960.0" y="91.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="989.0" y="111.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B7</text>
+<rect x="1050.0" y="91.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="1079.0" y="111.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B8</text>
+<text x="108" y="151.0" text-anchor="end" font-size="14" fill="#222" font-weight="bold">GPU 1</text>
+<text x="108" y="169.0" text-anchor="end" font-size="11" fill="#888">第 2 段</text>
+<rect x="120" y="136" width="990" height="36" fill="#FAFAFA" stroke="#E3E3E3"/>
+<rect x="150.0" y="137.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="164.0" y="157.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F1</text>
+<rect x="180.0" y="137.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="194.0" y="157.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F2</text>
+<rect x="210.0" y="137.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="224.0" y="157.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F3</text>
+<rect x="360.0" y="137.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="389.0" y="157.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B1</text>
+<rect x="420.0" y="137.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="434.0" y="157.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F4</text>
+<rect x="450.0" y="137.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="479.0" y="157.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B2</text>
+<rect x="510.0" y="137.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="524.0" y="157.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F5</text>
+<rect x="540.0" y="137.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="569.0" y="157.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B3</text>
+<rect x="600.0" y="137.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="614.0" y="157.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F6</text>
+<rect x="630.0" y="137.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="659.0" y="157.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B4</text>
+<rect x="690.0" y="137.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="704.0" y="157.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F7</text>
+<rect x="720.0" y="137.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="749.0" y="157.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B5</text>
+<rect x="780.0" y="137.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="794.0" y="157.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F8</text>
+<rect x="810.0" y="137.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="839.0" y="157.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B6</text>
+<rect x="900.0" y="137.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="929.0" y="157.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B7</text>
+<rect x="990.0" y="137.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="1019.0" y="157.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B8</text>
+<text x="108" y="197.0" text-anchor="end" font-size="14" fill="#222" font-weight="bold">GPU 2</text>
+<text x="108" y="215.0" text-anchor="end" font-size="11" fill="#888">第 3 段</text>
+<rect x="120" y="182" width="990" height="36" fill="#FAFAFA" stroke="#E3E3E3"/>
+<rect x="180.0" y="183.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="194.0" y="203.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F1</text>
+<rect x="210.0" y="183.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="224.0" y="203.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F2</text>
+<rect x="300.0" y="183.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="329.0" y="203.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B1</text>
+<rect x="360.0" y="183.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="374.0" y="203.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F3</text>
+<rect x="390.0" y="183.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="419.0" y="203.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B2</text>
+<rect x="450.0" y="183.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="464.0" y="203.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F4</text>
+<rect x="480.0" y="183.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="509.0" y="203.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B3</text>
+<rect x="540.0" y="183.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="554.0" y="203.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F5</text>
+<rect x="570.0" y="183.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="599.0" y="203.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B4</text>
+<rect x="630.0" y="183.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="644.0" y="203.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F6</text>
+<rect x="660.0" y="183.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="689.0" y="203.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B5</text>
+<rect x="720.0" y="183.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="734.0" y="203.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F7</text>
+<rect x="750.0" y="183.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="779.0" y="203.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B6</text>
+<rect x="810.0" y="183.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="824.0" y="203.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F8</text>
+<rect x="840.0" y="183.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="869.0" y="203.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B7</text>
+<rect x="930.0" y="183.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="959.0" y="203.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B8</text>
+<text x="108" y="243.0" text-anchor="end" font-size="14" fill="#222" font-weight="bold">GPU 3</text>
+<text x="108" y="261.0" text-anchor="end" font-size="11" fill="#888">第 4 段</text>
+<rect x="120" y="228" width="990" height="36" fill="#FAFAFA" stroke="#E3E3E3"/>
+<rect x="210.0" y="229.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="224.0" y="249.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F1</text>
+<rect x="240.0" y="229.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="269.0" y="249.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B1</text>
+<rect x="300.0" y="229.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="314.0" y="249.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F2</text>
+<rect x="330.0" y="229.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="359.0" y="249.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B2</text>
+<rect x="390.0" y="229.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="404.0" y="249.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F3</text>
+<rect x="420.0" y="229.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="449.0" y="249.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B3</text>
+<rect x="480.0" y="229.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="494.0" y="249.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F4</text>
+<rect x="510.0" y="229.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="539.0" y="249.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B4</text>
+<rect x="570.0" y="229.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="584.0" y="249.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F5</text>
+<rect x="600.0" y="229.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="629.0" y="249.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B5</text>
+<rect x="660.0" y="229.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="674.0" y="249.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F6</text>
+<rect x="690.0" y="229.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="719.0" y="249.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B6</text>
+<rect x="750.0" y="229.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="764.0" y="249.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F7</text>
+<rect x="780.0" y="229.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="809.0" y="249.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B7</text>
+<rect x="840.0" y="229.0" width="28.0" height="34.0" rx="4" fill="#4C8BF5" opacity="0.92"/>
+<text x="854.0" y="249.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">F8</text>
+<rect x="870.0" y="229.0" width="58.0" height="34.0" rx="4" fill="#F5A64C" opacity="0.92"/>
+<text x="899.0" y="249.0" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">B8</text>
+<rect x="120" y="300" width="26" height="15" rx="3" fill="#4C8BF5"/>
+<text x="152" y="312" font-size="13" fill="#333">前向 F1–F8</text>
+<rect x="270" y="300" width="26" height="15" rx="3" fill="#F5A64C"/>
+<text x="302" y="312" font-size="13" fill="#333">反向 B1–B8</text>
+<rect x="430" y="300" width="26" height="15" rx="3" fill="#FAFAFA" stroke="#DDD"/>
+<text x="462" y="312" font-size="13" fill="#333">气泡（空闲）</text>
+</svg>

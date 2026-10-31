@@ -1,0 +1,496 @@
+/* ============================================================
+   《大模型：从入门到精通》阅读排版 v3.1
+   参考：少数派 / distill.pub / GitHub Docs 的中文长文阅读标准
+   正文恒定 16px · 行高 1.9 · 栏宽 730px（约 45 字/行）· 两端对齐
+   关键字号一律用 px，避免 material 根字号缩放导致的视口漂移
+   ============================================================ */
+
+:root {
+  --text: #1d1d1f;
+  --text-2: #6e6e73;
+  --hairline: #e8e8ed;
+  --bg-soft: #f5f5f7;
+  --accent: #0071e3;
+  --accent-press: #0060c2;
+  --zebra: rgba(29, 29, 31, 0.025);
+}
+
+[data-md-color-scheme="slate"] {
+  --text: #f5f5f7;
+  --text-2: #a1a1a6;
+  --hairline: #2c2c2e;
+  --bg-soft: #1c1c1e;
+  --accent: #2997ff;
+  --accent-press: #4da3ff;
+  --zebra: rgba(245, 245, 247, 0.03);
+}
+
+/* ---------- 全局：字体与渲染 ---------- */
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+    "HarmonyOS Sans SC", "Source Han Sans SC", "Noto Sans CJK SC", "Segoe UI",
+    "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: rgba(0, 113, 227, 0.18); }
+
+/* ---------- 正文排版：为核心阅读体验负责 ---------- */
+
+.md-typeset {
+  font-size: 16px;
+  line-height: 1.9;
+  letter-spacing: 0.012em;
+  color: var(--text);
+}
+
+/* 阅读栏宽：约 45 字/行；窄屏时自然流式 */
+.md-content__inner {
+  max-width: 730px;
+  margin-inline: auto;
+}
+
+.md-typeset p {
+  margin-block: 0.9em;
+  text-align: justify;
+}
+
+.md-typeset li {
+  margin-block: 0.5em;
+  text-align: justify;
+}
+
+.md-typeset ul li::marker,
+.md-typeset ol li::marker { color: var(--text-2); }
+
+/* 锚点定位留出顶栏空间 */
+.md-typeset h2[id],
+.md-typeset h3[id],
+.md-typeset h4[id] { scroll-margin-top: 4.5rem; }
+
+/* ---------- 标题层级 ---------- */
+
+.md-typeset h1 {
+  font-size: 29px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+  margin: 0 0 1em;
+}
+
+.md-typeset h2 {
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 1.5;
+  margin: 2.3em 0 0.8em;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.md-typeset h3 {
+  font-size: 18.5px;
+  font-weight: 650;
+  margin: 1.9em 0 0.6em;
+}
+
+.md-typeset h4 {
+  font-size: 16.5px;
+  font-weight: 650;
+  color: var(--text);
+  margin: 1.5em 0 0.45em;
+}
+
+/* ---------- 链接 ---------- */
+
+.md-typeset a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.md-typeset a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+/* ---------- 引用块（各章「本章导读」）：强调色引用卡 ---------- */
+
+.md-typeset blockquote,
+.md-content blockquote {
+  border-left: 3px solid var(--accent) !important;
+  border-inline-start: 3px solid var(--accent);
+  background: var(--bg-soft);
+  border-radius: 0 12px 12px 0;
+  padding: 0.85em 1.3em;
+  margin-block: 1.4em;
+  color: var(--text);
+}
+
+.md-typeset blockquote p {
+  margin-block: 0.45em;
+  text-align: justify;
+}
+
+/* ---------- 表格：发丝线 + 极淡斑马纹 ---------- */
+
+.md-typeset table:not([class]) {
+  font-size: 13.5px;
+  border-collapse: collapse;
+  box-shadow: none;
+  border: none;
+  width: 100%;
+  margin-block: 1.4em;
+}
+
+.md-typeset table:not([class]) th {
+  background: transparent;
+  color: var(--text-2);
+  font-weight: 600;
+  padding: 0.55em 0.9em;
+  border-top: none;
+  border-bottom: 1px solid var(--hairline);
+  white-space: nowrap;
+}
+
+.md-typeset table:not([class]) td {
+  padding: 0.55em 0.9em;
+  border-top: 1px solid var(--hairline);
+  border-bottom: none;
+  vertical-align: top;
+}
+
+.md-typeset table:not([class]) tbody tr:nth-child(even) {
+  background: var(--zebra);
+}
+
+/* ---------- 图片与图注 ---------- */
+
+.md-typeset img,
+.md-typeset svg {
+  display: block;
+  margin: 1.8em auto;
+  max-width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  background: #fff;
+}
+
+[data-md-color-scheme="slate"] .md-typeset img { background: var(--bg-soft); }
+
+.md-typeset figcaption,
+.md-typeset p > em:only-child {
+  text-align: center;
+  color: var(--text-2);
+  font-size: 13px;
+  line-height: 1.7;
+  margin-top: -0.9em;
+}
+
+/* ---------- 代码 ---------- */
+
+.md-typeset code {
+  font-family: "SF Mono", "JetBrains Mono", Consolas, "Courier New", monospace;
+  font-size: 0.875em;
+  border-radius: 5px;
+  padding: 0.12em 0.4em;
+  background: var(--bg-soft);
+}
+
+.md-typeset pre {
+  border-radius: 12px;
+  margin-block: 1.3em;
+}
+
+.md-typeset pre > code {
+  font-size: 13.2px;
+  line-height: 1.7;
+}
+
+/* ---------- 提示块 ---------- */
+
+.md-typeset .admonition,
+.md-typeset details {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  box-shadow: none;
+  background: transparent;
+  font-size: 14px;
+  margin-block: 1.4em;
+}
+
+.md-typeset .admonition > .admonition-title,
+.md-typeset details > summary {
+  background: transparent;
+  border: none;
+  font-weight: 600;
+}
+
+/* ---------- 公式 ---------- */
+
+.md-typeset mjx-container[display="true"],
+.md-typeset .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.35em 0.1em;
+  margin: 1.15em 0 !important;
+}
+
+/* ---------- 侧栏：安静但可读 ---------- */
+
+.md-sidebar { font-size: 12.5px; }
+.md-nav__link { color: var(--text-2); line-height: 1.6; }
+.md-nav__item .md-nav__link--active {
+  color: var(--accent);
+  font-weight: 600;
+}
+.md-nav__title { font-weight: 650; }
+
+/* ---------- 顶栏更轻 ---------- */
+
+.md-header {
+  box-shadow: none;
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* ---------- 首页 Hero ---------- */
+
+.hero {
+  text-align: center;
+  padding: 4.2em 1em 2.4em;
+  background: radial-gradient(900px 320px at 50% -80px, rgba(0, 113, 227, 0.07), transparent 65%);
+  border-radius: 0 0 24px 24px;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  border: none;
+  margin-bottom: 0.4em;
+}
+
+.hero .sub {
+  color: var(--text-2);
+  font-size: 17px;
+  line-height: 1.85;
+  max-width: 36em;
+  margin: 0 auto 2.2em;
+  text-align: center;
+}
+
+.cta {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff !important;
+  border-radius: 980px;
+  padding: 0.72em 1.9em;
+  font-weight: 500;
+  font-size: 15px;
+  transition: background 0.2s ease;
+}
+
+.cta:hover { background: var(--accent-press); text-decoration: none; }
+
+.cta-ghost {
+  display: inline-block;
+  color: var(--accent) !important;
+  border-radius: 980px;
+  padding: 0.72em 1.6em;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.hero-note {
+  display: inline-block;
+  margin-top: 1.6em;
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.hero-note .hero-buy { color: var(--accent); font-weight: 600; }
+
+/* ---------- 卡片 ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 18px;
+  margin: 2.4em 0;
+}
+
+.card {
+  background: var(--bg-soft);
+  border-radius: 18px;
+  padding: 1.6em 1.7em;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+  margin: 0 0 0.45em !important;
+  font-size: 16.5px !important;
+  font-weight: 650;
+}
+
+.card p {
+  margin: 0 0 0.9em !important;
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.75;
+  text-align: left;
+}
+
+.card .go {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ---------- 页脚 ---------- */
+
+.md-footer-copyright { color: var(--text-2); }
+
+/* ---------- 解锁面板 ---------- */
+
+.lock-panel {
+  border: 1px solid var(--hairline);
+  border-radius: 18px;
+  padding: 2.2em 2em;
+  margin: 2.5em 0;
+  text-align: center;
+  background: var(--bg-soft);
+}
+
+.lock-panel .lock-badge { font-size: 1.6em; }
+
+.lock-panel h2 {
+  border-bottom: none;
+  font-size: 20px;
+  margin: 0.4em 0 0.5em;
+}
+
+.lock-panel .lock-desc {
+  color: var(--text-2);
+  font-size: 14px;
+  max-width: 34em;
+  margin: 0 auto 1.4em;
+  text-align: left;
+}
+
+.lock-panel ol {
+  text-align: left;
+  display: inline-block;
+  font-size: 14px;
+  color: var(--text);
+  margin: 0 auto 1.4em;
+  padding-left: 1.4em;
+}
+
+.lock-panel ol li { margin-block: 0.5em; }
+
+.lock-panel .lock-qr {
+  width: 190px;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.10);
+  margin: 0.4em auto 0.6em;
+}
+
+.lock-panel .lock-qr-caption {
+  font-size: 12.5px;
+  color: var(--text-2);
+  margin-bottom: 1.4em;
+}
+
+.lock-panel .unlock-form {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 0.4em;
+}
+
+.lock-panel .unlock-form input {
+  font-size: 14px;
+  padding: 0.6em 1em;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  width: 220px;
+  background: var(--md-default-bg-color, #fff);
+  color: var(--text);
+  outline: none;
+}
+
+.lock-panel .unlock-form input:focus { border-color: var(--accent); }
+
+.lock-panel .unlock-form button {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 0.6em 1.6em;
+  border: none;
+  border-radius: 980px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+}
+
+.lock-panel .unlock-form button:hover { background: var(--accent-press); }
+
+.lock-panel .unlock-msg {
+  font-size: 13px;
+  margin-top: 0.9em;
+  min-height: 1.2em;
+}
+
+.lock-panel .unlock-msg.err { color: #d03050; }
+.lock-panel .unlock-msg.ok { color: #2da44e; }
+
+.lock-panel .lock-fine {
+  font-size: 12.5px;
+  color: var(--text-2);
+  margin-top: 1.2em;
+}
+
+/* 试读目录 */
+.lock-toc {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 1.2em 1.6em;
+  margin: 2em 0;
+  font-size: 13.5px;
+}
+
+.lock-toc .lock-toc-title {
+  font-weight: 650;
+  margin: 0 0 0.6em;
+}
+
+.lock-toc ol { margin: 0; padding-left: 1.3em; }
+.lock-toc li { margin-block: 0.35em; }
+
+/* 解锁后的提示条 */
+.unlocked-strip {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 0.7em 1.2em;
+  font-size: 13px;
+  color: var(--text-2);
+  margin-bottom: 1.6em;
+}
+
+/* ---------- 购买页 ---------- */
+
+.buy-hero { text-align: center; padding: 1.5em 0 0.5em; }
+.buy-hero h2 { border-bottom: none; }
+.buy-price { text-align: center; font-size: 18px; }
+.buy-price h2 { border-bottom: none; color: var(--accent); }
+.buy-qr { text-align: center; }
+.buy-qr img {
+  width: 240px;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+}
